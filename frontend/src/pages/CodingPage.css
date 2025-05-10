@@ -1,0 +1,69 @@
+.codingPage {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0e0e10;
+  color: #e0e0e0;
+  padding: 1rem 2rem;
+  min-height: 100vh;
+}
+
+.codingHeader {
+  margin-bottom: 1rem;
+}
+
+.taskDescription {
+  color: #999;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.codingButtons button {
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #91f42f;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.shipButton {
+  background-color: #fff;
+  color: #000;
+}
+
+.codingBody {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.editorWrapper {
+  flex: 1;
+  min-width: 300px;
+}
+
+.answerPane {
+  flex: 1;
+  min-width: 300px;
+  background-color: #1b1b1f;
+  padding: 1rem;
+  border: 1px solid #333;
+  border-radius: 10px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.answerPane h3 {
+  color: #91f42f;
+  margin-bottom: 0.5rem;
+}
+
+.answerPane pre {
+  white-space: pre-wrap;
+  color: #ccc;
+  font-family: 'Courier New', monospace;
+  background-color: #121212;
+  padding: 1rem;
+  border-radius: 8px;
+}
