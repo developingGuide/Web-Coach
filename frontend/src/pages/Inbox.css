@@ -1,0 +1,100 @@
+:root {
+  --bg: #0e0e10;
+  --panel: #1b1b1f;
+  --accent: #91f42f;
+  --text: #e0e0e0;
+  --muted: #888;
+}
+
+.inbox-wrapper {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: sans-serif;
+}
+
+
+/* Inbox specific */
+.inbox-main {
+  display: flex;
+  flex: 1;
+  background-color: var(--bg);
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.inbox-sidebar {
+  width: 300px;
+  background-color: var(--bg);
+  border-right: 1px solid #333;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.inbox-sidebar h2 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--accent);
+}
+
+.inbox-email-preview {
+  padding: 0.75rem;
+  border-bottom: 1px solid #2a2a2d;
+  cursor: pointer;
+  color: var(--text);
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.inbox-email-preview:hover {
+  background-color: #222;
+}
+
+.inbox-selected {
+  background-color: #333;
+}
+
+.inbox-sender {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.inbox-body {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.inbox-body h2 {
+  margin-top: 0;
+  color: var(--text);
+}
+
+.inbox-content {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.inbox-start-task-button {
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.inbox-start-task-button:hover {
+  background-color: #b5ff4d;
+}
+
+.inbox-no-selection {
+  color: var(--muted);
+  font-style: italic;
+}

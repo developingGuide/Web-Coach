@@ -31,12 +31,24 @@ const CodingPage = () => {
 
 
   useEffect(() => {
-    const currentTask = projects[0].tasks[0];
-    setTaskTitle(currentTask.title);
-    setClientTask(currentTask.description);
-    setCode(currentTask.startingCode || defaultTemplate);
-    setExpectedOutput(currentTask.expectedOutput);
+    const savedTask = localStorage.getItem('selectedTask');
+    
+    if (savedTask) {
+        const task = JSON.parse(savedTask);
+        setTaskTitle(task.title || 'Untitled Task');
+        setClientTask(task.body || task.description || '');
+        setCode(task.startingCode || defaultTemplate);
+        setExpectedOutput(task.expectedOutput || '');
+    } else {
+      // fallback to first task if nothing is selected
+      const fallbackTask = projects[0].tasks[0];
+      setTaskTitle(fallbackTask.title);
+      setClientTask(fallbackTask.description);
+      setCode(fallbackTask.startingCode || defaultTemplate);
+      setExpectedOutput(fallbackTask.expectedOutput);
+    }
   }, []);
+
 
 
   const handleRun = () => {

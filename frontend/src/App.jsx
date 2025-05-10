@@ -1,8 +1,9 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Dashboard from './pages/Dashboard'
-import CodeEditor from './components/CodeEditor';
+import Test from './pages/test';
 import Home from './pages/Home';
 import CodingPage from './pages/CodingPage';
+import Inbox from './pages/Inbox';
 
 function App() {
 
@@ -25,7 +26,11 @@ function App() {
                     />
                     <Route
                         path="/test"
-                        element={<CodeEditor/>}
+                        element={<Test/>}
+                    />
+                    <Route
+                        path="/inbox"
+                        element={<Inbox/>}
                     />
                 </Routes>
             </div>

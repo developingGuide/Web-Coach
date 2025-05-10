@@ -1,16 +1,19 @@
 import "./Dashboard.css"
+import Sidebar from "../components/Sidebar";
 
 const Dashboard = () => {
   return (
     <div className="dashboard">
-      <aside className="sidebar">
+      {/* <aside className="sidebar">
         <h2>Dashboard</h2>
         <ul>
           <li>To-Do</li>
           <li>Tracker</li>
           <li>Messages</li>
         </ul>
-      </aside>
+      </aside> */}
+      
+      <Sidebar/>
 
       <main className="mainScreen">
         <h1>Welcome Back, Developer 👋</h1>

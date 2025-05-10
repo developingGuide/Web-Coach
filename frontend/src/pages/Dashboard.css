@@ -6,29 +6,6 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-
-.sidebar {
-  width: 250px;
-  background-color: #1b1b1f;
-  padding: 2rem;
-  border-right: 1px solid #222;
-}
-
-.sidebar h2 {
-  color: #91f42f;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 2rem;
-}
-
-.sidebar li {
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
 .mainScreen {
   flex-grow: 1;
   padding: 2rem;
