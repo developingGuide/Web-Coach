@@ -58,6 +58,36 @@ const CodingPage = () => {
     previewWindow.document.close();
   };
 
+  const handleShip = () => {
+    const lowerCode = code.toLowerCase();
+
+    const hasNav = lowerCode.includes('<nav');
+    const hasUL = lowerCode.includes('<ul');
+    const hasHome = lowerCode.includes('>home<');
+    const hasAbout = lowerCode.includes('>about<');
+
+    if (hasNav && hasUL && hasHome && hasAbout) {
+      alert("✅ Task shipped successfully! New task will arrive in 30 minutes.");
+
+      // Save progress (optional)
+      localStorage.setItem('taskShipped', Date.now());
+
+      // Schedule next task (in real app, you'd use backend/timer/cron)
+      setTimeout(() => {
+        loadNextTask();
+      }, 30 * 60 * 1000); // 30 minutes
+    } else {
+      let tips = [];
+      if (!hasNav) tips.push("Try adding a <nav> tag.");
+      if (!hasUL) tips.push("Did you use an unordered list (<ul>)?");
+      if (!hasHome) tips.push("Missing a link to 'Home'.");
+      if (!hasAbout) tips.push("Missing a link to 'About'.");
+
+      alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
+    }
+  };
+
+  
   
 
   return (
@@ -70,7 +100,7 @@ const CodingPage = () => {
           <button onClick={() => setShowAnswer(!showAnswer)}>
             {showAnswer ? 'Hide Answer' : 'Check Answer'}
           </button>
-          <button className="shipButton">Ship</button>
+          <button className="shipButton" onClick={handleShip}>Ship</button>
         </div>
       </header>
 
