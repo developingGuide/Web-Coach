@@ -1,28 +1,41 @@
-import "./Dashboard.css"
+import "./Dashboard.css";
 import Sidebar from "../components/Sidebar";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const [currentTask, setCurrentTask] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const task = JSON.parse(localStorage.getItem("currentTask"));
+    setCurrentTask(task);
+  }, []);
+
+  const goToCodingPage = () => {
+    if (currentTask) {
+      // Resave task just in case
+      localStorage.setItem("selectedTask", JSON.stringify(currentTask));
+      navigate("/playground");
+    }
+  };
+
   return (
     <div className="dashboard">
-      {/* <aside className="sidebar">
-        <h2>Dashboard</h2>
-        <ul>
-          <li>To-Do</li>
-          <li>Tracker</li>
-          <li>Messages</li>
-        </ul>
-      </aside> */}
-      
-      <Sidebar/>
+      <Sidebar />
 
       <main className="mainScreen">
         <h1>Welcome Back, Developer 👋</h1>
         <p>Here's what you’re working on today:</p>
 
         <section className="tasks">
-          <div className="task-card">Build landing page for client</div>
-          <div className="task-card">Fix navbar bug</div>
-          <div className="task-card">Update pricing section</div>
+          {currentTask ? (
+            <div className="task-card clickable" onClick={goToCodingPage}>
+              {currentTask.title}
+            </div>
+          ) : (
+            <p>No task started yet. Check your messages to begin!</p>
+          )}
         </section>
       </main>
     </div>

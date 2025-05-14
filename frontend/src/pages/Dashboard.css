@@ -23,3 +23,13 @@
   border-radius: 8px;
   border: 1px solid #2a2a2e;
 }
+
+.task-card.clickable {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.task-card.clickable:hover {
+  transform: scale(1.02);
+  background-color: #222;
+}
