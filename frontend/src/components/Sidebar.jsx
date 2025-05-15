@@ -8,10 +8,10 @@ function Sidebar() {
     <aside className="sidebar">
       <h2 onClick={() => navigate("/dashboard")} style={{ cursor: "pointer" }}>Dashboard</h2>
       <ul>
-        <li>To-Do</li>
+        <li onClick={() => navigate("/journey")} style={{ cursor: "pointer" }}>Journey</li>
         <li>Tracker</li>
         <li onClick={() => navigate("/inbox")} style={{ cursor: "pointer" }}>
-          Messages
+          Inbox
         </li>
       </ul>
     </aside>

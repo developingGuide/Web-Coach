@@ -1,80 +1,100 @@
-import Sidebar from "../components/Sidebar";
-import { useState, useEffect } from "react";
-import projects from "../data/tasks";
-import "./Inbox.css";
+import { useEffect, useState } from 'react';
+import Sidebar from '../components/Sidebar';
+import projects from '../data/tasks';
+import './Inbox.css';
 
-export default function Inbox() {
+const Inbox = () => {
+  const [inboxItems, setInboxItems] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [availableTasks, setAvailableTasks] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
-    const completed = JSON.parse(localStorage.getItem("completedTasks")) || [];
-    const current = JSON.parse(localStorage.getItem("currentTask"));
+    const selectedProjectId = parseInt(localStorage.getItem('selectedProjectId'));
+    setSelectedProject(selectedProjectId);
+    const completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [];
 
-    if (!current) {
-      const firstTask = projects[0].tasks[0];
-      localStorage.setItem("currentTask", JSON.stringify(firstTask));
+    const project = projects.find(p => p.id === selectedProjectId);
+    if (!project) return;
+
+    const historyKey = `inboxHistory_${selectedProjectId}`;
+    const inboxHistory = JSON.parse(localStorage.getItem(historyKey)) || [];
+
+    const deliveredTasks = inboxHistory.map(taskId =>
+      project.tasks.find(t => t.id === taskId)
+    ).filter(Boolean);
+
+    if (localStorage.getItem("taskJustShipped") === "true") {
+      const currentTask = JSON.parse(localStorage.getItem("currentTask"));
+      const currentIndex = project.tasks.findIndex(t => t.id === currentTask.id);
+      const nextTask = project.tasks[currentIndex + 1];
+
+      if (nextTask && !inboxHistory.includes(nextTask.id)) {
+        setTimeout(() => {
+          const updatedInbox = [...inboxHistory, nextTask.id];
+          localStorage.setItem(historyKey, JSON.stringify(updatedInbox));
+          setInboxItems([...deliveredTasks, nextTask]);
+          localStorage.setItem("taskJustShipped", "false");
+        }, 5000);
+      } else {
+        localStorage.setItem("taskJustShipped", "false");
+      }
     }
 
-    const allTasks = projects.flatMap((p) => p.tasks);
-    const filtered = allTasks.filter(
-      (task) => completed.includes(task.id) || task.id === current?.id
-    );
-
-    setAvailableTasks(filtered);
-
-    // Handle delayed task unlock
-    const nextIndex = allTasks.findIndex((t) => t.id === current?.id) + 1;
-    const nextTask = allTasks[nextIndex];
-
-    if (localStorage.getItem("taskJustShipped") && nextTask) {
-      setTimeout(() => {
-        localStorage.setItem("currentTask", JSON.stringify(nextTask));
-        localStorage.removeItem("taskJustShipped");
-        window.location.reload(); // refresh inbox to show new task
-      }, 5000); // 5 seconds for testing
-    }
+    setInboxItems(deliveredTasks);
   }, []);
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+    localStorage.setItem("selectedTask", JSON.stringify(task));
+  };
+
+  const handleStartTask = () => {
+    if (selectedTask) {
+      window.location.href = "/playground";
+    }
+  };
 
   return (
     <div className="inbox-wrapper">
       <Sidebar />
+
       <div className="inbox-main">
         <div className="inbox-sidebar">
           <h2>Inbox</h2>
-          {availableTasks.map((task) => (
-            <div
-              key={task.id}
-              onClick={() => setSelectedTask(task)}
-              className={`inbox-email-preview ${selectedTask?.id === task.id ? "inbox-selected" : ""}`}
-            >
-              <strong>{task.subject}</strong>
-              <p className="inbox-sender">{task.sender}</p>
-            </div>
-          ))}
+          {inboxItems.length === 0 ? (
+            <p className="inbox-no-selection">No tasks yet. Try selecting a journey!</p>
+          ) : (
+            inboxItems.map((task) => (
+              <div
+                key={task.id}
+                className={`inbox-email-preview ${selectedTask?.id === task.id ? 'inbox-selected' : ''}`}
+                onClick={() => handleTaskClick(task)}
+              >
+                <h3>{task.subject}</h3>
+                <p className="inbox-sender"><strong>From:</strong> {task.sender}</p>
+                <p>{task.description}</p>
+              </div>
+            ))
+          )}
         </div>
 
         <div className="inbox-body">
           {selectedTask ? (
             <>
               <h2>{selectedTask.subject}</h2>
-              <p><strong>From:</strong> {selectedTask.sender}</p>
-              <p className="inbox-content">{selectedTask.body}</p>
-              <button
-                className="inbox-start-task-button"
-                onClick={() => {
-                  localStorage.setItem("selectedTask", JSON.stringify(selectedTask));
-                  window.location.href = "/playground";
-                }}
-              >
+              <p className="inbox-sender"><strong>From:</strong> {selectedTask.sender}</p>
+              <div className="inbox-content">{selectedTask.description}</div>
+              <button className="inbox-start-task-button" onClick={handleStartTask}>
                 Start Task
               </button>
             </>
           ) : (
-            <p className="inbox-no-selection">Select an email to view</p>
+            <p className="inbox-no-selection">Select a task to view details</p>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Inbox;

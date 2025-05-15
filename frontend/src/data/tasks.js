@@ -22,6 +22,8 @@ const projects = [
   {
     id: 1,
     name: 'HTML Basics',
+    image: "https://placehold.co/300x150",
+    description: "Start your journey with HTML essentials",
     tasks: [
       {
         id: 1,
@@ -42,6 +44,34 @@ const projects = [
         body: 'Can you add a button that says "Click Me"? It should be visible on the homepage.',
         startingCode: defaultTemplate,
         expectedOutput: `<button>Click Me</button>`
+      }
+    ]
+  }, 
+  {
+    id: 2,
+    name: 'CSS Basics',
+    image: "https://placehold.co/300x150",
+    description: "Learn how to style your pages with CSS",
+    tasks: [
+      {
+        id: 101,
+        title: 'Center a Div',
+        subject: 'Client Request: Center This Box',
+        sender: 'client3@webdevcoach.fake',
+        description: 'Make a div that’s centered on the page.',
+        body: 'Hey! I need a div that’s centered. Make it look nice!',
+        startingCode: defaultTemplate,
+        expectedOutput: `<div style="display:flex;justify-content:center;align-items:center;height:100vh;"><div>Centered Box</div></div>`
+      },
+      {
+        id: 102,
+        title: 'Add a Background Color',
+        subject: 'Quick Task: Background Color',
+        sender: 'client4@webdevcoach.fake',
+        description: 'Add a background color to the page.',
+        body: 'Can you change the background color to lightblue? Thanks!',
+        startingCode: defaultTemplate,
+        expectedOutput: `<body style="background-color:lightblue;"></body>`
       }
     ]
   }

@@ -61,6 +61,7 @@ const CodingPage = () => {
   
   const handleShip = () => {
     alert("Task marked as complete!");
+
     const current = JSON.parse(localStorage.getItem("selectedTask"));
     const completed = JSON.parse(localStorage.getItem("completedTasks")) || [];
 
@@ -72,11 +73,22 @@ const CodingPage = () => {
     localStorage.setItem("currentTask", JSON.stringify(current));
     localStorage.setItem("taskJustShipped", true);
 
-    // Redirect to inbox
+    // Schedule delivery of next task in 30 mins (5s for testing)
+    setTimeout(() => {
+      const projectId = parseInt(localStorage.getItem("selectedProjectId"));
+      const project = projects.find(p => p.id === projectId);
+      const taskIndex = project.tasks.findIndex(t => t.id === current.id);
+      const nextTask = project.tasks[taskIndex + 1];
+      if (nextTask) {
+        localStorage.setItem("currentTask", JSON.stringify(nextTask));
+        const inboxHistory = JSON.parse(localStorage.getItem("inboxHistory")) || [];
+        inboxHistory.push(nextTask.id);
+        localStorage.setItem("inboxHistory", JSON.stringify(inboxHistory));
+      }
+    }, 5000); // for testing
+
     window.location.href = "/inbox";
   };
-
-
   
   
 

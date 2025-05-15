@@ -4,6 +4,7 @@ import Test from './pages/test';
 import Home from './pages/Home';
 import CodingPage from './pages/CodingPage';
 import Inbox from './pages/Inbox';
+import Journey from './pages/Journey';
 
 function App() {
 
@@ -31,6 +32,10 @@ function App() {
                     <Route
                         path="/inbox"
                         element={<Inbox/>}
+                    />
+                    <Route
+                        path="/journey"
+                        element={<Journey/>}
                     />
                 </Routes>
             </div>
