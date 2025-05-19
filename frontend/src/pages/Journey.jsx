@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import "./Journey.css";
 import projects from "../data/tasks";
 import Sidebar from "../components/Sidebar";
-import { supabase } from "../../supabaseClient"
+import supabase from "../../config/supabaseClient";
 
 export default function Journey() {
+  console.log(supabase)
+
   const navigate = useNavigate();
 
   const handleSelect = (id) => {
