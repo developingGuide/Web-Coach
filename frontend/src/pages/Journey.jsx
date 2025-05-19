@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./Journey.css";
 import projects from "../data/tasks";
 import Sidebar from "../components/Sidebar";
+import { supabase } from "../../supabaseClient"
 
 export default function Journey() {
   const navigate = useNavigate();
