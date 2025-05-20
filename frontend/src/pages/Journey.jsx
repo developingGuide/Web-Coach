@@ -1,32 +1,61 @@
 import { useNavigate } from "react-router-dom";
 import "./Journey.css";
-import projects from "../data/tasks";
+// import projects from "../data/tasks";
 import Sidebar from "../components/Sidebar";
 import supabase from "../../config/supabaseClient";
+import { useEffect, useState } from "react";
 
 export default function Journey() {
-  console.log(supabase)
-
   const navigate = useNavigate();
 
-  const handleSelect = (id) => {
-    localStorage.setItem('selectedProjectId', id);
+  const [projects, setProjects] = useState([])
 
-    // Check if this project already has inbox history
-    const historyKey = `inboxHistory_${id}`;
-    const inboxHistory = JSON.parse(localStorage.getItem(historyKey)) || [];
+  const fetchProjects = async () => {
+    const {error, data} = await supabase
+      .from("projects")
+      .select("*")
+      .order("id", {ascending: true});
 
-    // If no task was shipped yet, add the first one
-    const selectedProject = projects.find((proj) => proj.id === id);
-    if (inboxHistory.length === 0 && selectedProject?.tasks.length > 0) {
-      const firstTask = selectedProject.tasks[0];
-      localStorage.setItem(historyKey, JSON.stringify([firstTask.id]));
-      localStorage.setItem('currentTask', JSON.stringify(firstTask));
-    }
-
-    localStorage.setItem("taskJustShipped", "true");
-    window.location.href = '/inbox';
+      if (error) {
+        console.error("Error reading projects: ", error.message);
+        return
+      }
+      
+      setProjects(data)
   };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  console.log(projects)
+
+  const handleSelect = async (id) => {
+    const { error } = await supabase
+      .from("user_state")
+      .update({ current_project: id, shipped_tasks: {} })
+
+    navigate("/inbox")
+  }
+
+  // const handleSelect = (id) => {
+  //   localStorage.setItem('selectedProjectId', id);
+
+  //   // Check if this project already has inbox history
+  //   const historyKey = `inboxHistory_${id}`;
+  //   const inboxHistory = JSON.parse(localStorage.getItem(historyKey)) || [];
+
+  //   // If no task was shipped yet, add the first one
+  //   const selectedProject = projects.find((proj) => proj.id === id);
+  //   if (inboxHistory.length === 0 && selectedProject?.tasks.length > 0) {
+  //     const firstTask = selectedProject.tasks[0];
+  //     localStorage.setItem(historyKey, JSON.stringify([firstTask.id]));
+  //     localStorage.setItem('currentTask', JSON.stringify(firstTask));
+  //   }
+
+  //   localStorage.setItem("taskJustShipped", "true");
+  //   window.location.href = '/inbox';
+  // };
 
 
 
@@ -44,7 +73,7 @@ export default function Journey() {
               className="project-card"
               onClick={() => handleSelect(proj.id)}
             >
-              <img src={proj.image} alt={proj.name} className="project-image" />
+              <img src={proj.image_url} alt={proj.name} className="project-image" />
               <div className="project-info">
                 <h2>{proj.name}</h2>
                 <p>{proj.description}</p>
