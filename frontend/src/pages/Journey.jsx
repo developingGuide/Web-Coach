@@ -42,19 +42,6 @@ export default function Journey() {
       
       setTasks(data)
   };
-    
-  const fetchUserState = async () => {
-    const {error, data} = await supabase
-      .from("user_state")
-      .select("*")
-
-      if (error) {
-        console.error("Error reading user state: ", error.message);
-        return
-      }
-      
-      setTasks(data)
-  };
 
   const fetchTaskIds = async () => {
     const {data, error } = await supabase
@@ -85,7 +72,6 @@ export default function Journey() {
   }
 
   useEffect(() => {
-    fetchUserState();
     fetchTasks();
     fetchProjects();
     fetchTaskIds();
@@ -120,7 +106,7 @@ export default function Journey() {
 
             const {error2} = await supabase
               .from("user_state")
-              .update({current_task: data, inbox_history: updatedHistory, task_just_shipped: true })
+              .update({current_task: data, inbox_history: updatedHistory, task_just_shipped: true, current_task_id: firstTaskId })
               .eq("user_id", userId)
 
               if(error2){
