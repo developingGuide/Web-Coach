@@ -11,7 +11,6 @@ const CodingPage = () => {
   const [currentTaskId, setCurrentTaskId] = useState()
   const [currentTask, setCurrentTask] = useState({})
   const [tasks, setTasks] = useState([])
-  const [completedTasks, setCompletedTasks] = useState([])
   const [inboxHistory, setInboxHistory] = useState([])
 
   
@@ -73,22 +72,6 @@ const CodingPage = () => {
     fetchCurrentTask();
   }, []);
 
-
-  const fetchCompletedTasks = async () => {
-    const { error, data } = await supabase
-      .from("user_state")
-      .select("completed_tasks")
-      .eq("user_id", userId)
-      .single(); // THIS is important
-
-    if (error) {
-      console.error("Error fetching completed tasks: ", error.message);
-      return;
-    }
-
-    setCompletedTasks(data?.completed_tasks || []);
-  }
-
   const fetchInboxHistory = async () => {
     const { data, error } = await supabase
         .from("user_state")
@@ -105,7 +88,6 @@ const CodingPage = () => {
   }
 
   useEffect(() => {
-    fetchCompletedTasks();
     fetchTasks();
     fetchInboxHistory();
   }, []);
@@ -118,41 +100,13 @@ const CodingPage = () => {
     previewWindow.document.close();
   };
 
-  
-  // const handleShip = () => {
-
-  //   if (!completed.includes(current.id)) {
-  //     completed.push(current.id);
-  //     localStorage.setItem("completedTasks", JSON.stringify(completed));
-  //   }
-
-  //   // Schedule delivery of next task in 30 mins (5s for testing)
-  //   setTimeout(() => {
-  //     const projectId = parseInt(localStorage.getItem("selectedProjectId"));
-  //     const project = projects.find(p => p.id === projectId);
-  //     const taskIndex = project.tasks.findIndex(t => t.id === current.id);
-  //     const nextTask = project.tasks[taskIndex + 1];
-  //     if (nextTask) {
-  //       localStorage.setItem("currentTask", JSON.stringify(nextTask));
-  //       const inboxHistory = JSON.parse(localStorage.getItem("inboxHistory")) || [];
-  //       inboxHistory.push(nextTask.id);
-  //       localStorage.setItem("inboxHistory", JSON.stringify(inboxHistory));
-  //     }
-  //   }, 5000); // for testing
-
-  //   window.location.href = "/inbox";
-  // };
-
 
   const handleShip = async () => {
     if (!currentTask?.id) return;
 
-    const newCompletedTask = [...completedTasks, currentTask.id];
-
     const { error } = await supabase
       .from("user_state")
       .update({
-        completed_tasks: newCompletedTask,
         task_just_shipped: true,
         // `current_task_id` will be updated later in the Inbox
       })

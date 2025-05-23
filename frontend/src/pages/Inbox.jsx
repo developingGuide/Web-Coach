@@ -10,41 +10,6 @@ const Inbox = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
 
-  // useEffect(() => {
-  //   const selectedProjectId = parseInt(localStorage.getItem('selectedProjectId'));
-  //   setSelectedProject(selectedProjectId);
-  //   const completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [];
-
-  //   const project = projects.find(p => p.id === selectedProjectId);
-  //   if (!project) return;
-
-  //   const historyKey = `inboxHistory_${selectedProjectId}`;
-  //   const inboxHistory = JSON.parse(localStorage.getItem(historyKey)) || [];
-
-  //   const deliveredTasks = inboxHistory.map(taskId =>
-  //     project.tasks.find(t => t.id === taskId)
-  //   ).filter(Boolean);
-
-  //   if (localStorage.getItem("taskJustShipped") === "true") {
-  //     const currentTask = JSON.parse(localStorage.getItem("currentTask"));
-  //     const currentIndex = project.tasks.findIndex(t => t.id === currentTask.id);
-  //     const nextTask = project.tasks[currentIndex + 1];
-
-  //     if (nextTask && !inboxHistory.includes(nextTask.id)) {
-  //       setTimeout(() => {
-  //         const updatedInbox = [...inboxHistory, nextTask.id];
-  //         localStorage.setItem(historyKey, JSON.stringify(updatedInbox));
-  //         setInboxItems([...deliveredTasks, nextTask]);
-  //         localStorage.setItem("taskJustShipped", "false");
-  //       }, 5000);
-  //     } else {
-  //       localStorage.setItem("taskJustShipped", "false");
-  //     }
-  //   }
-
-  //   setInboxItems(deliveredTasks);
-  // }, []);
-
   useEffect(() => {
     let deliveredNext = false; // 🛡️ prevent double delivery
 
