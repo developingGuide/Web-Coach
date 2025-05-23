@@ -94,9 +94,10 @@ const Inbox = () => {
               .eq("user_id", userId);
 
             if (!updateError) {
-              setInboxItems(prev => [...prev, nextTask]);
+              fetchInbox(); // ✅ reload from scratch
             }
           }, 5000);
+
         } else {
           await supabase
             .from("user_state")
