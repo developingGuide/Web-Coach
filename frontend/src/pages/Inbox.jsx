@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
-import projects from '../data/tasks';
 import './Inbox.css';
 import supabase from '../../config/supabaseClient';
 
@@ -9,6 +8,7 @@ const Inbox = () => {
   const [inboxItems, setInboxItems] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [tasks, setTasks] = useState([])
 
   useEffect(() => {
     let deliveredNext = false; // 🛡️ prevent double delivery
@@ -28,19 +28,33 @@ const Inbox = () => {
       const selectedProjectId = userState.selected_project_id;
       setSelectedProject(selectedProjectId);
 
-      const project = projects.find(p => p.id === selectedProjectId);
-      if (!project) return;
+      // const project = projects.find(p => p.id === selectedProjectId);
+
+      const {error2, data2} = await supabase
+        .from("tasks")
+        .select("*")
+        .order("id", {ascending: true});
+
+        if (error2) {
+          console.error("Error reading tasks: ", error.message);
+          return
+        } else{
+          setTasks(data2)
+        }
+
+      if (!tasks) return;
 
       const inboxHistory = userState.inbox_history || [];
+      console.log(inboxHistory)
       const deliveredTasks = inboxHistory
-        .map(taskId => project.tasks.find(t => t.id === taskId))
+        .map(taskId => tasks.find(t => t.id === taskId))
         .filter(Boolean);
 
       setInboxItems(deliveredTasks);
 
       if (userState.task_just_shipped && !deliveredNext) {
-        const currentIndex = project.tasks.findIndex(t => t.id === userState.current_task_id);
-        const nextTask = project.tasks[currentIndex + 1];
+        const currentIndex = tasks.findIndex(t => t.id === userState.current_task_id);
+        const nextTask = tasks[currentIndex + 1];
 
         if (nextTask && !inboxHistory.includes(nextTask.id)) {
           setTimeout(async () => {
@@ -73,7 +87,7 @@ const Inbox = () => {
     };
 
     fetchInbox();
-  }, [projects, userId]);
+  }, [tasks, userId]);
 
 
 
