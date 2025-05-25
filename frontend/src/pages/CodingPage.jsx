@@ -242,43 +242,21 @@ const CodingPage = () => {
       return;
     }
 
-    const { data: taskList, error: taskError } = await supabase
-      .from("tasks")
-      .select("id")
-      .eq("project_id", userState.selected_project_id)
-      .order("id", { ascending: true });
-
-    if (taskError) {
-      console.error("Failed to fetch task list:", taskError);
-      return;
-    }
-
-    const currentIndex = taskList.findIndex(t => t.id === userState.current_task_id);
-    const nextTask = taskList[currentIndex + 1];
-
-    if (!nextTask) {
-      alert("No more tasks in this project!");
-      return;
-    }
-
-    const updatedInbox = [...userState.inbox_history, nextTask.id];
-
+    // Just mark it as shipped (in a new column or flag)
     const { error: updateError } = await supabase
       .from("user_state")
-      .update({
-        inbox_history: updatedInbox,
-        current_task_id: nextTask.id,
-      })
+      .update({ task_just_shipped: true })  // this triggers delayed delivery in Inbox
       .eq("user_id", userId);
 
     if (updateError) {
-      console.error("Failed to update inbox:", updateError);
+      console.error("Failed to mark task as shipped:", updateError);
       return;
     }
 
-    alert("Task shipped! Next task delivered.");
+    alert("Task shipped! Returning to inbox...");
     window.location.href = "/inbox";
   };
+
 
 
 

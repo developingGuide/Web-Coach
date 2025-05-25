@@ -157,11 +157,13 @@ const Inbox = () => {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [allTasks, setAllTasks] = useState([]);
 
+  
+
   useEffect(() => {
     const fetchInbox = async () => {
       const { data: userState, error: userError } = await supabase
         .from("user_state")
-        .select("selected_project_id, inbox_history, current_task_id")
+        .select("selected_project_id, inbox_history, current_task_id, task_just_shipped")
         .eq("user_id", userId)
         .single();
 
@@ -190,10 +192,47 @@ const Inbox = () => {
         .filter(Boolean) || [];
 
       setInboxItems(deliveredTasks);
+
+      // 🔒 Only attempt delivery if just shipped, and there IS a next task
+      if (userState.task_just_shipped) {
+        const currentIndex = allTasksData.findIndex(task => task.id === userState.current_task_id);
+        const nextTask = allTasksData[currentIndex + 1];
+
+        if (!nextTask) {
+          // No task to deliver, just reset flag
+          await supabase
+            .from("user_state")
+            .update({ task_just_shipped: false })
+            .eq("user_id", userId);
+          return;
+        }
+
+        setTimeout(async () => {
+          const updatedInbox = [...userState.inbox_history, nextTask.id];
+
+          const { error: updateError } = await supabase
+            .from("user_state")
+            .update({
+              inbox_history: updatedInbox,
+              current_task_id: nextTask.id,
+              task_just_shipped: false, // ✅ Reset the flag after delivering
+            })
+            .eq("user_id", userId);
+
+          if (updateError) {
+            console.error("Failed to update inbox after delay:", updateError);
+          } else {
+            // ✅ Refresh inbox
+            fetchInbox();
+          }
+        }, 5000);
+      }
     };
 
     fetchInbox();
   }, []);
+
+
 
 
 

@@ -106,7 +106,7 @@ export default function Journey() {
 
             const {error2} = await supabase
               .from("user_state")
-              .update({current_task: data, inbox_history: updatedHistory, task_just_shipped: true, current_task_id: firstTaskId })
+              .update({current_task: data, inbox_history: updatedHistory, task_just_shipped: false, current_task_id: firstTaskId })
               .eq("user_id", userId)
 
               if(error2){
