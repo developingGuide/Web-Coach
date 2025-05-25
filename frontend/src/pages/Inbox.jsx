@@ -199,10 +199,20 @@ const Inbox = () => {
         const nextTask = allTasksData[currentIndex + 1];
 
         if (!nextTask) {
-          // No task to deliver, just reset flag
+          // No more tasks, just reset the flag
           await supabase
             .from("user_state")
             .update({ task_just_shipped: false })
+            .eq("user_id", userId);
+          return;
+        }
+
+        // 🚫 Don't add nextTask if it's already in inbox_history
+        const alreadyInInbox = userState.inbox_history.includes(nextTask.id);
+        if (alreadyInInbox) {
+          await supabase
+            .from("user_state")
+            .update({ task_just_shipped: false }) // just reset flag
             .eq("user_id", userId);
           return;
         }
@@ -215,18 +225,18 @@ const Inbox = () => {
             .update({
               inbox_history: updatedInbox,
               current_task_id: nextTask.id,
-              task_just_shipped: false, // ✅ Reset the flag after delivering
+              task_just_shipped: false,
             })
             .eq("user_id", userId);
 
           if (updateError) {
             console.error("Failed to update inbox after delay:", updateError);
           } else {
-            // ✅ Refresh inbox
-            fetchInbox();
+            fetchInbox(); // refresh inbox UI
           }
         }, 5000);
       }
+
     };
 
     fetchInbox();
