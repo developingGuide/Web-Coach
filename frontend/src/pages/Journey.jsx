@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import "./Journey.css";
-// import projects from "../data/tasks";
 import Sidebar from "../components/Sidebar";
 import supabase from "../../config/supabaseClient";
 import { useEffect, useState } from "react";
