@@ -261,26 +261,23 @@ const CodingPage = () => {
       return;
     }
 
-    // Delay delivery by 5 seconds
-    setTimeout(async () => {
-      const updatedInbox = [...userState.inbox_history, nextTask.id];
+    const updatedInbox = [...userState.inbox_history, nextTask.id];
 
-      const { error: updateError } = await supabase
-        .from("user_state")
-        .update({
-          inbox_history: updatedInbox,
-          current_task_id: nextTask.id,
-        })
-        .eq("user_id", userId);
+    const { error: updateError } = await supabase
+      .from("user_state")
+      .update({
+        inbox_history: updatedInbox,
+        current_task_id: nextTask.id,
+      })
+      .eq("user_id", userId);
 
-      if (updateError) {
-        console.error("Failed to update inbox:", updateError);
-        return;
-      }
+    if (updateError) {
+      console.error("Failed to update inbox:", updateError);
+      return;
+    }
 
-      alert("Task shipped! Next task delivered.");
-      window.location.href = "/inbox";
-    }, 5000);
+    alert("Task shipped! Next task delivered.");
+    window.location.href = "/inbox";
   };
 
 
