@@ -123,26 +123,22 @@ export default function Journey() {
 
 
   return (
-    <div className="journey-wrapper">
-      <Sidebar />
-
-      <div className="journey-main">
-        <h1 className="journey-title">Choose Your Journey</h1>
-        <div className="project-grid">
-          {projects.map((proj) => (
-            <div
-              key={proj.id}
-              className="project-card"
-              onClick={() => handleSelect(proj.id)}
-            >
-              <img src={proj.image_url} alt={proj.name} className="project-image" />
-              <div className="project-info">
-                <h2>{proj.name}</h2>
-                <p>{proj.description}</p>
-              </div>
+    <div className="journey-main">
+      <h1 className="journey-title">Choose Your Journey</h1>
+      <div className="project-grid">
+        {projects.map((proj) => (
+          <div
+            key={proj.id}
+            className="project-card"
+            onClick={() => handleSelect(proj.id)}
+          >
+            <img src={proj.image_url} alt={proj.name} className="project-image" />
+            <div className="project-info">
+              <h2>{proj.name}</h2>
+              <p>{proj.description}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

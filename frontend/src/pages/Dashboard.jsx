@@ -21,24 +21,20 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
-      <Sidebar />
+    <main className="mainScreen">
+      <h1>Welcome Back, Developer 👋</h1>
+      <p>Here's what you’re working on today:</p>
 
-      <main className="mainScreen">
-        <h1>Welcome Back, Developer 👋</h1>
-        <p>Here's what you’re working on today:</p>
-
-        <section className="tasks">
-          {currentTask ? (
-            <div className="task-card clickable" onClick={goToCodingPage}>
-              {currentTask.title}
-            </div>
-          ) : (
-            <p>No task started yet. Check your messages to begin!</p>
-          )}
-        </section>
-      </main>
-    </div>
+      <section className="tasks">
+        {currentTask ? (
+          <div className="task-card clickable" onClick={goToCodingPage}>
+            {currentTask.title}
+          </div>
+        ) : (
+          <p>No task started yet. Check your messages to begin!</p>
+        )}
+      </section>
+    </main>
   );
 };
 

@@ -65,62 +65,135 @@ const CodingPage = () => {
     previewWindow.document.close();
   };
 
-  const handleShip = async () => {
-      const lowerCode = code.toLowerCase();
+  // const handleShip = async () => {
+  //     const lowerCode = code.toLowerCase();
 
-      const hasNav = lowerCode.includes('<nav');
-      const hasUL = lowerCode.includes('<ul');
-      const hasHome = lowerCode.includes('>home<');
-      const hasAbout = lowerCode.includes('>about<');
+  //     const hasNav = lowerCode.includes('<nav');
+  //     const hasUL = lowerCode.includes('<ul');
+  //     const hasHome = lowerCode.includes('>home<');
+  //     const hasAbout = lowerCode.includes('>about<');
 
-    if (hasNav && hasUL && hasHome && hasAbout) {
-      if (!currentTask?.id) return;
+  //   if (hasNav && hasUL && hasHome && hasAbout) {
+  //     if (!currentTask?.id) return;
 
-      const { data: userState, error: stateError } = await supabase
-        .from("user_state")
-        .select("selected_project_id, inbox_history, current_task_id, completed_tasks")
-        .eq("user_id", userId)
-        .single();
+  //     const { data: userState, error: stateError } = await supabase
+  //       .from("user_state")
+  //       .select("selected_project_id, inbox_history, current_task_id, completed_tasks")
+  //       .eq("user_id", userId)
+  //       .single();
 
-      if (stateError || !userState) {
-        console.error("Failed to fetch user state:", stateError);
-        return;
-      }
+  //     if (stateError || !userState) {
+  //       console.error("Failed to fetch user state:", stateError);
+  //       return;
+  //     }
 
-      // Just mark it as shipped (in a new column or flag)
-      const { error: updateError } = await supabase
-        .from("user_state")
-        .update({ task_just_shipped: true })  // this triggers delayed delivery in Inbox
-        .eq("user_id", userId);
+  //     // Just mark it as shipped (in a new column or flag)
+  //     const { error: updateError } = await supabase
+  //       .from("user_state")
+  //       .update({ task_just_shipped: true })  // this triggers delayed delivery in Inbox
+  //       .eq("user_id", userId);
 
-      if (updateError) {
-        console.error("Failed to mark task as shipped:", updateError);
-        return;
-      }
+  //     if (updateError) {
+  //       console.error("Failed to mark task as shipped:", updateError);
+  //       return;
+  //     }
 
-      const finishedTask = [...userState.completed_tasks, userState.current_task_id]
+  //     const finishedTask = [...userState.completed_tasks, userState.current_task_id]
 
-      const { error: completedError } = await supabase
-        .from("user_state")
-        .update({ completed_tasks: finishedTask })  // this triggers delayed delivery in Inbox
-        .eq("user_id", userId);
+  //     const { error: completedError } = await supabase
+  //       .from("user_state")
+  //       .update({ completed_tasks: finishedTask })  // this triggers delayed delivery in Inbox
+  //       .eq("user_id", userId);
 
-      if (updateError) {
-        console.error("Failed to mark task as shipped:", completedError);
-        return;
-      }
+  //     if (updateError) {
+  //       console.error("Failed to mark task as shipped:", completedError);
+  //       return;
+  //     }
 
-      alert("✅ Task shipped successfully! New task will arrive in 30 minutes.");
-      window.location.href = "/inbox";
-    } else {
-      let tips = [];
-      if (!hasNav) tips.push("Try adding a <nav> tag.");
-      if (!hasUL) tips.push("Did you use an unordered list (<ul>)?");
-      if (!hasHome) tips.push("Missing a link to 'Home'.");
-      if (!hasAbout) tips.push("Missing a link to 'About'.");
+  //     alert("✅ Task shipped successfully! New task will arrive in 30 minutes.");
+  //     window.location.href = "/inbox";
+  //   } else {
+  //     let tips = [];
+  //     if (!hasNav) tips.push("Try adding a <nav> tag.");
+  //     if (!hasUL) tips.push("Did you use an unordered list (<ul>)?");
+  //     if (!hasHome) tips.push("Missing a link to 'Home'.");
+  //     if (!hasAbout) tips.push("Missing a link to 'About'.");
 
-      alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
+  //     alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
+  //   }
+  // };
+
+
+  const checkUserCode = () => {
+    const lowerCode = code.toLowerCase();
+
+    const hasNav = lowerCode.includes('<nav');
+    const hasUL = lowerCode.includes('<ul');
+    const hasHome = lowerCode.includes('>home<');
+    const hasAbout = lowerCode.includes('>about<');
+
+    let tips = [];
+    if (!hasNav) tips.push("Try adding a <nav> tag.");
+    if (!hasUL) tips.push("Did you use an unordered list (<ul>)?");
+    if (!hasHome) tips.push("Missing a link to 'Home'.");
+    if (!hasAbout) tips.push("Missing a link to 'About'.");
+
+    // if (tips.length > 0){
+    //   alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
+    // }
+  }
+
+  const shipTask = async () => {
+    if (!currentTask?.id) return;
+  
+    const { data: userState, error: stateError } = await supabase
+      .from("user_state")
+      .select("selected_project_id, inbox_history, current_task_id, completed_tasks")
+      .eq("user_id", userId)
+      .single();
+
+    if (stateError || !userState) {
+      console.error("Failed to fetch user state:", stateError);
+      return;
     }
+
+    // Just mark it as shipped (in a new column or flag)
+    const { error: updateError } = await supabase
+      .from("user_state")
+      .update({ task_just_shipped: true })  // this triggers delayed delivery in Inbox
+      .eq("user_id", userId);
+
+    if (updateError) {
+      console.error("Failed to mark task as shipped:", updateError);
+      return;
+    }
+
+    const finishedTask = [...userState.completed_tasks, userState.current_task_id]
+
+    const { error: completedError } = await supabase
+      .from("user_state")
+      .update({ completed_tasks: finishedTask })  // this triggers delayed delivery in Inbox
+      .eq("user_id", userId);
+
+    if (updateError) {
+      console.error("Failed to mark task as shipped:", completedError);
+      return;
+    }
+
+    alert("Task shipped! Next task will be delivered in 30 minutes!...");
+    window.location.href = "/inbox";
+  }
+
+  const handleShip = () => {
+    const isCorrect = checkUserCode(); // your current correctness check function
+
+    if (!isCorrect) {
+      const confirmShip = window.confirm("Are you sure you want to ship? Mistakes will lose you exp!");
+      if (!confirmShip) return;
+    }
+
+    // Proceed with shipping regardless of correctness
+    shipTask(); // your existing shipping logic
   };
 
 
