@@ -7,7 +7,7 @@ const Navbar = ({ exp = 45, maxExp = 100 }) => {
 
   return (
     <div className="navbar">
-      <img src="/logo.png" alt="Logo" className="navbar-logo" />
+      <img src="../public/Logo.png" alt="Logo" className="navbar-logo" />
 
       <div className="exp-bar-container">
         <div className="exp-bar">
