@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import CodeEditor from '../components/CodeEditor';
 import './CodingPage.css';
 import supabase from '../../config/supabaseClient';
+import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
 
 const CodingPage = () => {
   const userId = "demo_user";
   const [showAnswer, setShowAnswer] = useState(false);
   const [currentTask, setCurrentTask] = useState({});
   const [code, setCode] = useState("");
+  const [exp, setExp] = useState(0);
+  const [level, setLevel] = useState(1);
+  const [ nextLevelExp,setNextLevelExp] = useState(0)
 
   const defaultTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -64,65 +68,6 @@ const CodingPage = () => {
     previewWindow.document.write(code);
     previewWindow.document.close();
   };
-
-  // const handleShip = async () => {
-  //     const lowerCode = code.toLowerCase();
-
-  //     const hasNav = lowerCode.includes('<nav');
-  //     const hasUL = lowerCode.includes('<ul');
-  //     const hasHome = lowerCode.includes('>home<');
-  //     const hasAbout = lowerCode.includes('>about<');
-
-  //   if (hasNav && hasUL && hasHome && hasAbout) {
-  //     if (!currentTask?.id) return;
-
-  //     const { data: userState, error: stateError } = await supabase
-  //       .from("user_state")
-  //       .select("selected_project_id, inbox_history, current_task_id, completed_tasks")
-  //       .eq("user_id", userId)
-  //       .single();
-
-  //     if (stateError || !userState) {
-  //       console.error("Failed to fetch user state:", stateError);
-  //       return;
-  //     }
-
-  //     // Just mark it as shipped (in a new column or flag)
-  //     const { error: updateError } = await supabase
-  //       .from("user_state")
-  //       .update({ task_just_shipped: true })  // this triggers delayed delivery in Inbox
-  //       .eq("user_id", userId);
-
-  //     if (updateError) {
-  //       console.error("Failed to mark task as shipped:", updateError);
-  //       return;
-  //     }
-
-  //     const finishedTask = [...userState.completed_tasks, userState.current_task_id]
-
-  //     const { error: completedError } = await supabase
-  //       .from("user_state")
-  //       .update({ completed_tasks: finishedTask })  // this triggers delayed delivery in Inbox
-  //       .eq("user_id", userId);
-
-  //     if (updateError) {
-  //       console.error("Failed to mark task as shipped:", completedError);
-  //       return;
-  //     }
-
-  //     alert("✅ Task shipped successfully! New task will arrive in 30 minutes.");
-  //     window.location.href = "/inbox";
-  //   } else {
-  //     let tips = [];
-  //     if (!hasNav) tips.push("Try adding a <nav> tag.");
-  //     if (!hasUL) tips.push("Did you use an unordered list (<ul>)?");
-  //     if (!hasHome) tips.push("Missing a link to 'Home'.");
-  //     if (!hasAbout) tips.push("Missing a link to 'About'.");
-
-  //     alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
-  //   }
-  // };
-
 
   const checkUserCode = () => {
     const lowerCode = code.toLowerCase();
@@ -181,16 +126,43 @@ const CodingPage = () => {
     }
 
     alert("Task shipped! Next task will be delivered in 30 minutes!...");
+
     window.location.href = "/inbox";
   }
 
-  const handleShip = () => {
+  const handleShip = async () => {
     const isCorrect = checkUserCode(); // your current correctness check function
 
     if (!isCorrect) {
       const confirmShip = window.confirm("Are you sure you want to ship? Mistakes will lose you exp!");
       if (!confirmShip) return;
     }
+
+    const { data, error } = await supabase
+      .from("user_state")
+      .select("exp")
+      .eq("user_id", userId)
+      .single();
+
+    if (!data || error) {
+      console.error("Failed to fetch exp:", error);
+      return;
+    }
+
+    const gainedExp = 30;
+    const newExp = data.exp + gainedExp;
+    const newLevel = getLevelFromExp(newExp);
+    const nextLevel = getExpForLevel(newLevel + 1);
+
+    // Update local state correctly
+    setExp(newExp);
+    setLevel(newLevel);
+    setNextLevelExp(nextLevel);
+
+    const { error2 } = await supabase
+      .from("user_state")
+      .update({ exp: newExp, level: newLevel })
+      .eq("user_id", userId);
 
     // Proceed with shipping regardless of correctness
     shipTask(); // your existing shipping logic
