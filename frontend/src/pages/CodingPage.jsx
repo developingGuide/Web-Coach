@@ -66,46 +66,62 @@ const CodingPage = () => {
   };
 
   const handleShip = async () => {
-    if (!currentTask?.id) return;
+      const lowerCode = code.toLowerCase();
 
-    const { data: userState, error: stateError } = await supabase
-      .from("user_state")
-      .select("selected_project_id, inbox_history, current_task_id, completed_tasks")
-      .eq("user_id", userId)
-      .single();
+      const hasNav = lowerCode.includes('<nav');
+      const hasUL = lowerCode.includes('<ul');
+      const hasHome = lowerCode.includes('>home<');
+      const hasAbout = lowerCode.includes('>about<');
 
-    if (stateError || !userState) {
-      console.error("Failed to fetch user state:", stateError);
-      return;
+    if (hasNav && hasUL && hasHome && hasAbout) {
+      if (!currentTask?.id) return;
+
+      const { data: userState, error: stateError } = await supabase
+        .from("user_state")
+        .select("selected_project_id, inbox_history, current_task_id, completed_tasks")
+        .eq("user_id", userId)
+        .single();
+
+      if (stateError || !userState) {
+        console.error("Failed to fetch user state:", stateError);
+        return;
+      }
+
+      // Just mark it as shipped (in a new column or flag)
+      const { error: updateError } = await supabase
+        .from("user_state")
+        .update({ task_just_shipped: true })  // this triggers delayed delivery in Inbox
+        .eq("user_id", userId);
+
+      if (updateError) {
+        console.error("Failed to mark task as shipped:", updateError);
+        return;
+      }
+
+      const finishedTask = [...userState.completed_tasks, userState.current_task_id]
+
+      const { error: completedError } = await supabase
+        .from("user_state")
+        .update({ completed_tasks: finishedTask })  // this triggers delayed delivery in Inbox
+        .eq("user_id", userId);
+
+      if (updateError) {
+        console.error("Failed to mark task as shipped:", completedError);
+        return;
+      }
+
+      alert("✅ Task shipped successfully! New task will arrive in 30 minutes.");
+      window.location.href = "/inbox";
+    } else {
+      let tips = [];
+      if (!hasNav) tips.push("Try adding a <nav> tag.");
+      if (!hasUL) tips.push("Did you use an unordered list (<ul>)?");
+      if (!hasHome) tips.push("Missing a link to 'Home'.");
+      if (!hasAbout) tips.push("Missing a link to 'About'.");
+
+      alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
     }
-
-    // Just mark it as shipped (in a new column or flag)
-    const { error: updateError } = await supabase
-      .from("user_state")
-      .update({ task_just_shipped: true })  // this triggers delayed delivery in Inbox
-      .eq("user_id", userId);
-
-    if (updateError) {
-      console.error("Failed to mark task as shipped:", updateError);
-      return;
-    }
-
-    const finishedTask = [...userState.completed_tasks, userState.current_task_id]
-
-    const { error: completedError } = await supabase
-      .from("user_state")
-      .update({ completed_tasks: finishedTask })  // this triggers delayed delivery in Inbox
-      .eq("user_id", userId);
-
-    if (updateError) {
-      console.error("Failed to mark task as shipped:", completedError);
-      return;
-    }
-
-    alert("Task shipped! Returning to inbox...");
-    window.location.href = "/inbox";
   };
-
 
 
 
