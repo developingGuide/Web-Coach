@@ -1,6 +1,23 @@
-import './Navbar.css';
+import { useEffect, useState } from "react";
+import "./Navbar.css";
 
-const Navbar = ({ exp, maxExp, level}) => {
+const Navbar = ({ exp, maxExp, level }) => {
+  const [prevExp, setPrevExp] = useState(exp);
+  const [leveledUp, setLeveledUp] = useState(false);
+
+  useEffect(() => {
+    if (exp > prevExp) {
+      setTimeout(() => setShowGain(false), 1000);
+    }
+
+    if (exp === 0 && prevExp !== 0) {
+      setLeveledUp(true);
+      setTimeout(() => setLeveledUp(false), 1000);
+    }
+
+    setPrevExp(exp);
+  }, [exp]);
+
   const progressPercent = (exp / maxExp) * 100;
 
   return (
@@ -14,12 +31,23 @@ const Navbar = ({ exp, maxExp, level}) => {
 
         <div className="exp-info">
           <div className="exp-label">
-            <span className="level">Lv {level}</span>
+            <span className={`level ${leveledUp ? "level-up" : ""}`}>
+              Lv {level}
+            </span>
           </div>
-          <div className="exp-bar">
-            <div className="exp-fill" style={{ width: `${progressPercent}%` }}></div>
+
+          <div className="exp-bar-wrapper">
+            <div className="exp-bar">
+              <div
+                className="exp-fill"
+                style={{ width: `${progressPercent}%` }}
+              ></div>
+            </div>
           </div>
-          <span className="exp-text">{exp} / {maxExp} EXP</span>
+
+          <span className="exp-text">
+            {exp} / {maxExp} EXP
+          </span>
         </div>
       </div>
     </div>

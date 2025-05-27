@@ -17,6 +17,7 @@ function App() {
     const [userExp, setUserExp] = useState(0);
     const [userLevel, setUserLevel] = useState(0);
     const [nextLevelExp, setNextLevelExp] = useState(100);
+    const [currentLevelExp, setCurrentLevelExp] = useState(0);
 
     useEffect(() => {
         const fetchExp = async () => {
@@ -27,15 +28,21 @@ function App() {
             .single();
 
             if (data) {
-            const exp = data.exp;
-            const level = getLevelFromExp(exp);
-            setUserExp(exp);
-            setUserLevel(level);
-            setNextLevelExp(getExpForLevel(level + 1));
+                const exp = data.exp;
+                const level = getLevelFromExp(exp);
+                const baseExp = getExpForLevel(level);
+                const nextExp = getExpForLevel(level + 1);
+
+                setUserExp(exp);
+                setUserLevel(level);
+                setCurrentLevelExp(exp - baseExp);
+                setNextLevelExp(nextExp - baseExp);
             }
         };
 
         fetchExp();
+
+
 
         const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
         return () => clearInterval(interval);
@@ -45,7 +52,7 @@ function App() {
 
     return (
         <div className='App'>
-            <Navbar exp={userExp} level={userLevel} maxExp={nextLevelExp}/>
+            <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>
             <BrowserRouter>
                 <Sidebar/>
                 <div className='pages'>
