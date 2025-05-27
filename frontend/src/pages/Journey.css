@@ -17,6 +17,7 @@
 .journey-main {
   flex: 1;
   padding: 2rem;
+  padding-left: calc(250px + 2rem);
   overflow-y: auto;
 }
 

@@ -6,10 +6,6 @@ const Navbar = ({ exp, maxExp, level }) => {
   const [leveledUp, setLeveledUp] = useState(false);
 
   useEffect(() => {
-    if (exp > prevExp) {
-      setTimeout(() => setShowGain(false), 1000);
-    }
-
     if (exp === 0 && prevExp !== 0) {
       setLeveledUp(true);
       setTimeout(() => setLeveledUp(false), 1000);

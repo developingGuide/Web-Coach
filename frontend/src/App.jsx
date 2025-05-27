@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {Routes, Route, useLocation} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Dashboard from './pages/Dashboard'
 import Test from './pages/test';
@@ -14,6 +14,11 @@ import './App.css'
 
 function App() {
     const userId = "demo_user"
+    const location = useLocation();
+    const fullScreenRoutes = ["/playground", "/"];
+    const isFullScreen = fullScreenRoutes.includes(location.pathname);
+
+
     const [userExp, setUserExp] = useState(0);
     const [userLevel, setUserLevel] = useState(0);
     const [nextLevelExp, setNextLevelExp] = useState(100);
@@ -52,9 +57,14 @@ function App() {
 
     return (
         <div className='App'>
-            <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>
-            <BrowserRouter>
-                <Sidebar/>
+            {!isFullScreen && (
+                <Navbar
+                    exp={currentLevelExp}
+                    level={userLevel}
+                    maxExp={nextLevelExp}
+                />
+            )}
+            {!isFullScreen && <Sidebar />}
                 <div className='pages'>
                     <Routes>
                         <Route
@@ -83,7 +93,6 @@ function App() {
                         />
                     </Routes>
                 </div>
-            </BrowserRouter>
         </div>
     )
 }
