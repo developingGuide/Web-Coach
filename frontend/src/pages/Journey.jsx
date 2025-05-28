@@ -130,6 +130,26 @@ export default function Journey() {
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  const handleDrag = (clientX, clientY) => {
+    const newX = clientX - offset.x;
+    const newY = clientY - offset.y;
+
+    // Define the limits
+    const mapWidth = 2000; // your map width
+    const mapHeight = 1300; // your map height
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    const minX = -(mapWidth - viewportWidth);
+    const minY = -(mapHeight - viewportHeight);
+
+    setPosition({
+      x: clamp(newX, minX, 0),
+      y: clamp(newY, minY, 0),
+    });
+  };
 
   const handleMouseDown = (e) => {
     setDragging(true);
@@ -138,12 +158,11 @@ export default function Journey() {
 
   const handleMouseMove = (e) => {
     if (dragging) {
-      setPosition({
-        x: e.clientX - offset.x,
-        y: e.clientY - offset.y,
-      });
+      handleDrag(e.clientX, e.clientY);
     }
   };
+  
+
 
   const handleMouseUp = () => setDragging(false);
 
@@ -166,10 +185,7 @@ export default function Journey() {
 
         if (dragging) {
           const touch = e.touches[0];
-          setPosition({
-            x: touch.clientX - offset.x,
-            y: touch.clientY - offset.y,
-          });
+          handleDrag(touch.clientX, touch.clientY);
         }
       }}
       onTouchEnd={handleMouseUp}
