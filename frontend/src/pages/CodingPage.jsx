@@ -181,18 +181,6 @@ const CodingPage = () => {
 
   return (
     <div className="codingPage">
-      {/* <header className="codingHeader">
-        <h2>{currentTask.title}</h2>
-        <p className="taskDescription">{currentTask.description}</p>
-        <div className="codingButtons">
-          <button onClick={handleRun}>Run</button>
-          <button onClick={() => setShowAnswer(!showAnswer)}>
-            {showAnswer ? 'Hide Answer' : 'Check Answer'}
-          </button>
-          <button className="shipButton" onClick={handleShip}>Ship</button>
-        </div>
-      </header> */}
-
       <header className="codingHeader">
         <div className="codingHeaderTop">
           <button className="backButton" onClick={handleBack}>← Back</button>

@@ -1,68 +1,42 @@
-:root {
-  --bg: #0e0e10;
-  --panel: #1b1b1f;
-  --accent: #91f42f;
-  --text: #e0e0e0;
-  --muted: #888;
+.map-container {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  cursor: grab;
+  touch-action: none;
 }
 
-.journey-wrapper {
-  display: flex;
-  height: 100vh;
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: sans-serif;
+.map-content {
+  position: absolute;
+  will-change: transform;
+}
+
+.map-image {
+  width: 2000px; /* Or match your image dimensions */
+  height: auto;
+  display: block;
 }
 
 .journey-main {
-  flex: 1;
-  padding: 2rem;
-  padding-left: calc(250px + 2rem);
-  overflow-y: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2000px; /* Match image width */
+  height: 1500px; /* Match image height */
 }
 
-.journey-title {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+.checkpoint {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: rgba(27, 27, 31, 0.9);
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
   color: var(--accent);
-}
-
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
-.project-card {
-  background-color: var(--panel);
-  border-radius: 8px;
-  padding: 1rem;
   cursor: pointer;
-  transition: transform 0.2s ease;
-  border: 1px solid #333;
-}
-
-.project-card:hover {
-  transform: translateY(-3px);
-  background-color: #222;
-}
-
-.project-image {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-}
-
-.project-info h2 {
-  margin: 0;
-  font-size: 1.25rem;
-  color: var(--text);
-}
-
-.project-info p {
-  margin-top: 0.5rem;
-  color: var(--muted);
-  font-size: 0.9rem;
+  transition: transform 0.2s;
+  border: 1px solid #444;
+  pointer-events: auto; /* Allow clicks on checkpoints */
 }

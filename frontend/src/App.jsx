@@ -15,7 +15,7 @@ import './App.css'
 function App() {
     const userId = "demo_user"
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/"];
+    const fullScreenRoutes = ["/playground", "/", "/journey"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
 
 

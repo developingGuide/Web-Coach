@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./Journey.css";
 import Sidebar from "../components/Sidebar";
 import supabase from "../../config/supabaseClient";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Journey() {
   const userId = "demo_user"
@@ -120,25 +120,80 @@ export default function Journey() {
     navigate("/inbox")
   }
 
+  useEffect(() => {
+    const centerX = window.innerWidth / 2 - 1000; // 1500 = half map width
+    const centerY = window.innerHeight / 2 - 700; // 1000 = half map height
+    setPosition({ x: centerX, y: centerY });
+  }, []);
+
+  const mapRef = useRef(null);
+  const [dragging, setDragging] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e) => {
+    setDragging(true);
+    setOffset({ x: e.clientX - position.x, y: e.clientY - position.y });
+  };
+
+  const handleMouseMove = (e) => {
+    if (dragging) {
+      setPosition({
+        x: e.clientX - offset.x,
+        y: e.clientY - offset.y,
+      });
+    }
+  };
+
+  const handleMouseUp = () => setDragging(false);
+
 
 
   return (
-    <div className="journey-main">
-      <h1 className="journey-title">Choose Your Journey</h1>
-      <div className="project-grid">
-        {projects.map((proj) => (
-          <div
-            key={proj.id}
-            className="project-card"
-            onClick={() => handleSelect(proj.id)}
-          >
-            <img src={proj.image_url} alt={proj.name} className="project-image" />
-            <div className="project-info">
-              <h2>{proj.name}</h2>
-              <p>{proj.description}</p>
-            </div>
+    <div
+      className="map-container"
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onTouchStart={(e) => {
+        const touch = e.touches[0];
+        setDragging(true);
+        setOffset({ x: touch.clientX - position.x, y: touch.clientY - position.y });
+      }}
+      onTouchMove={(e) => {
+        e.preventDefault()
+
+        if (dragging) {
+          const touch = e.touches[0];
+          setPosition({
+            x: touch.clientX - offset.x,
+            y: touch.clientY - offset.y,
+          });
+        }
+      }}
+      onTouchEnd={handleMouseUp}
+    >
+      <div
+        className="map-content"
+        ref={mapRef}
+        style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+      >
+        {/* Put your map image directly here */}
+        <img src="/BeachIsland.png" alt="Map" className="map-image" />
+
+        <div className="journey-main">
+          <div className="checkpoint" style={{ top: '20%', left: '10%' }} onClick={() => handleSelect(1)}>
+            <span>🏝️ Welcome Dock</span>
           </div>
-        ))}
+          <div className="checkpoint" style={{ top: '35%', left: '25%' }} onClick={() => handleSelect(2)}>
+            <span>🏕️ HTML Hut</span>
+          </div>
+          <div className="checkpoint" style={{ top: '50%', left: '40%' }} onClick={() => handleSelect(3)}>
+            <span>🌊 CSS Cove</span>
+          </div>
+          {/* Add other checkpoints here */}
+        </div>
       </div>
     </div>
   );
