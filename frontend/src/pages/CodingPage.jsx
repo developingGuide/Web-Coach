@@ -3,6 +3,7 @@ import CodeEditor from '../components/CodeEditor';
 import './CodingPage.css';
 import supabase from '../../config/supabaseClient';
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
+import { useNavigate } from "react-router-dom";
 
 const CodingPage = () => {
   const userId = "demo_user";
@@ -12,6 +13,7 @@ const CodingPage = () => {
   const [exp, setExp] = useState(0);
   const [level, setLevel] = useState(1);
   const [ nextLevelExp,setNextLevelExp] = useState(0)
+  const navigate = useNavigate()
 
   const defaultTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -169,13 +171,37 @@ const CodingPage = () => {
   };
 
 
+  const handleBack = () => {
+    const confirmLeave = window.confirm("Are you sure? Progress will be lost.");
+    if (confirmLeave) {
+      navigate("/inbox");
+    }
+  };
 
 
   return (
     <div className="codingPage">
-      <header className="codingHeader">
+      {/* <header className="codingHeader">
         <h2>{currentTask.title}</h2>
         <p className="taskDescription">{currentTask.description}</p>
+        <div className="codingButtons">
+          <button onClick={handleRun}>Run</button>
+          <button onClick={() => setShowAnswer(!showAnswer)}>
+            {showAnswer ? 'Hide Answer' : 'Check Answer'}
+          </button>
+          <button className="shipButton" onClick={handleShip}>Ship</button>
+        </div>
+      </header> */}
+
+      <header className="codingHeader">
+        <div className="codingHeaderTop">
+          <button className="backButton" onClick={handleBack}>← Back</button>
+          <div className='taskText'>
+            <h2>{currentTask.title}</h2>
+            <p className="taskDescription">{currentTask.description}</p>
+          </div>
+        </div>
+
         <div className="codingButtons">
           <button onClick={handleRun}>Run</button>
           <button onClick={() => setShowAnswer(!showAnswer)}>

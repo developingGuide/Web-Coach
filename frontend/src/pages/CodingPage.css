@@ -10,10 +10,31 @@
   margin-bottom: 1rem;
 }
 
+.codingHeaderTop {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.backButton {
+  background: none;
+  color: #91f42f;
+  border: 1px solid #91f42f;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.taskText{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .taskDescription {
   color: #999;
-  margin-top: 0.25rem;
-  margin-bottom: 1rem;
 }
 
 .codingButtons button {
