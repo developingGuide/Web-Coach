@@ -6,6 +6,8 @@ import supabase from "../../config/supabaseClient";
 import { useEffect, useState, useRef } from "react";
 import Crow from "../components/crow";
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
+import Inbox from "./Inbox";
+
 
 export default function Journey() {
   const userId = "demo_user"
@@ -119,8 +121,8 @@ export default function Journey() {
       }
 
     
-
-    navigate("/inbox")
+      window.alert("Journey selected (add journey description)")
+    
   }
 
   useEffect(() => {
@@ -165,8 +167,6 @@ export default function Journey() {
     }
   };
   
-
-
   const handleMouseUp = () => setDragging(false);
 
 
@@ -198,11 +198,13 @@ export default function Journey() {
 
     fetchExp();
 
-
-
     const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
     return () => clearInterval(interval);
   }, []);
+
+
+  const [showIpad, setShowIpad] = useState(false);
+
 
 
   return (
@@ -234,27 +236,42 @@ export default function Journey() {
         ref={mapRef}
         style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
       >
+
         {/* Put your map image directly here */}
         <img src="/BeachIsland.png" alt="Map" className="map-image" />
 
-        <div style={{ scale: '1.5', position: 'absolute', top: '70%', left: '20%' }}>
+        <div
+          style={{ zIndex:"999", scale: '1.5', position: 'absolute', top: '70%', left: '20%', cursor: "pointer" }}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onClick={() => setShowIpad(true)}
+        >
           <Crow />
         </div>
 
         <div className="journey-main">
-          <div className="checkpoint" style={{ top: '20%', left: '10%' }} onClick={() => handleSelect(1)}>
+          <div className="checkpoint" style={{ top: '20%', left: '10%' }} onClick={() => handleSelect(0)}>
             <span>🏝️ Welcome Dock</span>
           </div>
-          <div className="checkpoint" style={{ top: '35%', left: '25%' }} onClick={() => handleSelect(2)}>
+          <div className="checkpoint" style={{ top: '35%', left: '25%' }} onClick={() => handleSelect(1)}>
             <span>🏕️ HTML Hut</span>
           </div>
-          <div className="checkpoint" style={{ top: '50%', left: '40%' }} onClick={() => handleSelect(3)}>
+          <div className="checkpoint" style={{ top: '50%', left: '40%' }} onClick={() => handleSelect(2)}>
             <span>🌊 CSS Cove</span>
           </div>
           {/* Add other checkpoints here */}
         </div>
       </div>
     </div>
+
+    {showIpad && (
+      <div className="ipad-overlay" onClick={() => setShowIpad(false)}>
+        <div className="ipad-container" onClick={(e) => e.stopPropagation()}>
+          {/* Neon iPad border can be styled with CSS */}
+          <Inbox /> {/* Or any component you want inside */}
+        </div>
+      </div>
+    )}
     </>
   );
 }

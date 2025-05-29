@@ -14,9 +14,9 @@ const Crow = () => {
 
     return(
         <img
-        src={flapState === 'up' ? '/crow-up.png' : '/crow-down.png'}
-        className="flapping-crow"
-        alt="Crow"
+          src={flapState === 'up' ? '/crow-up.png' : '/crow-down.png'}
+          className="flapping-crow"
+          alt="Crow"
         />
     )
 }

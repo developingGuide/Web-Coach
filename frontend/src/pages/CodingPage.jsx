@@ -174,7 +174,7 @@ const CodingPage = () => {
   const handleBack = () => {
     const confirmLeave = window.confirm("Are you sure? Progress will be lost.");
     if (confirmLeave) {
-      navigate("/inbox");
+      navigate("/journey");
     }
   };
 
