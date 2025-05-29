@@ -5,6 +5,7 @@ import Navbar from "../components/NavBar";
 import supabase from "../../config/supabaseClient";
 import { useEffect, useState, useRef } from "react";
 import Crow from "../components/crow";
+import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
 
 export default function Journey() {
   const userId = "demo_user"
@@ -169,10 +170,44 @@ export default function Journey() {
   const handleMouseUp = () => setDragging(false);
 
 
+  const [userExp, setUserExp] = useState(0);
+  const [userLevel, setUserLevel] = useState(0);
+  const [nextLevelExp, setNextLevelExp] = useState(100);
+  const [currentLevelExp, setCurrentLevelExp] = useState(0);
+  
+  useEffect(() => {
+    const fetchExp = async () => {
+      const { data, error } = await supabase
+      .from("user_state")
+      .select("exp")
+      .eq("user_id", userId)
+      .single();
+
+      if (data) {
+          const exp = data.exp;
+          const level = getLevelFromExp(exp);
+          const baseExp = getExpForLevel(level);
+          const nextExp = getExpForLevel(level + 1);
+
+          setUserExp(exp);
+          setUserLevel(level);
+          setCurrentLevelExp(exp - baseExp);
+          setNextLevelExp(nextExp - baseExp);
+      }
+    };
+
+    fetchExp();
+
+
+
+    const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+
 
   return (
     <>
-    <Navbar/>
+    <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>
     <div
       className="map-container"
       onMouseDown={handleMouseDown}

@@ -18,8 +18,6 @@ const Navbar = ({ exp, maxExp, level }) => {
 
   return (
     <div className="navbar">
-      <img src="../public/Logo.png" alt="Logo" className="navbar-logo" />
-
       <div className="navbar-right">
         <div className="profile-circle large">
           <span>W</span>
