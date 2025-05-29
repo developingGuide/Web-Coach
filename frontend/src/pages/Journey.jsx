@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "./Journey.css";
 import Sidebar from "../components/Sidebar";
+import Navbar from "../components/NavBar";
 import supabase from "../../config/supabaseClient";
 import { useEffect, useState, useRef } from "react";
+import Crow from "../components/crow";
 
 export default function Journey() {
   const userId = "demo_user"
@@ -169,6 +171,8 @@ export default function Journey() {
 
 
   return (
+    <>
+    <Navbar/>
     <div
       className="map-container"
       onMouseDown={handleMouseDown}
@@ -198,6 +202,10 @@ export default function Journey() {
         {/* Put your map image directly here */}
         <img src="/BeachIsland.png" alt="Map" className="map-image" />
 
+        <div style={{ scale: '1.5', position: 'absolute', top: '70%', left: '20%' }}>
+          <Crow />
+        </div>
+
         <div className="journey-main">
           <div className="checkpoint" style={{ top: '20%', left: '10%' }} onClick={() => handleSelect(1)}>
             <span>🏝️ Welcome Dock</span>
@@ -212,5 +220,6 @@ export default function Journey() {
         </div>
       </div>
     </div>
+    </>
   );
 }
