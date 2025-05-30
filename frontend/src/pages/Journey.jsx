@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from "react";
 import Crow from "../components/crow";
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
 import Inbox from "./Inbox";
+import CloudLayer from "../components/CloudLayer";
 
 
 export default function Journey() {
@@ -223,9 +224,69 @@ export default function Journey() {
   const [showIpad, setShowIpad] = useState(false);
 
 
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [currentMap, setCurrentMap] = useState("BeachIsland"); // or a key from your project list
+
+  const handleMapChange = async (newMapName) => {
+    setIsTransitioning(true);
+
+    // Save new map in user_state
+    await supabase
+      .from("user_state")
+      .update({ current_map: newMapName })
+      .eq("user_id", userId);
+
+    setTimeout(() => {
+      setCurrentMap(newMapName);
+    }, 1000);
+
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    const fetchCurrentMap = async () => {
+      const { data, error } = await supabase
+        .from("user_state")
+        .select("current_map")
+        .eq("user_id", userId)
+        .single();
+
+      if (data?.current_map) {
+        setCurrentMap(data.current_map);
+      }
+    };
+    
+    fetchCurrentMap();
+  }, []);
+  
+  const checkpointLayouts = {
+    BeachIsland: [
+      { top: "20%", left: "10%", label: "🏝️ Welcome Dock", projectId: 0 },
+      { top: "40%", left: "60%", label: "🏝️ HTML Hut", projectId: 1 },
+      { top: "30%", left: "40%", label: "📦 CSS Cove", projectId: 2 },
+    ],
+    MountainIsland: [
+      { top: "25%", left: "15%", label: "🌴 JS Trail", projectId: 3 },
+      { top: "35%", left: "50%", label: "🧠 Logic Lake", projectId: 4 },
+    ]
+  };
+  {/* Add other checkpoints here */}
+
+  const mapNames = Object.keys(checkpointLayouts); // ["BeachIsland", "JungleMountain"]
+  const currentCheckpoints = checkpointLayouts[currentMap];
+
+
 
   return (
     <>
+    {isTransitioning && (
+      <div className="cloud-transition">
+        <img src="/cloud-cover.png" className="cloud-cover" />
+      </div>
+    )}
+
     <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>
     <div
       className="map-container"
@@ -240,44 +301,57 @@ export default function Journey() {
       }}
       onTouchMove={(e) => {
         e.preventDefault()
-
+        
         if (dragging) {
           const touch = e.touches[0];
           handleDrag(touch.clientX, touch.clientY);
         }
       }}
       onTouchEnd={handleMouseUp}
-    >
+      >
       <div
         className="map-content"
         ref={mapRef}
         style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
-      >
+        >
+
+        <CloudLayer/>
 
         {/* Put your map image directly here */}
-        <img src="/BeachIsland.png" alt="Map" className="map-image" />
+        <img src={`/${currentMap}.png`} alt="Map" className="map-image" />
 
         <div
           style={{ zIndex:"999", scale: '1.5', position: 'absolute', top: '70%', left: '20%', cursor: "pointer" }}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
           onClick={() => setShowIpad(true)}
-        >
+          >
           <Crow />
         </div>
 
         <div className="journey-main">
-          <div className="checkpoint" style={{ top: '20%', left: '10%' }} onClick={() => handleOverlayOpen(0)}>
-            <span>🏝️ Welcome Dock</span>
-          </div>
-          <div className="checkpoint" style={{ top: '35%', left: '25%' }} onClick={() => handleOverlayOpen(1)}>
-            <span>🏕️ HTML Hut</span>
-          </div>
-          <div className="checkpoint" style={{ top: '50%', left: '40%' }} onClick={() => handleOverlayOpen(2)}>
-            <span>🌊 CSS Cove</span>
-          </div>
-          {/* Add other checkpoints here */}
+          {checkpointLayouts[currentMap]?.map(({ top, left, label, projectId }) => (
+            <div
+              key={projectId}
+              className="checkpoint"
+              style={{ top, left }}
+              onClick={() => handleOverlayOpen(projectId)}
+            >
+              <span>{label}</span>
+            </div>
+          ))}
         </div>
+      </div>
+
+      <div className="dot-navigation">
+        {mapNames.map((mapName) => (
+          <button
+            key={mapName}
+            onClick={() => handleMapChange(`${mapName}`)}
+            className={`dot ${currentMap === mapName ? "active" : ""}`}
+            title={mapName}
+          />
+        ))}
       </div>
     </div>
 
