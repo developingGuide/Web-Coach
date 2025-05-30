@@ -18,6 +18,8 @@ export default function Journey() {
   const [projectTasks, setProjectTasks] = useState([])
   const [taskIds, setTaskIds] = useState([])
   const [ inboxHistory, setInboxHistory] = useState([])
+  const [selectedProject, setSelectedProject] = useState(null);
+
 
   const fetchProjects = async () => {
     const {error, data} = await supabase
@@ -85,45 +87,60 @@ export default function Journey() {
   const handleSelect = async (id) => {
     const { error } = await supabase
       .from("user_state")
-      .update( { selected_project_id: id } )
-      .eq("user_id", userId )
+      .update({ selected_project_id: id })
+      .eq("user_id", userId);
 
-      if(error){
-        console.error("Error Selecting Project:", error)
-      } else {
+    if (error) {
+      console.error("Error Selecting Project:", error);
+    } else {
+      const firstTaskId = Number(`${id}01`);
 
-        const firstTaskId = Number(`${id}01`);
-
-        if (!inboxHistory.includes(firstTaskId)) {
-          
-          const { data, error } = await supabase
+      if (!inboxHistory.includes(firstTaskId)) {
+        const { data: taskData, error: taskError } = await supabase
           .from("tasks")
           .select("*")
           .eq("id", firstTaskId)
           .single();
-          
-          if (error) {
-            console.error("Error fetching first task:", error);
-            return
-          } else {
-            const updatedHistory = [...inboxHistory, firstTaskId]
 
-            const {error2} = await supabase
-              .from("user_state")
-              .update({current_task: data, inbox_history: updatedHistory, task_just_shipped: false, current_task_id: firstTaskId })
-              .eq("user_id", userId)
+        if (taskError) {
+          console.error("Error fetching first task:", taskError);
+          return;
+        }
 
-              if(error2){
-                console.error("Error Updating:", error)
-              }
-          } 
+        const updatedHistory = [...inboxHistory, firstTaskId];
+        const { error: updateError } = await supabase
+          .from("user_state")
+          .update({
+            current_task: taskData,
+            inbox_history: updatedHistory,
+            task_just_shipped: false,
+            current_task_id: firstTaskId,
+          })
+          .eq("user_id", userId);
+
+        if (updateError) {
+          console.error("Error Updating:", updateError);
         }
       }
 
-    
-      window.alert("Journey selected (add journey description)")
-    
-  }
+      setShowIpad(true)
+    }
+  };
+
+  const handleOverlayOpen = async (id) => {
+    const { data: projectData, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching project:", error);
+    } else {
+      setSelectedProject(projectData);
+    }
+  };
+
 
   useEffect(() => {
     const centerX = window.innerWidth / 2 - 1000; // 1500 = half map width
@@ -250,13 +267,13 @@ export default function Journey() {
         </div>
 
         <div className="journey-main">
-          <div className="checkpoint" style={{ top: '20%', left: '10%' }} onClick={() => handleSelect(0)}>
+          <div className="checkpoint" style={{ top: '20%', left: '10%' }} onClick={() => handleOverlayOpen(0)}>
             <span>🏝️ Welcome Dock</span>
           </div>
-          <div className="checkpoint" style={{ top: '35%', left: '25%' }} onClick={() => handleSelect(1)}>
+          <div className="checkpoint" style={{ top: '35%', left: '25%' }} onClick={() => handleOverlayOpen(1)}>
             <span>🏕️ HTML Hut</span>
           </div>
-          <div className="checkpoint" style={{ top: '50%', left: '40%' }} onClick={() => handleSelect(2)}>
+          <div className="checkpoint" style={{ top: '50%', left: '40%' }} onClick={() => handleOverlayOpen(2)}>
             <span>🌊 CSS Cove</span>
           </div>
           {/* Add other checkpoints here */}
@@ -269,6 +286,25 @@ export default function Journey() {
         <div className="ipad-container" onClick={(e) => e.stopPropagation()}>
           {/* Neon iPad border can be styled with CSS */}
           <Inbox /> {/* Or any component you want inside */}
+        </div>
+      </div>
+    )}
+
+    {selectedProject && (
+      <div className="project-overlay" onClick={() => setSelectedProject(null)}>
+        <div className="project-card" onClick={(e) => e.stopPropagation()}>
+          <img src={selectedProject.image_url} alt={selectedProject.name} className="project-image" />
+          <h2>{selectedProject.name}</h2>
+          <p>{selectedProject.description}</p>
+          <button
+            onClick={() => {
+              handleSelect(selectedProject.id);
+              setSelectedProject(null);
+            }}
+            style={{ marginTop: "1rem", padding: "0.5rem 1.5rem", background: "#0ff", color: "#000", borderRadius: "8px" }}
+          >
+            Let's Go
+          </button>
         </div>
       </div>
     )}
