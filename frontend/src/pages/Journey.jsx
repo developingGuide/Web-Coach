@@ -222,11 +222,27 @@ export default function Journey() {
 
 
   const [showIpad, setShowIpad] = useState(false);
-
-
+  
+  
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentMap, setCurrentMap] = useState("BeachIsland"); // or a key from your project list
+  
+  const checkpointLayouts = {
+    BeachIsland: [
+      { top: "20%", left: "10%", label: "🏝️ Welcome Dock", projectId: 0 },
+      { top: "40%", left: "60%", label: "🏝️ HTML Hut", projectId: 1 },
+      { top: "30%", left: "40%", label: "📦 CSS Cove", projectId: 2 },
+    ],
+    MountainIsland: [
+      { top: "25%", left: "15%", label: "🌴 JS Trail", projectId: 3 },
+      { top: "35%", left: "50%", label: "🧠 Logic Lake", projectId: 4 },
+    ]
+  };
+  {/* Add other checkpoints here */}
 
+  const mapNames = Object.keys(checkpointLayouts); // ["BeachIsland", "JungleMountain"]
+  const checkpoints = checkpointLayouts[currentMap];
+  
   const handleMapChange = async (newMapName) => {
     setIsTransitioning(true);
 
@@ -238,9 +254,6 @@ export default function Journey() {
 
     setTimeout(() => {
       setCurrentMap(newMapName);
-    }, 1000);
-
-    setTimeout(() => {
       setIsTransitioning(false);
     }, 2000);
   };
@@ -261,31 +274,14 @@ export default function Journey() {
     fetchCurrentMap();
   }, []);
   
-  const checkpointLayouts = {
-    BeachIsland: [
-      { top: "20%", left: "10%", label: "🏝️ Welcome Dock", projectId: 0 },
-      { top: "40%", left: "60%", label: "🏝️ HTML Hut", projectId: 1 },
-      { top: "30%", left: "40%", label: "📦 CSS Cove", projectId: 2 },
-    ],
-    MountainIsland: [
-      { top: "25%", left: "15%", label: "🌴 JS Trail", projectId: 3 },
-      { top: "35%", left: "50%", label: "🧠 Logic Lake", projectId: 4 },
-    ]
-  };
-  {/* Add other checkpoints here */}
-
-  const mapNames = Object.keys(checkpointLayouts); // ["BeachIsland", "JungleMountain"]
-  const currentCheckpoints = checkpointLayouts[currentMap];
 
 
 
   return (
     <>
-    {isTransitioning && (
-      <div className="cloud-transition">
-        <img src="/cloud-cover.png" className="cloud-cover" />
-      </div>
-    )}
+    <div className="cloud-transition">
+      <img src="/cloud-cover.png" className={`cloud-cover ${isTransitioning ? "visible" : ""}`} />
+    </div>
 
     <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>
     <div
