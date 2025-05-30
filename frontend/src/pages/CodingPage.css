@@ -55,25 +55,26 @@
 
 .codingBody {
   display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: 1rem;
+  height: calc(100vh - 200px); /* adjust based on header height */
+  position: relative;
+  z-index: 1;
 }
 
 .editorWrapper {
   flex: 1;
-  min-width: 300px;
+  min-width: 0; /* important for editors in flex layout */
+  z-index: 2;
 }
 
 .answerPane {
-  flex: 1;
-  min-width: 300px;
-  background-color: #1b1b1f;
+  width: 300px;
+  background: #1e1e1e;
   padding: 1rem;
-  border: 1px solid #333;
-  border-radius: 10px;
-  max-height: 500px;
-  overflow: auto;
+  border-left: 1px solid #333;
+  overflow-y: auto;
 }
+
 
 .answerPane h3 {
   color: #91f42f;
@@ -87,4 +88,33 @@
   background-color: #121212;
   padding: 1rem;
   border-radius: 8px;
+}
+
+
+.tabButtons {
+  display: flex;
+  border-bottom: 1px solid #444;
+  margin-bottom: 12px;
+}
+
+.tabButtons button {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  color: #bbb;
+  font-size: 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tabButtons button:hover {
+  color: white;
+}
+
+.tabButtons button.active {
+  color: #3cff99;
+  border-bottom: 2px solid #3cff99;
+  font-weight: bold;
 }

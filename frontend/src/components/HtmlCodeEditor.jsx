@@ -1,0 +1,40 @@
+import Editor from "@monaco-editor/react";
+
+function HtmlCodeEditor({code, setCode}) {
+  return (
+    <Editor
+    //   height="80vh"
+      height="100%"
+      defaultLanguage="html"
+      defaultValue="<h1>Hello</h1>"
+      theme="vs-dark"
+      value={code}
+      onChange={(value) => setCode(value)}
+      options={{
+        tabCompletion: "on", // enable tab completion for snippets
+        quickSuggestions: true,
+        suggestOnTriggerCharacters: true,
+        autoClosingBrackets: "always",
+        autoClosingQuotes: "always",
+      }}
+      onMount={(editor, monaco) => {
+        monaco.languages.registerCompletionItemProvider("html", {
+          provideCompletionItems: () => {
+            const tags = ["h1", "p", "div", "section", "span"];
+            const suggestions = tags.map(tag => ({
+              label: tag,
+              kind: monaco.languages.CompletionItemKind.Snippet,
+              insertText: `<${tag}>$1</${tag}>`,
+              insertTextRules:
+                monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+              documentation: `${tag} tag`,
+            }));
+            return { suggestions };
+          },
+        });
+      }}
+    />
+  );
+}
+
+export default HtmlCodeEditor
