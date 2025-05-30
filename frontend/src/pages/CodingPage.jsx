@@ -10,7 +10,7 @@ import JsCodeEditor from '../components/JsCodeEditor';
 
 const CodingPage = () => {
   const userId = "demo_user";
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [showTools, setShowTools] = useState(false);
   const [currentTask, setCurrentTask] = useState({});
   const [code, setCode] = useState("");
   const [exp, setExp] = useState(0);
@@ -36,6 +36,9 @@ const CodingPage = () => {
 </html>
 `;
 
+  const [taskTools, setTaskTools] = useState(false);
+
+
   const fetchCurrentTask = async () => {
     const { data: userState, error: stateError } = await supabase
       .from("user_state")
@@ -60,6 +63,7 @@ const CodingPage = () => {
     }
 
     setCurrentTask(taskData);
+    setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
     setHtmlCode(taskData.startingHtml || defaultTemplate);
     setCssCode(taskData.startingCss || "body { background: white; }");
     setJsCode(taskData.startingJs || "console.log('Hello');");
@@ -220,10 +224,10 @@ const CodingPage = () => {
 
         <div className="codingButtons">
 
-          <button onClick={handleRun}>Run</button>
-          <button onClick={() => setShowAnswer(!showAnswer)}>
-            {showAnswer ? 'Hide Answer' : 'Check Answer'}
+          <button onClick={() => setShowTools(!showTools)}>
+            {showTools ? 'Hide Tools' : 'Show Tools'}
           </button>
+          <button onClick={handleRun}>Run</button>
           <button className="shipButton" onClick={handleShip}>Ship</button>
         </div>
       </header>
@@ -241,10 +245,14 @@ const CodingPage = () => {
         </div>
 
 
-        {showAnswer && (
-          <div className="answerPane">
-            <h3>Expected Output:</h3>
-            <pre>{currentTask.expectedOutput}</pre>
+        {showTools && (
+          <div className="toolsPane">
+            <h3>Tools for this Task:</h3>
+            <ul>
+              {taskTools?.map((tool, index) => (
+                <li key={index}>{tool}</li>
+              ))}
+            </ul>
           </div>
         )}
       </div>

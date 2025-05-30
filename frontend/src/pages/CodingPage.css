@@ -67,7 +67,7 @@
   z-index: 2;
 }
 
-.answerPane {
+.toolsPane {
   width: 300px;
   background: #1e1e1e;
   padding: 1rem;
@@ -76,12 +76,12 @@
 }
 
 
-.answerPane h3 {
+.toolsPane h3 {
   color: #91f42f;
   margin-bottom: 0.5rem;
 }
 
-.answerPane pre {
+.toolsPane pre {
   white-space: pre-wrap;
   color: #ccc;
   font-family: 'Courier New', monospace;
