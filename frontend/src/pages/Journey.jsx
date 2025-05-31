@@ -273,12 +273,24 @@ export default function Journey() {
     
     fetchCurrentMap();
   }, []);
-  
+
+
+  const [isCoverVisible, setIsCoverVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsCoverVisible(false);
+    }, 1000); // 1 second
+
+    return () => clearTimeout(timer);
+  }, []);
 
 
 
   return (
     <>
+    {isCoverVisible && <div className="cloud-cover-opening"></div>}
+
     <div className="cloud-transition">
       <img src="/cloud-cover.png" className={`cloud-cover ${isTransitioning ? "visible" : ""}`} />
     </div>
