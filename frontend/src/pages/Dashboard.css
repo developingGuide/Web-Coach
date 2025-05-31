@@ -1,35 +1,222 @@
-.dashboard {
-  display: flex;
+.devdash-root {
   height: 100vh;
-  background-color: #0e0e10;
-  color: #e0e0e0;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.mainScreen {
-  flex-grow: 1;
+  width: 100vw;
+  background-image: url('space.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
   padding: 2rem;
+  box-sizing: border-box;
+  color: #ccffcc;
+  overflow: hidden;
 }
 
-.tasks {
-  margin-top: 2rem;
-  display: grid;
-  gap: 1rem;
+.devdash-layout {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.task-card {
-  background: #1b1b1f;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #2a2a2e;
+.devdash-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  height: 100%;
 }
 
-.task-card.clickable {
+.devdash-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  height: 100%;
+  padding: 40px 0;
+}
+
+.devdash-level-circle {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 255, 140, 0.2), rgba(0, 255, 120, 0.1));
+  border: 2px solid rgba(0, 255, 150, 0.3);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(0, 255, 160, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: pulseGlow 2.5s infinite ease-in-out;
+  text-align: center;
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 20px #00ffccaa;
+  }
+  50% {
+    box-shadow: 0 0 40px #00ffcc;
+  }
+  100% {
+    box-shadow: 0 0 20px #00ffccaa;
+  }
+}
+
+.devdash-level-circle h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #00ffcc;
+}
+
+.devdash-level-circle p {
+  margin: 0;
+  font-size: 1rem;
+  color: #aaffee;
+}
+
+.devdash-controls {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  padding-bottom: 30px;
+}
+
+button {
+  background: rgba(0, 255, 120, 0.2);
+  color: white;
+  border: 1px solid rgba(0, 255, 120, 0.3);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: background 0.2s;
 }
 
-.task-card.clickable:hover {
-  transform: scale(1.02);
-  background-color: #222;
+button:hover {
+  background: rgba(0, 255, 120, 0.3);
+}
+
+.devdash-panel {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.devdash-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #8fffbc;
+}
+
+.devdash-label {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
+.devdash-value {
+  font-size: 1.4rem;
+  color: #ffffff;
+}
+
+.devdash-map {
+  width: 100%;
+  border-radius: 12px;
+  margin: 10px 0;
+  object-fit: cover;
+}
+
+.devdash-progress-bar {
+  height: 12px;
+  background: #1a1a1a;
+  border-radius: 6px;
+  margin-top: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.devdash-progress-fill {
+  height: 100%;
+  background: #00ff9c;
+  box-shadow: 0 0 6px #00ffcc;
+  transition: width 0.3s;
+}
+
+.devdash-progress-percent {
+  position: absolute;
+  right: 8px;
+  top: -24px;
+  font-size: 0.85rem;
+  color: #8fffbc;
+}
+
+.devdash-compact {
+  padding: 16px;
+  font-size: 0.9rem;
+}
+
+.neon-glow {
+  color: #00ffcc;
+  text-shadow: 0 0 8px #00ffcc;
+}
+
+
+@keyframes dashLiftUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100vh);
+  }
+}
+
+@keyframes fallThroughStars {
+  0% {
+    background-position: center top;
+  }
+  100% {
+    background-position: center bottom;
+  }
+}
+
+@keyframes fadeCloudsIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Trigger dashboard lifting */
+.launching .devdash-layout {
+  animation: dashLiftUp 1.2s ease-in forwards;
+}
+
+/* Animate starfall background */
+.launching {
+  animation: fallThroughStars 1.2s ease-in forwards;
+  background-image: url('space.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+/* Cloud layer (optional extra layer) */
+.dash-clouds {
+  position: absolute;
+  inset: 0;
+  background: url('cloud-cover.png') center center / cover no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.launching .dash-clouds {
+  animation: fadeCloudsIn 0.8s ease-in 1.1s forwards;
 }

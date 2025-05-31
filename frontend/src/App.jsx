@@ -15,7 +15,7 @@ import './App.css'
 function App() {
     const userId = "demo_user"
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
 
 
@@ -64,7 +64,6 @@ function App() {
                     maxExp={nextLevelExp}
                 />
             )}
-            {!isFullScreen && <Sidebar />}
                 <div className='pages'>
                     <Routes>
                         <Route
