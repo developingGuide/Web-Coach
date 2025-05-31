@@ -6,19 +6,20 @@ const Dashboard = () => {
   const [isLaunching, setIsLaunching] = useState(false);
   const navigate = useNavigate()
 
-  const handleLaunch = () => {
+  const handleLaunch = (destination) => {
     setIsLaunching(true);
 
     setTimeout(() => {
-      // After animation finishes (~1.8s), navigate or trigger next action
-      // For now just log or replace with routing logic
-      navigate("/journey")
-    }, 1800);
+      setIsLaunching(false);
+      navigate(`${destination}`)
+    }, 2000);
   }
 
   return (
     <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
-      <div className="dash-clouds" />
+      <div className="cloud-transition">
+        <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching ? "visible" : ""}`} />
+      </div>
       <div className="devdash-layout">
 
         {/* Left Side */}
@@ -48,7 +49,7 @@ const Dashboard = () => {
 
           <div className="devdash-controls">
             <button>Start Task</button>
-            <button onClick={handleLaunch}>View Journey</button>
+            <button onClick={() => handleLaunch('/journey')}>View Journey</button>
           </div>
         </div>
 
