@@ -114,7 +114,7 @@ const CodingPage = () => {
     if (!hasAbout) tips.push("Missing a link to 'About'.");
 
     if (tips.length > 0) {
-      alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
+      // alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
       return false;
     }
 
@@ -165,12 +165,10 @@ const CodingPage = () => {
   }
 
   const handleShip = async () => {
+    const confirmShip = window.confirm("Are you sure you want to ship? Mistakes will lose you exp!");
+    if (!confirmShip) return;
+    
     const isCorrect = checkUserCode(); // your current correctness check function
-
-    if (!isCorrect) {
-      const confirmShip = window.confirm("Are you sure you want to ship? Mistakes will lose you exp!");
-      if (!confirmShip) return;
-    }
 
     const { data, error } = await supabase
       .from("user_state")
@@ -183,24 +181,43 @@ const CodingPage = () => {
       return;
     }
 
-    const gainedExp = 30;
-    const newExp = data.exp + gainedExp;
-    const newLevel = getLevelFromExp(newExp);
-    const nextLevel = getExpForLevel(newLevel + 1);
+    let gainedExp = 0;
+    let newExp = data.exp;
+    let newLevel = getLevelFromExp(newExp);
+    let nextLevel = getExpForLevel(newLevel + 1);
 
-    // Update local state correctly
+    if (!isCorrect) {
+      const min = -30;
+      const max = -10;
+      gainedExp = Math.floor(Math.random() * (max - min + 1)) + min;
+    } else {
+      const min = 20;
+      const max = 50;
+      gainedExp = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    newExp = data.exp + gainedExp;
+    newLevel = getLevelFromExp(newExp);
+    nextLevel = getExpForLevel(newLevel + 1);
+
+    // Update local state
     setExp(newExp);
     setLevel(newLevel);
     setNextLevelExp(nextLevel);
 
-    const { error2 } = await supabase
+    const { error: updateError } = await supabase
       .from("user_state")
       .update({ exp: newExp, level: newLevel })
       .eq("user_id", userId);
 
-    // Proceed with shipping regardless of correctness
-    shipTask(); // your existing shipping logic
+    if (updateError) {
+      console.error("Error updating user_state:", updateError);
+    }
+
+    // Proceed with shipping
+    shipTask();
   };
+
 
 
   const handleBack = () => {
