@@ -159,17 +159,24 @@ const CodingPage = () => {
       return;
     }
 
-    alert("Task shipped! Next task will be delivered in 30 minutes!...");
+    navigate("/journey", { state: { openIpad: true } });
 
-    window.location.href = "/journey";
   }
+
+
+  const [showResultCard, setShowResultCard] = useState(false);
+  const [resultData, setResultData] = useState({
+    gainedExp: 0,
+    tips: [],
+    expectedOutput: "",
+  });
+
 
   const handleShip = async () => {
     const confirmShip = window.confirm("Are you sure you want to ship? Mistakes will lose you exp!");
     if (!confirmShip) return;
-    
-    const isCorrect = checkUserCode(); // your current correctness check function
 
+    const isCorrect = checkUserCode();
     const { data, error } = await supabase
       .from("user_state")
       .select("exp")
@@ -181,11 +188,14 @@ const CodingPage = () => {
       return;
     }
 
-    let gainedExp = 0;
-    let newExp = data.exp;
-    let newLevel = getLevelFromExp(newExp);
-    let nextLevel = getExpForLevel(newLevel + 1);
+    let tips = [];
+    const lowerCode = htmlCode.toLowerCase();
+    if (!lowerCode.includes('<nav')) tips.push("Try adding a <nav> tag.");
+    if (!lowerCode.includes('<ul')) tips.push("Did you use an unordered list (<ul>)?");
+    if (!lowerCode.includes('>home<')) tips.push("Missing a link to 'Home'.");
+    if (!lowerCode.includes('>about<')) tips.push("Missing a link to 'About'.");
 
+    let gainedExp = 0;
     if (!isCorrect) {
       const min = -30;
       const max = -10;
@@ -196,27 +206,39 @@ const CodingPage = () => {
       gainedExp = Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    newExp = data.exp + gainedExp;
-    newLevel = getLevelFromExp(newExp);
-    nextLevel = getExpForLevel(newLevel + 1);
+    const newExp = data.exp + gainedExp;
+    const newLevel = getLevelFromExp(newExp);
+    const nextLevel = getExpForLevel(newLevel + 1);
 
-    // Update local state
     setExp(newExp);
     setLevel(newLevel);
     setNextLevelExp(nextLevel);
 
-    const { error: updateError } = await supabase
+    await supabase
       .from("user_state")
       .update({ exp: newExp, level: newLevel })
       .eq("user_id", userId);
 
-    if (updateError) {
-      console.error("Error updating user_state:", updateError);
+    const { data: taskData, error: taskError } = await supabase
+      .from("tasks")
+      .select("expectedOutput")
+      .eq("id", currentTask.id)
+      .single();
+
+    if (taskError) {
+      console.error("Failed to fetch expected output:", taskError);
+      return;
     }
 
-    // Proceed with shipping
-    shipTask();
+    // Show result card
+    setResultData({
+      gainedExp,
+      tips,
+      expectedOutput: taskData?.expectedOutput || "",
+    });
+    setShowResultCard(true);
   };
+
 
 
 
@@ -273,6 +295,36 @@ const CodingPage = () => {
           </div>
         )}
       </div>
+      {showResultCard && (
+        <div className={`resultCard ${resultData.gainedExp >= 0 ? "positive" : "negative"}`}>
+          <h2>{resultData.gainedExp >= 0 ? "✅ Task Shipped!" : "⚠️ Task Shipped with Mistakes"}</h2>
+          <p>
+            <strong>{resultData.gainedExp >= 0 ? "EXP Gained:" : "EXP Lost:"}</strong>
+            {resultData.gainedExp >= 0 ? ` ${resultData.gainedExp}` : ` ${Math.abs(resultData.gainedExp)}`}
+          </p>
+
+
+          {resultData.tips.length > 0 && (
+            <>
+              <h3>Improvements</h3>
+              <ul>
+                {resultData.tips.map((tip, i) => <li key={i}>{tip}</li>)}
+              </ul>
+            </>
+          )}
+
+          {resultData.expectedOutput && (
+            <>
+              <h3>Suggested Answer</h3>
+              <pre className="expectedOutput">{resultData.expectedOutput}</pre>
+            </>
+          )}
+
+          <button onClick={shipTask}>
+            {resultData.gainedExp >= 0 ? "Continue" : "Continue"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

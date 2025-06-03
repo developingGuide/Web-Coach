@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Journey.css";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/NavBar";
@@ -13,7 +13,7 @@ import CloudLayer from "../components/CloudLayer";
 export default function Journey() {
   const userId = "demo_user"
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [projects, setProjects] = useState([])
   const [tasks, setTasks] = useState([])
   const [projectTasks, setProjectTasks] = useState([])
@@ -21,6 +21,13 @@ export default function Journey() {
   const [ inboxHistory, setInboxHistory] = useState([])
   const [selectedProject, setSelectedProject] = useState(null);
 
+  useEffect(() => {
+    if (location.state?.openIpad) {
+      setShowIpad(true);
+
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const fetchProjects = async () => {
     const {error, data} = await supabase
