@@ -151,9 +151,10 @@
 }
 
 .dot {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
+  padding: 0;
   background-color: gray;
   border: none;
   cursor: pointer;
