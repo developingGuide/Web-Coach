@@ -335,14 +335,14 @@ export default function Journey() {
         {/* Put your map image directly here */}
         <img src={`/${currentMap}.png`} alt="Map" className="map-image" />
 
-        <div
+        {/* <div
           style={{ zIndex:"999", scale: '1.5', position: 'absolute', top: '70%', left: '20%', cursor: "pointer" }}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
           onClick={() => setShowIpad(true)}
           >
           <Crow />
-        </div>
+        </div> */}
 
         <div className="journey-main">
           {checkpointLayouts[currentMap]?.map(({ top, left, label, projectId }) => (
@@ -370,14 +370,13 @@ export default function Journey() {
       </div>
     </div>
 
-    {showIpad && (
+    {/* {showIpad && (
       <div className="ipad-overlay" onClick={() => setShowIpad(false)}>
         <div className="ipad-container" onClick={(e) => e.stopPropagation()}>
-          {/* Neon iPad border can be styled with CSS */}
-          <Inbox /> {/* Or any component you want inside */}
+          <Inbox />
         </div>
       </div>
-    )}
+    )} */}
 
     {selectedProject && (
       <div className="project-overlay" onClick={() => setSelectedProject(null)}>
@@ -389,6 +388,7 @@ export default function Journey() {
             onClick={() => {
               handleSelect(selectedProject.id);
               setSelectedProject(null);
+              navigate('/inbox')
             }}
             style={{ marginTop: "1rem", padding: "0.5rem 1.5rem", background: "#0ff", color: "#000", borderRadius: "8px" }}
           >

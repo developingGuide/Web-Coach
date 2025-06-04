@@ -107,6 +107,7 @@ button:hover {
   -webkit-backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   flex: 1;
 }
 
