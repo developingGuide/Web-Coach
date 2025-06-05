@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import "./Dashboard.css";
 import {useNavigate} from "react-router-dom"
 import supabase from "../../config/supabaseClient";
+import CalendarHeatmap from 'react-calendar-heatmap';
+import 'react-calendar-heatmap/dist/styles.css';
+import moment from "moment";
+import { Tooltip as ReactTooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
+
 
 const Dashboard = () => {
   const userId = "demo_user"
@@ -95,30 +101,14 @@ const Dashboard = () => {
 
 
   // Github square thingies
-  const getLastNDays = (n = 30) => {
-    const dates = [];
-    const today = new Date();
-    for (let i = n - 1; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(today.getDate() - i);
-      const dateStr = d.toISOString().split("T")[0];
-      dates.push({
-        date: dateStr,
-        count: tasksToday[dateStr]?.length || 0,
-      });
-    }
-    return dates;
-  };
-
-  const getColorClass = (count) => {
-    if (count === 0) return "square-box";
-    if (count <= 2) return "square-box square-1";
-    if (count <= 5) return "square-box square-2";
-    return "square-box square-3";
-  };
-
-
-
+  const heatmapData = Object.entries(tasksToday).map(([date, tasks]) => ({
+    date,
+    count: tasks.length,
+  }));
+  
+  const startDate = moment().subtract(5, 'months').format('YYYY-MM-DD');
+  const endDate = moment().format('YYYY-MM-DD');
+  
 
   return (
     <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
@@ -145,15 +135,30 @@ const Dashboard = () => {
             <div className="devdash-value">{count}</div>
             <div className="devdash-label">Daily Tracker</div>
             {/* <div className="devdash-value">(Inser github square thingie)</div> */}
-            <div className="square-grid">
-              {getLastNDays(30).map(({ date, count }) => (
-                <div
-                  key={date}
-                  className={getColorClass(count)}
-                  title={`${date}: ${count} task${count !== 1 ? "s" : ""}`}
-                ></div>
-              ))}
-            </div>
+            <CalendarHeatmap
+              startDate={startDate}
+              endDate={endDate}
+              // startDate={new Date('2025-06-01')}
+              // endDate={new Date('2025-12-01')}
+              values={heatmapData}
+              classForValue={(value) => {
+                if (!value || value.count === 0) return 'color-empty';
+                if (value.count < 2) return 'color-github-1';
+                if (value.count < 4) return 'color-github-2';
+                if (value.count < 6) return 'color-github-3';
+                return 'color-github-4';
+              }}
+              tooltipDataAttrs={(value) => {
+                if (!value || !value.date) return null;
+                return {
+                  'data-tooltip-id': 'heatmap-tooltip',
+                  'data-tooltip-content': `${moment(value.date).format('MMM D')}: ${value.count || 0} tasks`,
+                };
+              }}
+            />
+
+            <ReactTooltip id="heatmap-tooltip" />
+
           </div>
         </div>
 
@@ -185,8 +190,8 @@ const Dashboard = () => {
 
           <div className="devdash-panel">
             <div className="devdash-title">Inbox</div>
-            <div className="devdash-label">New Messages</div>
-            <div className="devdash-value">2</div>
+            <div className="devdash-label">New Message</div>
+            <div className="devdash-value">Inbox</div>
             <button onClick={() => {navigate('/inbox')}}>Open Inbox</button>
           </div>
           {/* <div className="devdash-panel devdash-compact">
