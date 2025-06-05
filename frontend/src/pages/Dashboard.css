@@ -235,3 +235,33 @@ button:hover {
 .cloud-cover.visible{
   opacity: 1;
 }
+
+
+
+/* Github Square things */
+.square-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  margin-top: 8px;
+  width: 60%;
+}
+
+.square-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background-color: #e0e0e0; /* default gray */
+}
+
+.square-1 {
+  background-color: #a7f3d0; /* light green */
+}
+
+.square-2 {
+  background-color: #34d399; /* medium green */
+}
+
+.square-3 {
+  background-color: #059669; /* dark green */
+}

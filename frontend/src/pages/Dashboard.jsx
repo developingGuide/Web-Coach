@@ -67,6 +67,10 @@ const Dashboard = () => {
     }
   }, [currentTaskId]);
 
+
+
+  // Today's Commit
+
   const fetchTasksToday = async () => {
     const { data, error } = await supabase
       .from("task_completion_log")
@@ -89,7 +93,33 @@ const Dashboard = () => {
   const today = new Date().toISOString().split("T")[0];
   const count = tasksToday[today]?.length || 0;
 
-  
+
+  // Github square thingies
+  const getLastNDays = (n = 30) => {
+    const dates = [];
+    const today = new Date();
+    for (let i = n - 1; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const dateStr = d.toISOString().split("T")[0];
+      dates.push({
+        date: dateStr,
+        count: tasksToday[dateStr]?.length || 0,
+      });
+    }
+    return dates;
+  };
+
+  const getColorClass = (count) => {
+    if (count === 0) return "square-box";
+    if (count <= 2) return "square-box square-1";
+    if (count <= 5) return "square-box square-2";
+    return "square-box square-3";
+  };
+
+
+
+
   return (
     <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
       <div className="cloud-transition">
@@ -114,7 +144,16 @@ const Dashboard = () => {
             <div className="devdash-label">Commits Today</div>
             <div className="devdash-value">{count}</div>
             <div className="devdash-label">Daily Tracker</div>
-            <div className="devdash-value">(Inser github square thingie)</div>
+            {/* <div className="devdash-value">(Inser github square thingie)</div> */}
+            <div className="square-grid">
+              {getLastNDays(30).map(({ date, count }) => (
+                <div
+                  key={date}
+                  className={getColorClass(count)}
+                  title={`${date}: ${count} task${count !== 1 ? "s" : ""}`}
+                ></div>
+              ))}
+            </div>
           </div>
         </div>
 
