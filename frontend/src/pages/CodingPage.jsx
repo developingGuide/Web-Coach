@@ -159,7 +159,31 @@ const CodingPage = () => {
       return;
     }
 
-    navigate("/journey", { state: { openIpad: true } });
+    const today = new Date().toISOString().split('T')[0]; // "2025-06-05"
+
+    // 1. Get current log
+    const { data, error } = await supabase
+      .from('task_completion_log')
+      .select('daily_log')
+      .eq('user_id', userId)
+      .single();
+
+    const dailyLog = data?.daily_log || {};
+    const tasksToday = dailyLog[today] || [];
+
+    // 2. Add new task
+    tasksToday.push(userState.current_task_id);
+    dailyLog[today] = tasksToday;
+
+    console.log("Updated daily log:", dailyLog);
+
+    // 3. Update back to Supabase
+    await supabase
+      .from('task_completion_log')
+      .update({ daily_log: dailyLog, updated_at: new Date().toISOString() })
+      .eq('user_id', userId);
+
+    navigate("/journey");
 
   }
 

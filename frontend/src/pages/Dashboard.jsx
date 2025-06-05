@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [userLvl, setUserLvl] = useState(0);
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [currentTask, setCurrentTask] = useState(null);
+  const [tasksToday, setTasksToday] = useState({})
 
 
   const handleLaunch = (destination) => {
@@ -59,9 +60,6 @@ const Dashboard = () => {
     setCurrentTask(task);
   };
 
-  useEffect(() => {
-    fetchUserState();
-  }, []);
 
   useEffect(() => {
     if (currentTaskId) {
@@ -69,6 +67,27 @@ const Dashboard = () => {
     }
   }, [currentTaskId]);
 
+  const fetchTasksToday = async () => {
+    const { data, error } = await supabase
+      .from("task_completion_log")
+      .select("daily_log")
+      .eq("user_id", userId)
+      .single();
+
+    if (error || !data) {
+      console.error("Failed to fetch today done tasks:", error);
+      return;
+    }
+
+    setTasksToday(data.daily_log || {});
+  };
+
+  useEffect(() => {
+    fetchTasksToday();
+  }, []);
+
+  const today = new Date().toISOString().split("T")[0];
+  const count = tasksToday[today]?.length || 0;
 
   
   return (
@@ -90,11 +109,12 @@ const Dashboard = () => {
             <div className="devdash-value">In Progress</div>
           </div>
 
-          <div className="devdash-panel">
-            <div className="devdash-title">Inbox</div>
-            <div className="devdash-label">New Messages</div>
-            <div className="devdash-value">2</div>
-            <button onClick={() => {navigate('/inbox')}}>Open Inbox</button>
+          <div className="devdash-panel devdash-compact">
+            <div className="devdash-title">Dev Stats</div>
+            <div className="devdash-label">Commits Today</div>
+            <div className="devdash-value">{count}</div>
+            <div className="devdash-label">Daily Tracker</div>
+            <div className="devdash-value">(Inser github square thingie)</div>
           </div>
         </div>
 
@@ -102,11 +122,11 @@ const Dashboard = () => {
         <div className="devdash-center">
           <div className="devdash-level-circle">
             <h1>LEVEL {userLvl}</h1>
-            <p>Frontend Apprentice</p>
+            <p>Status: <span className="neon-glow">Live</span></p>
           </div>
 
           <div className="devdash-controls">
-            <button>Start Task</button>
+            <button>Start Challenge</button>
             <button onClick={() => handleLaunch('/journey')}>View Journey</button>
           </div>
         </div>
@@ -114,28 +134,27 @@ const Dashboard = () => {
         {/* Right Side */}
         <div className="devdash-column">
           <div className="devdash-panel">
-            <div className="devdash-title">Current Zone</div>
-            <img src="/images/map-placeholder.png" className="devdash-map" />
-            <div className="devdash-value">HTML Hut</div>
+            <div className="devdash-title">Current Map: {currentMap}</div>
+            <img src={`/${currentMap}.png`} className="devdash-map" />
+            <div className="devdash-value">Progress:</div>
             <div className="devdash-progress-bar">
               <div className="devdash-progress-fill" style={{ width: "45%" }} />
               <span className="devdash-progress-percent">45%</span>
             </div>
           </div>
 
-          <div className="devdash-panel devdash-compact">
-            <div className="devdash-title">Dev Stats</div>
-            <div className="devdash-label">Commits Today</div>
-            <div className="devdash-value">4</div>
-            <div className="devdash-label">Time Focused</div>
-            <div className="devdash-value">1h 35m</div>
-          </div>
 
-          <div className="devdash-panel devdash-compact">
+          <div className="devdash-panel">
+            <div className="devdash-title">Inbox</div>
+            <div className="devdash-label">New Messages</div>
+            <div className="devdash-value">2</div>
+            <button onClick={() => {navigate('/inbox')}}>Open Inbox</button>
+          </div>
+          {/* <div className="devdash-panel devdash-compact">
             <div className="devdash-title">Status</div>
             <div className="devdash-value">Logged In</div>
             <div className="devdash-value neon-glow">[LIVE]</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
