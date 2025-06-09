@@ -8,14 +8,19 @@ import Inbox from './pages/Inbox';
 import Journey from './pages/Journey';
 import Navbar from './components/NavBar';
 import Sidebar from './components/Sidebar';
+import ChallengeMap from './pages/Challenge';
 import supabase from '../config/supabaseClient';
 import { getLevelFromExp, getExpForLevel } from "./utils/expCalculator";
 import './App.css'
+import TestingIdea from './pages/TestingIdea';
+import JourneyCharacterMap from './pages/TestingIdea';
+import QueuePage from './pages/QueuePage';
+import BattlePage from './pages/BattlePage';
 
 function App() {
     const userId = "demo_user"
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard/", "/challenge"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
 
 
@@ -85,6 +90,22 @@ function App() {
                         <Route
                             path="/inbox"
                             element={<Inbox/>}
+                        />
+                        <Route
+                            path="/challenges"
+                            element={<ChallengeMap/>}
+                        />
+                        <Route
+                            path='/queue'
+                            element={<QueuePage/>}
+                        />
+                        <Route
+                            path='/battle/:match_id'
+                            element={<BattlePage/>}
+                        />
+                        <Route
+                            path="/testing"
+                            element={<JourneyCharacterMap/>}
                         />
                         <Route
                             path="/journey"

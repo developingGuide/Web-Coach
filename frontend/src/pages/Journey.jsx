@@ -1,12 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Journey.css";
-import Sidebar from "../components/Sidebar";
 import Navbar from "../components/NavBar";
 import supabase from "../../config/supabaseClient";
 import { useEffect, useState, useRef } from "react";
-import Crow from "../components/crow";
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
-import Inbox from "./Inbox";
 import CloudLayer from "../components/CloudLayer";
 
 
@@ -335,15 +332,6 @@ export default function Journey() {
         {/* Put your map image directly here */}
         <img src={`/${currentMap}.png`} alt="Map" className="map-image" />
 
-        {/* <div
-          style={{ zIndex:"999", scale: '1.5', position: 'absolute', top: '70%', left: '20%', cursor: "pointer" }}
-          onMouseDown={(e) => e.stopPropagation()}
-          onTouchStart={(e) => e.stopPropagation()}
-          onClick={() => setShowIpad(true)}
-          >
-          <Crow />
-        </div> */}
-
         <div className="journey-main">
           {checkpointLayouts[currentMap]?.map(({ top, left, label, projectId }) => (
             <div
@@ -369,14 +357,6 @@ export default function Journey() {
         ))}
       </div>
     </div>
-
-    {/* {showIpad && (
-      <div className="ipad-overlay" onClick={() => setShowIpad(false)}>
-        <div className="ipad-container" onClick={(e) => e.stopPropagation()}>
-          <Inbox />
-        </div>
-      </div>
-    )} */}
 
     {selectedProject && (
       <div className="project-overlay" onClick={() => setSelectedProject(null)}>
