@@ -1,8 +1,10 @@
 import './BattlePage.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import HtmlCodeEditor from '../components/HtmlCodeEditor';
 import CssCodeEditor from '../components/CssCodeEditor';
 import JsCodeEditor from '../components/JsCodeEditor';
+import supabase from '../../config/supabaseClient';
 
 function generatePreviewHTML(html, css, js) {
   return `
@@ -21,17 +23,80 @@ function generatePreviewHTML(html, css, js) {
 
 }
 const BattlePage = () => {
-  const [activeTab, setActiveTab] = useState("html");
-  const [htmlCode, setHtmlCode] = useState("<h1>Hello</h1>");
-  const [cssCode, setCssCode] = useState("h1 { color: green; }");
-  const [jsCode, setJsCode] = useState("console.log('Hello');");
+  const { match_id } = useParams();
+  const [channel, setChannel] = useState(null);
+  const [opponentHtml, setOpponentHtml] = useState("");
+  const [opponentCss, setOpponentCss] = useState("");
+  const [opponentJs, setOpponentJs] = useState("");
 
-  const opponentHtml = "<h1>Opponent</h1>";
-  const opponentCss = "h1 { color: red; }";
-  const opponentJs = "console.log('Opponent');";
+  const [activeTab, setActiveTab] = useState("html");
+  const [htmlCode, setHtmlCode] = useState("<h1>Start</h1>");
+  const [cssCode, setCssCode] = useState("h1 { color: green; }");
+  const [jsCode, setJsCode] = useState("");
+
+  const user_id = "demo_user"; // Or from Supabase auth
+
 
   const compiledCode = generatePreviewHTML(htmlCode, cssCode, jsCode);
   const opponentCompiledCode = generatePreviewHTML(opponentHtml, opponentCss, opponentJs);
+
+  useEffect(() => {
+    const chan = supabase.channel(`match-${match_id}`);
+
+    chan
+      .on("broadcast", { event: "code-update" }, (payload) => {
+        const { html, css, js, sender_id } = payload.payload;
+        if (sender_id !== user_id) {
+          setOpponentHtml(html);
+          setOpponentCss(css);
+          setOpponentJs(js);
+        }
+      })
+      .subscribe();
+
+    setChannel(chan);
+
+    return () => {
+      supabase.removeChannel(chan);
+    };
+  }, [match_id]);
+
+  // Broadcast changes
+  useEffect(() => {
+    if (!channel) return;
+
+    const payload = {
+      sender_id: user_id,
+      html: htmlCode,
+      css: cssCode,
+      js: jsCode,
+    };
+
+    channel.send({
+      type: "broadcast",
+      event: "code-update",
+      payload,
+    });
+  }, [htmlCode, cssCode, jsCode]);
+
+  useEffect(() => {
+    if (!channel) return;
+    const timeout = setTimeout(() => {
+      channel.send({
+        type: "broadcast",
+        event: "code-update",
+        payload: {
+          sender_id: user_id,
+          html: htmlCode,
+          css: cssCode,
+          js: jsCode,
+        },
+      });
+    }, 500); // 500ms after user stops typing
+
+    return () => clearTimeout(timeout);
+  }, [htmlCode, cssCode, jsCode]);
+
 
   return (
     <div className="battleContainer">
