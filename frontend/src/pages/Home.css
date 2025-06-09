@@ -17,6 +17,12 @@
   position: absolute;
   top: 2rem;
   right: 3rem; 
+  cursor: pointer;
+  z-index: 999;
+}
+
+.logInBtn:hover{
+  scale: 1.02;
 }
 
 .ctaButton{

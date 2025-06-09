@@ -3,6 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const journeySteps = [
@@ -126,11 +127,13 @@ const Home = () => {
         },
     ];
 
+    const navigate = useNavigate()
+
     return (
         // Hero Section
         <div className="homePage">
             <div className="darkFilter"></div>
-            <button className='logInBtn'>Log In</button>
+            <button className='logInBtn' onClick={() => {navigate('/login')}}>Log In</button>
             <div className="content">
                 <div className="hero">
                     <div className="textAndButton">

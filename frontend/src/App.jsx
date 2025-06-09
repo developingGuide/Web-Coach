@@ -16,11 +16,15 @@ import TestingIdea from './pages/TestingIdea';
 import JourneyCharacterMap from './pages/TestingIdea';
 import QueuePage from './pages/QueuePage';
 import BattlePage from './pages/BattlePage';
+import SignupPage from './pages/SignupPage';
+import LoginPage from './pages/LoginPage';
+import { AuthContext } from './components/AuthContext';
+import GoBack from './pages/GoBack';
 
 function App() {
     const userId = "demo_user"
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard/", "/challenge"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard/", "/challenge", "/signup", "/login", "/goback"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
 
 
@@ -72,6 +76,18 @@ function App() {
                 <div className='pages'>
                     <Routes>
                         <Route
+                            path='/signup'
+                            element={<SignupPage/>}
+                        />
+                        <Route
+                            path='/login'
+                            element={<LoginPage/>}
+                        />
+                        <Route
+                            path="/goback"
+                            element={<GoBack/>}
+                        />
+                        <Route
                             path="/"
                             element={<Home/>}
                         />
@@ -105,7 +121,7 @@ function App() {
                         />
                         <Route
                             path="/testing"
-                            element={<JourneyCharacterMap/>}
+                            element={<AuthContext/>}
                         />
                         <Route
                             path="/journey"
