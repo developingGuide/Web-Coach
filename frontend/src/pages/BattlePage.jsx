@@ -34,7 +34,11 @@ const BattlePage = () => {
   const [cssCode, setCssCode] = useState("h1 { color: green; }");
   const [jsCode, setJsCode] = useState("");
 
-  const user_id = "demo_user"; // Or from Supabase auth
+  const {user} = useContext(AuthContext)
+  if (!user) {
+    return <div>Loading...</div>; // or show a spinner, or redirect to login
+  }
+  const user_id = user.id
 
 
   const compiledCode = generatePreviewHTML(htmlCode, cssCode, jsCode);

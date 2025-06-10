@@ -1,14 +1,21 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useContext } from "react";
 import "./Journey.css";
 import Navbar from "../components/NavBar";
 import supabase from "../../config/supabaseClient";
 import { useEffect, useState, useRef } from "react";
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
 import CloudLayer from "../components/CloudLayer";
+import { AuthContext } from "../components/AuthContext";
 
 
 export default function Journey() {
-  const userId = "demo_user"
+  // const userId = "demo_user"
+  const {user} = useContext(AuthContext)
+  if (!user) {
+    return <div>Loading...</div>; // or show a spinner, or redirect to login
+  }
+  const userId = user.id
   const navigate = useNavigate();
   const location = useLocation();
   const [projects, setProjects] = useState([])

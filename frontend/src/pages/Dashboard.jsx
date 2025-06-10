@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./Dashboard.css";
 import {useNavigate} from "react-router-dom"
 import supabase from "../../config/supabaseClient";
@@ -7,18 +7,23 @@ import 'react-calendar-heatmap/dist/styles.css';
 import moment from "moment";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
+import { AuthContext } from "../components/AuthContext";
 
 
 const Dashboard = () => {
-  const userId = "demo_user"
+  // const userId = "demo_user"
+  const {user} = useContext(AuthContext)
+  if (!user) {
+    return <div>Loading...</div>; // or show a spinner, or redirect to login
+  }
+  const userId = user.id
   const [isLaunching, setIsLaunching] = useState(false);
   const navigate = useNavigate()
-  const [currentMap, setCurrentMap] = useState(null);
+  const [currentMap, setCurrentMap] = useState("No map selected!");
   const [userLvl, setUserLvl] = useState(0);
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [currentTask, setCurrentTask] = useState(null);
   const [tasksToday, setTasksToday] = useState({})
-
 
   const handleLaunch = (destination) => {
     setIsLaunching(true);

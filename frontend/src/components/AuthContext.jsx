@@ -8,18 +8,36 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const session = supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user || null);
-    });
+    const setupAuth = async () => {
+      const { data } = await supabase.auth.getSession();
+      const sessionUser = data.session?.user || null;
+      setUser(sessionUser);
+
+      if (sessionUser) {
+        await supabase
+          .from("user_state")
+          .upsert({ user_id: sessionUser.id, exp: 0 }, { onConflict: ['user_id'] });
+      }
+    };
+
+    setupAuth();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
+      const newUser = session?.user || null;
+      setUser(newUser);
+
+      if (newUser) {
+        supabase
+          .from("user_state")
+          .upsert({ user_id: newUser.id, exp: 0 }, { onConflict: ['user_id'] });
+      }
     });
 
     return () => {
       listener.subscription.unsubscribe();
     };
   }, []);
+
 
   return (
     <AuthContext.Provider value={{ user }}>

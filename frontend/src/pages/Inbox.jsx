@@ -1,10 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Sidebar from '../components/Sidebar';
 import './Inbox.css';
 import supabase from '../../config/supabaseClient';
+import { AuthContext } from '../components/AuthContext';
 
 const Inbox = () => {
-  const userId = "demo_user";
+  const {user} = useContext(AuthContext)
+  if (!user) {
+    return <div>Loading...</div>; // or show a spinner, or redirect to login
+  }
+  const userId = user.id
   const [inboxItems, setInboxItems] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);

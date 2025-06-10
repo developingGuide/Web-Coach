@@ -1,5 +1,5 @@
 import {Routes, Route, useLocation} from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Dashboard from './pages/Dashboard'
 import Test from './pages/test';
 import Home from './pages/Home';
@@ -22,7 +22,11 @@ import { AuthContext } from './components/AuthContext';
 import GoBack from './pages/GoBack';
 
 function App() {
-    const userId = "demo_user"
+    const {user} = useContext(AuthContext)
+    if (!user) {
+    return <div>Loading...</div>; // or show a spinner, or redirect to login
+    }
+    const userId = user.id
     const location = useLocation();
     const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard/", "/challenge", "/signup", "/login", "/goback"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);

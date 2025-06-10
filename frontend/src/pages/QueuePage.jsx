@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import supabase from '../../config/supabaseClient';
+import { AuthContext } from '../components/AuthContext';
 import './QueuePage.css';
 
 export default function QueuePage() {
@@ -10,7 +11,11 @@ export default function QueuePage() {
   const [channel, setChannel] = useState(null);
   const navigate = useNavigate();
   const challengeId = searchParams.get('challenge_id');
-  const user_id = "demo_user"
+  const {user} = useContext(AuthContext)
+  if (!user) {
+    return <div>Loading...</div>; // or show a spinner, or redirect to login
+  }
+  const userId = user.id
 
   useEffect(() => {
     let active = true;

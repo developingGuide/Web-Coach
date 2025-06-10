@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { AuthContext } from '../components/AuthContext';
 import CodeEditor from '../components/CodeEditor';
 import './CodingPage.css';
 import supabase from '../../config/supabaseClient';
@@ -9,7 +10,11 @@ import CssCodeEditor from '../components/CssCodeEditor';
 import JsCodeEditor from '../components/JsCodeEditor';
 
 const CodingPage = () => {
-  const userId = "demo_user";
+  const {user} = useContext(AuthContext)
+  if (!user) {
+    return <div>Loading...</div>; // or show a spinner, or redirect to login
+  }
+  const userId = user.id
   const [showTools, setShowTools] = useState(false);
   const [currentTask, setCurrentTask] = useState({});
   const [code, setCode] = useState("");
