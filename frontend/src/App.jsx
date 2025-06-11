@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import CodingPage from './pages/CodingPage';
 import Inbox from './pages/Inbox';
 import Journey from './pages/Journey';
-import Navbar from './components/NavBar';
+import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ChallengeMap from './pages/Challenge';
 import supabase from '../config/supabaseClient';
