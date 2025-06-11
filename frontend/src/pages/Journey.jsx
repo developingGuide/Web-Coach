@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import "./Journey.css";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar";
 import supabase from "../../config/supabaseClient";
 import { useEffect, useState, useRef } from "react";
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
