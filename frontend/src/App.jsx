@@ -1,4 +1,4 @@
-import {Routes, Route, useLocation, useNavigate} from 'react-router-dom';
+import {Routes, Route, useLocation} from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import Dashboard from './pages/Dashboard'
 import Test from './pages/test';
@@ -23,21 +23,23 @@ import GoBack from './pages/GoBack';
 
 function App() {
     const {user} = useContext(AuthContext)
-    if (!user) {
-        <LoginPage/>; // or show a spinner, or redirect to login
-    }
-    const userId = user.id
     const location = useLocation();
     const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard/", "/challenge", "/signup", "/login", "/goback"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
-
-
+    
+    
     const [userExp, setUserExp] = useState(0);
     const [userLevel, setUserLevel] = useState(0);
     const [nextLevelExp, setNextLevelExp] = useState(100);
     const [currentLevelExp, setCurrentLevelExp] = useState(0);
-
+    
     useEffect(() => {
+        if (!user) {
+            return; // or show a spinner, or redirect to login
+        }
+
+        const userId = user.id
+
         const fetchExp = async () => {
             const { data, error } = await supabase
             .from("user_state")
