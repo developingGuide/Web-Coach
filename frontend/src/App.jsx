@@ -23,9 +23,9 @@ import GoBack from './pages/GoBack';
 
 function App() {
     const {user} = useContext(AuthContext)
-    if (!user) {
-    return <div>Loading...</div>; // or show a spinner, or redirect to login
-    }
+    // if (!user) {
+    // return <div>Loading...</div>; // or show a spinner, or redirect to login
+    // }
     const userId = user.id
     const location = useLocation();
     const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard/", "/challenge", "/signup", "/login", "/goback"];
