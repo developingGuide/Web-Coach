@@ -1,4 +1,4 @@
-import {Routes, Route, useLocation} from 'react-router-dom';
+import {Routes, Route, useLocation, useNavigate} from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react';
 import Dashboard from './pages/Dashboard'
 import Test from './pages/test';
@@ -24,7 +24,7 @@ import GoBack from './pages/GoBack';
 function App() {
     const {user} = useContext(AuthContext)
     if (!user) {
-    return <div>Loading...</div>; // or show a spinner, or redirect to login
+        <LoginPage/>; // or show a spinner, or redirect to login
     }
     const userId = user.id
     const location = useLocation();
