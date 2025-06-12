@@ -51,10 +51,6 @@ const Dashboard = () => {
       setCurrentTaskId(userState.current_task_id)
   }
 
-  useEffect(() => {
-      fetchUserState();
-    }, []);
-
 
   const fetchCurrentTask = async (taskId) => {
     const { data: task, error: taskError } = await supabase
@@ -71,52 +67,52 @@ const Dashboard = () => {
     setCurrentTask(task);
   };
 
-
-  useEffect(() => {
-    if (currentTaskId) {
-      fetchCurrentTask(currentTaskId);
-    }
-  }, [currentTaskId]);
-
-
-
+  
   // Today's Commit
-
+  
   const fetchTasksToday = async () => {
     const { data, error } = await supabase
-      .from("task_completion_log")
-      .select("daily_log")
-      .eq("user_id", userId)
+    .from("task_completion_log")
+    .select("daily_log")
+    .eq("user_id", userId)
       .single();
-
-    if (error || !data) {
-      console.error("Failed to fetch today done tasks:", error);
-      return;
-    }
-
-    setTasksToday(data.daily_log || {});
-  };
-
-  useEffect(() => {
-    fetchTasksToday();
-  }, []);
-
-  const today = new Date().toISOString().split("T")[0];
-  const count = tasksToday[today]?.length || 0;
-
-
-  // Github square thingies
-  const heatmapData = Object.entries(tasksToday).map(([date, tasks]) => ({
-    date,
-    count: tasks.length,
-  }));
-  
-  const startDate = moment().subtract(5, 'months').format('YYYY-MM-DD');
-  const endDate = moment().format('YYYY-MM-DD');
-  
-
-  return (
-    <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
+      
+      if (error || !data) {
+        console.error("Failed to fetch today done tasks:", error);
+        return;
+      }
+      
+      setTasksToday(data.daily_log || {});
+    };
+    
+    const today = new Date().toISOString().split("T")[0];
+    const count = tasksToday[today]?.length || 0;
+    
+    
+    // Github square thingies
+    const heatmapData = Object.entries(tasksToday).map(([date, tasks]) => ({
+      date,
+      count: tasks.length,
+    }));
+    
+    const startDate = moment().subtract(5, 'months').format('YYYY-MM-DD');
+    const endDate = moment().format('YYYY-MM-DD');
+    
+    useEffect(() => {
+      if (currentTaskId) {
+        fetchCurrentTask(currentTaskId);
+      }
+    }, [currentTaskId]);
+    
+    
+    useEffect(() => {
+      fetchUserState();
+      fetchTasksToday();
+    }, []);
+    
+    
+    return (
+      <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
       <div className="cloud-transition">
         <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching ? "visible" : ""}`} />
       </div>
