@@ -121,6 +121,7 @@ export default function Journey() {
       }
 
       setShowIpad(true)
+      navigate('/inbox')
     }
   };
 
@@ -355,7 +356,6 @@ export default function Journey() {
             onClick={() => {
               handleSelect(selectedProject.id);
               setSelectedProject(null);
-              navigate('/inbox')
             }}
             style={{ marginTop: "1rem", padding: "0.5rem 1.5rem", background: "#0ff", color: "#000", borderRadius: "8px" }}
           >
