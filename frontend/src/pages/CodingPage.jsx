@@ -203,7 +203,7 @@ const fetchCurrentTask = async () => {
       .update({ daily_log: dailyLog, updated_at: new Date().toISOString() })
       .eq('user_id', userId);
 
-    navigate("/journey");
+    navigate("/inbox");
 
   }
 
