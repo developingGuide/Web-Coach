@@ -11,10 +11,10 @@ import JsCodeEditor from '../components/JsCodeEditor';
 
 const CodingPage = () => {
   const {user} = useContext(AuthContext)
-  if (!user) {
-    return <div>Loading...</div>; // or show a spinner, or redirect to login
-  }
-  const userId = user.id
+  // if (!user) {
+  //   return <div>Loading...</div>;
+  // }
+  // const userId = user.id
   const [showTools, setShowTools] = useState(false);
   const [currentTask, setCurrentTask] = useState({});
   const [code, setCode] = useState("");
@@ -26,14 +26,33 @@ const CodingPage = () => {
   const [cssCode, setCssCode] = useState("body { background: #111; }");
   const [jsCode, setJsCode] = useState("console.log('Hello');");
   const [activeTab, setActiveTab] = useState("html");
-
+  const [taskTools, setTaskTools] = useState(false);
+  const [showResultCard, setShowResultCard] = useState(false);
+  const [resultData, setResultData] = useState({
+    gainedExp: 0,
+    tips: [],
+    expectedOutput: "",
+  });
+  
+  
+  useEffect(() => {
+    if (user) {
+      fetchCurrentTask();
+    }
+  }, [user]);
+  
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+  const userId = user.id;
+  
   const defaultTemplate = `<!-- Stylesheet and JavaScript are linked automatically -->
-
+  
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -41,43 +60,39 @@ const CodingPage = () => {
 </html>
 `;
 
-  const [taskTools, setTaskTools] = useState(false);
 
 
-  const fetchCurrentTask = async () => {
-    const { data: userState, error: stateError } = await supabase
-      .from("user_state")
+const fetchCurrentTask = async () => {
+  const { data: userState, error: stateError } = await supabase
+  .from("user_state")
       .select("selected_project_id, current_task_id")
       .eq("user_id", userId)
       .single();
-
-    if (stateError || !userState) {
-      console.error("Failed to fetch user state:", stateError);
-      return;
-    }
-
-    const { data: taskData, error: taskError } = await supabase
+      
+      if (stateError || !userState) {
+        console.error("Failed to fetch user state:", stateError);
+        return;
+      }
+      
+      const { data: taskData, error: taskError } = await supabase
       .from("tasks")
       .select("*")
       .eq("id", userState.current_task_id)
       .single();
+      
+      if (taskError || !taskData) {
+        console.error("Failed to fetch current task data:", taskError);
+        return;
+      }
 
-    if (taskError || !taskData) {
-      console.error("Failed to fetch current task data:", taskError);
-      return;
-    }
-
-    setCurrentTask(taskData);
-    setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
+      setCurrentTask(taskData);
+      setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
     setHtmlCode(taskData.startingHtml || defaultTemplate);
     setCssCode(taskData.startingCss || "body { background: white; }");
     setJsCode(taskData.startingJs || "console.log('Hello');");
 
   };
 
-  useEffect(() => {
-    fetchCurrentTask();
-  }, []);
 
   const handleRun = () => {
     const finalCode = `
@@ -193,12 +208,6 @@ const CodingPage = () => {
   }
 
 
-  const [showResultCard, setShowResultCard] = useState(false);
-  const [resultData, setResultData] = useState({
-    gainedExp: 0,
-    tips: [],
-    expectedOutput: "",
-  });
 
 
   const handleShip = async () => {
