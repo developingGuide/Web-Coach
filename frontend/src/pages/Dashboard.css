@@ -202,7 +202,7 @@ button:hover {
 /* Animate starfall background */
 .launching {
   animation: fallThroughStars 1.2s ease-in forwards;
-  background-image: url('space.png');
+  background-image: url('/space.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center top;
