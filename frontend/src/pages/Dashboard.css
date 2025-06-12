@@ -1,7 +1,7 @@
 .devdash-root {
   height: 100vh;
   width: 100vw;
-  background-image: url('space.png');
+  background-image: url('/space.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center top;
