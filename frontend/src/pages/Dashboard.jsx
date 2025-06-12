@@ -13,18 +13,38 @@ import { AuthContext } from "../components/AuthContext";
 const Dashboard = () => {
   // const userId = "demo_user"
   const {user} = useContext(AuthContext)
-  if (!user) {
-    return <div>Loading...</div>; // or show a spinner, or redirect to login
-  }
-  const userId = user.id
-  const [isLaunching, setIsLaunching] = useState(false);
+  // if (!user) {
+  //   return <div>Loading...</div>; // or show a spinner, or redirect to login
+  // }
+  
   const navigate = useNavigate()
+  const [isLaunching, setIsLaunching] = useState(false);
   const [currentMap, setCurrentMap] = useState("No map selected!");
   const [userLvl, setUserLvl] = useState(0);
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [currentTask, setCurrentTask] = useState(null);
   const [tasksToday, setTasksToday] = useState({})
-
+  
+  useEffect(() => {
+    if (currentTaskId) {
+      fetchCurrentTask(currentTaskId);
+    }
+  }, [currentTaskId]);
+  
+  
+  useEffect(() => {
+    if (user?.id) {
+      fetchUserState();
+      fetchTasksToday();
+    }
+  }, [user]);
+  
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+  
+  const userId = user.id
+  
   const handleLaunch = (destination) => {
     setIsLaunching(true);
 
@@ -97,18 +117,6 @@ const Dashboard = () => {
     
     const startDate = moment().subtract(5, 'months').format('YYYY-MM-DD');
     const endDate = moment().format('YYYY-MM-DD');
-    
-    useEffect(() => {
-      if (currentTaskId) {
-        fetchCurrentTask(currentTaskId);
-      }
-    }, [currentTaskId]);
-    
-    
-    useEffect(() => {
-      fetchUserState();
-      fetchTasksToday();
-    }, []);
     
     
     return (

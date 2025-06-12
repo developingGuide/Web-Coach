@@ -27,9 +27,20 @@ export const AuthProvider = ({ children }) => {
       setUser(newUser);
 
       if (newUser) {
+        // Fire and forget — but still handle the response
         supabase
           .from("user_state")
-          .upsert({ user_id: newUser.id, exp: 0 }, { onConflict: ['user_id'] });
+          .upsert({ user_id: newUser.id, exp: 0 }, { onConflict: ['user_id'] })
+          .then(({ error }) => {
+            if (error) console.error("User state upsert error:", error.message);
+          });
+
+        supabase
+          .from("task_completion_log")
+          .upsert({ user_id: newUser.id, daily_log: {} }, { onConflict: ['user_id'] })
+          .then(({ error }) => {
+            if (error) console.error("Task log upsert error:", error.message);
+          });
       }
     });
 
