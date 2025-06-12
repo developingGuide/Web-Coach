@@ -180,7 +180,7 @@ const Dashboard = () => {
           </div>
 
           <div className="devdash-controls">
-            <button>Start Challenge</button>
+            <button onClick={() => handleLaunch('/challenges')}>Start Challenge</button>
             <button onClick={() => handleLaunch('/journey')}>View Journey</button>
           </div>
         </div>

@@ -12,12 +12,13 @@ export default function QueuePage() {
   const navigate = useNavigate();
   const challengeId = searchParams.get('challenge_id');
   const {user} = useContext(AuthContext)
-  if (!user) {
-    return <div>Loading...</div>; // or show a spinner, or redirect to login
-  }
-  const userId = user.id
-
+  
   useEffect(() => {
+    if (!user) {
+      return; // or show a spinner, or redirect to login
+    }
+    const userId = user.id
+    
     let active = true;
     const joinQueue = async () => {
       // const { data: { user } } = await supabase.auth.getUser();

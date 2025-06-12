@@ -1,10 +1,11 @@
 import './BattlePage.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import HtmlCodeEditor from '../components/HtmlCodeEditor';
 import CssCodeEditor from '../components/CssCodeEditor';
 import JsCodeEditor from '../components/JsCodeEditor';
 import supabase from '../../config/supabaseClient';
+import { AuthContext } from '../components/AuthContext';
 
 function generatePreviewHTML(html, css, js) {
   return `
@@ -35,10 +36,25 @@ const BattlePage = () => {
   const [jsCode, setJsCode] = useState("");
 
   const {user} = useContext(AuthContext)
-  if (!user) {
-    return <div>Loading...</div>; // or show a spinner, or redirect to login
+
+  const [userReady, setUserReady] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setUserReady(true);
+    }
+  }, [user]);
+
+  // Place this return AFTER all hooks
+  if (!userReady) {
+    return <div>Loading...</div>;
   }
-  const user_id = user.id
+
+  const user_id = user.id;
+  // if (!user) {
+  //   return <div>Loading...</div>; // or show a spinner, or redirect to login
+  // }
+  // const user_id = user.id
 
 
   const compiledCode = generatePreviewHTML(htmlCode, cssCode, jsCode);
