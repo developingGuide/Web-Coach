@@ -26,7 +26,7 @@ export default function QueuePage() {
       const { data: entry, error } = await supabase
         .from('queue')
         // .insert([{ user_id: user.id, challenge_id: challengeId }])
-        .insert([{ user_id: user_id, challenge_id: challengeId }])
+        .insert([{ user_id: userId, challenge_id: challengeId }])
         .select()
         .single();
 
@@ -41,7 +41,7 @@ export default function QueuePage() {
         .from('queue')
         .select('*')
         .eq('challenge_id', challengeId)
-        .neq('user_id', user_id)
+        .neq('user_id', userId)
         .order('inserted_at', { ascending: true });
 
       if (others.length > 0) {
@@ -51,8 +51,8 @@ export default function QueuePage() {
           .from('matches')
           .insert([{
             challenge_id: challengeId,
-            user_1_id: user_id,
-            user_2_id: opponent.user_id,
+            user_1_id: userId,
+            user_2_id: opponent.userId,
             created_at: new Date().toISOString()
           }])
           .select()
@@ -73,7 +73,7 @@ export default function QueuePage() {
             event: 'INSERT',
             schema: 'public',
             table: 'matches',
-            filter: `user_2_id=eq.${user_id}`
+            filter: `user_2_id=eq.${userId}`
           }, payload => {
             navigate(`/battle/${payload.new.id}`);
           })

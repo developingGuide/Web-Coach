@@ -6,10 +6,10 @@ import { AuthContext } from '../components/AuthContext';
 
 const Inbox = () => {
   const {user} = useContext(AuthContext)
-  if (!user) {
-    return <div>Loading...</div>; // or show a spinner, or redirect to login
-  }
-  const userId = user.id
+  // if (!user) {
+  //   return <div>Loading...</div>;
+  // }
+  // const userId = user.id
   const [inboxItems, setInboxItems] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
@@ -18,11 +18,13 @@ const Inbox = () => {
   
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchInbox = async () => {
       const { data: userState, error: userError } = await supabase
         .from("user_state")
         .select("selected_project_id, inbox_history, current_task_id, task_just_shipped")
-        .eq("user_id", userId)
+        .eq("user_id", user.id)
         .single();
 
       if (userError || !userState) {
@@ -61,7 +63,7 @@ const Inbox = () => {
           await supabase
             .from("user_state")
             .update({ task_just_shipped: false })
-            .eq("user_id", userId);
+            .eq("user_id", user.id);
           return;
         }
 
@@ -71,7 +73,7 @@ const Inbox = () => {
           await supabase
             .from("user_state")
             .update({ task_just_shipped: false }) // just reset flag
-            .eq("user_id", userId);
+            .eq("user_id", user.id);
           return;
         }
 
@@ -85,7 +87,7 @@ const Inbox = () => {
               current_task_id: nextTask.id,
               task_just_shipped: false,
             })
-            .eq("user_id", userId);
+            .eq("user_id", user.id);
 
           if (updateError) {
             console.error("Failed to update inbox after delay:", updateError);
@@ -98,10 +100,12 @@ const Inbox = () => {
     };
 
     fetchInbox();
-  }, []);
+  }, [user]);
 
 
-
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
 
   const handleTaskClick = async (task) => {
@@ -110,7 +114,7 @@ const Inbox = () => {
     const { error } = await supabase
       .from("user_state")
       .update({ current_task_id: task.id })
-      .eq("user_id", userId);
+      .eq("user_id", user.id);
 
     if (error) console.error("Failed to update selected task:", error);
   };
