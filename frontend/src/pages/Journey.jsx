@@ -25,14 +25,6 @@ export default function Journey() {
   const [ inboxHistory, setInboxHistory] = useState([])
   const [selectedProject, setSelectedProject] = useState(null);
 
-  useEffect(() => {
-    if (location.state?.openIpad) {
-      setShowIpad(true);
-
-      window.history.replaceState({}, document.title);
-    }
-  }, [location.state]);
-
   const fetchProjects = async () => {
     const {error, data} = await supabase
       .from("projects")
@@ -88,13 +80,6 @@ export default function Journey() {
 
       setInboxHistory(data?.inbox_history || []);
   }
-
-  useEffect(() => {
-    fetchTasks();
-    fetchProjects();
-    fetchTaskIds();
-    fetchInboxHistory();
-  }, []);
 
   const handleSelect = async (id) => {
     const { error } = await supabase
@@ -154,12 +139,6 @@ export default function Journey() {
   };
 
 
-  useEffect(() => {
-    const centerX = window.innerWidth / 2 - 1000; // 1500 = half map width
-    const centerY = window.innerHeight / 2 - 700; // 1000 = half map height
-    setPosition({ x: centerX, y: centerY });
-  }, []);
-
   const mapRef = useRef(null);
   const [dragging, setDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -197,44 +176,11 @@ export default function Journey() {
   };
   
   const handleMouseUp = () => setDragging(false);
-
-
   const [userExp, setUserExp] = useState(0);
   const [userLevel, setUserLevel] = useState(0);
   const [nextLevelExp, setNextLevelExp] = useState(100);
   const [currentLevelExp, setCurrentLevelExp] = useState(0);
-  
-  useEffect(() => {
-    const fetchExp = async () => {
-      const { data, error } = await supabase
-      .from("user_state")
-      .select("exp")
-      .eq("user_id", userId)
-      .single();
-
-      if (data) {
-          const exp = data.exp;
-          const level = getLevelFromExp(exp);
-          const baseExp = getExpForLevel(level);
-          const nextExp = getExpForLevel(level + 1);
-
-          setUserExp(exp);
-          setUserLevel(level);
-          setCurrentLevelExp(exp - baseExp);
-          setNextLevelExp(nextExp - baseExp);
-      }
-    };
-
-    fetchExp();
-
-    const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
-
-
   const [showIpad, setShowIpad] = useState(false);
-  
-  
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentMap, setCurrentMap] = useState("BeachIsland"); // or a key from your project list
   
@@ -270,6 +216,40 @@ export default function Journey() {
   };
 
   useEffect(() => {
+    fetchTasks();
+    fetchProjects();
+    fetchTaskIds();
+    fetchInboxHistory();
+
+    const centerX = window.innerWidth / 2 - 1000; // 1500 = half map width
+    const centerY = window.innerHeight / 2 - 700; // 1000 = half map height
+    setPosition({ x: centerX, y: centerY });
+
+    const fetchExp = async () => {
+      const { data, error } = await supabase
+      .from("user_state")
+      .select("exp")
+      .eq("user_id", userId)
+      .single();
+
+      if (data) {
+          const exp = data.exp;
+          const level = getLevelFromExp(exp);
+          const baseExp = getExpForLevel(level);
+          const nextExp = getExpForLevel(level + 1);
+
+          setUserExp(exp);
+          setUserLevel(level);
+          setCurrentLevelExp(exp - baseExp);
+          setNextLevelExp(nextExp - baseExp);
+      }
+    };
+
+    fetchExp();
+
+    const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
+    return () => clearInterval(interval);
+
     const fetchCurrentMap = async () => {
       const { data, error } = await supabase
         .from("user_state")
