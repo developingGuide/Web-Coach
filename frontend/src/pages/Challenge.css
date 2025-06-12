@@ -95,3 +95,28 @@
 .enter-btn:hover {
   background-color: #00aa77;
 }
+
+
+.cloud-cover-opening {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/cloud-cover.png'); /* Replace with your path */
+  background-size: cover;
+  background-position: center;
+  z-index: 1000;
+  animation: fadeOut 1s ease forwards;
+}
+
+/* Fade animation */
+@keyframes fadeOut {
+  from{
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Challenge.css';
 
@@ -17,7 +17,20 @@ export default function ChallengeMap() {
     if (selected) navigate(`/queue?challenge_id=${selected.id}`);
   };
 
+  const [isCoverVisible, setIsCoverVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsCoverVisible(false);
+    }, 1000); // 1 second
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
+    <>
+    {isCoverVisible && <div className="cloud-cover-opening"></div>}
+
     <div className="challenge-container">
       <div className={`grid ${selected ? 'compressed' : ''}`}>
         {challenges.map(ch => (
@@ -45,5 +58,7 @@ export default function ChallengeMap() {
         </div>
       )}
     </div>
+
+    </>
   );
 } 
