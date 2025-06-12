@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar';
 import './Inbox.css';
 import supabase from '../../config/supabaseClient';
 import { AuthContext } from '../components/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Inbox = () => {
   const {user} = useContext(AuthContext)
@@ -14,6 +15,7 @@ const Inbox = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [allTasks, setAllTasks] = useState([]);
+  const navigate = useNavigate()
 
   
 
@@ -121,7 +123,7 @@ const Inbox = () => {
 
   const handleStartTask = () => {
     if (selectedTask) {
-      window.location.href = "/playground";
+      navigate("/playground");
     }
   };
 
