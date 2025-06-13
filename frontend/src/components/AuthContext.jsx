@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
           .from("user_state")
           .select("user_id")
           .eq("user_id", newUser.id)
-          .single()
+          .maybeSingle()
           .then(async ({ data: existing, error }) => {
             if (!existing && !error) {
               const { error: insertError } = await supabase
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
           .from("task_completion_log")
           .select("user_id")
           .eq("user_id", newUser.id)
-          .single()
+          .maybeSingle()
           .then(async ({ data: existing, error }) => {
             if (!existing && !error) {
               const { error: insertError } = await supabase
