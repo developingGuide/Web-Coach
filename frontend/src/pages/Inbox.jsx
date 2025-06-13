@@ -128,6 +128,8 @@ const Inbox = () => {
   };
 
   return (
+    <>
+    <button className="inboxBackBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
     <div className="inbox-main">
       <div className="inbox-sidebar">
         <h2>Inbox</h2>
@@ -163,6 +165,7 @@ const Inbox = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 
