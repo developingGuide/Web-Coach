@@ -66,7 +66,7 @@ function App() {
 
         const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
         return () => clearInterval(interval);
-        }, []);
+        }, [user]);
 
 
 

@@ -200,8 +200,10 @@ const fetchCurrentTask = async () => {
     // 3. Update back to Supabase
     await supabase
       .from('task_completion_log')
-      .update({ daily_log: dailyLog, updated_at: new Date().toISOString() })
-      .eq('user_id', userId);
+      .upsert(
+        { user_id: userId, daily_log: dailyLog, updated_at: new Date().toISOString() },
+        { onConflict: ['user_id'] }
+      );
 
     navigate("/inbox");
 
@@ -283,7 +285,7 @@ const fetchCurrentTask = async () => {
   const handleBack = () => {
     const confirmLeave = window.confirm("Are you sure? Progress will be lost.");
     if (confirmLeave) {
-      navigate("/journey");
+      navigate("/inbox");
     }
   };
 
