@@ -13,10 +13,9 @@ export default function QueuePage() {
   const challengeId = searchParams.get('challenge_id');
   const {user} = useContext(AuthContext)
   
+  if (!user) return <div>Loading...</div>;
+
   useEffect(() => {
-    if (!user) {
-      return; // or show a spinner, or redirect to login
-    }
     const userId = user.id
     
     let active = true;
