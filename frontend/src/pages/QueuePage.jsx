@@ -52,7 +52,7 @@ export default function QueuePage() {
           .insert([{
             challenge_id: challengeId,
             user_1_id: userId,
-            user_2_id: opponent.userId,
+            user_2_id: opponent.user_id,
             created_at: new Date().toISOString()
           }])
           .select()
