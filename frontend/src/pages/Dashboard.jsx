@@ -132,11 +132,15 @@ const Dashboard = () => {
             <div className="devdash-title">Current Task</div>
             <div className="devdash-label">Title</div>
             <div className="devdash-value">
-              {currentTask ? currentTask.title : "Loading..."}
+              {currentTask ? currentTask.title : "No Task Started Yet!"}
             </div>
             <div className="devdash-label">Status</div>
-            <div className="devdash-value">In Progress</div>
-            <button onClick={() => {navigate('/playground')}}>Go Straight In!</button>
+            <div className="devdash-value">
+              {currentTask ? "In Progress" : "Not Started!"}
+            </div>
+            <div>
+              {currentTask ? <button onClick={() => {navigate('/inbox')}}>Go Straight In!</button> : ""}
+            </div>
           </div>
 
           <div className="devdash-panel devdash-compact">

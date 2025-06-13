@@ -14,9 +14,17 @@ export const AuthProvider = ({ children }) => {
       setUser(sessionUser);
 
       if (sessionUser) {
-        await supabase
+        const { data: existing, error } = await supabase
           .from("user_state")
-          .upsert({ user_id: sessionUser.id, exp: 0 }, { onConflict: ['user_id'] });
+          .select("user_id")
+          .eq("user_id", sessionUser.id)
+          .single();
+
+        if (!existing && !error) {
+          await supabase
+            .from("user_state")
+            .insert({ user_id: sessionUser.id, exp: 0 });
+        }
       }
     };
 
@@ -30,16 +38,34 @@ export const AuthProvider = ({ children }) => {
         // Fire and forget — but still handle the response
         supabase
           .from("user_state")
-          .upsert({ user_id: newUser.id, exp: 0, level: 0 }, { onConflict: ['user_id'] })
-          .then(({ error }) => {
-            if (error) console.error("User state upsert error:", error.message);
+          .select("user_id")
+          .eq("user_id", newUser.id)
+          .single()
+          .then(async ({ data: existing, error }) => {
+            if (!existing && !error) {
+              const { error: insertError } = await supabase
+                .from("user_state")
+                .insert({ user_id: newUser.id, exp: 0, level: 0 });
+              if (insertError) console.error("Insert error:", insertError.message);
+            }
           });
+
 
         supabase
           .from("task_completion_log")
-          .upsert({ user_id: newUser.id, daily_log: {} }, { onConflict: ['user_id'] })
-          .then(({ error }) => {
-            if (error) console.error("Task log upsert error:", error.message);
+          .select("user_id")
+          .eq("user_id", newUser.id)
+          .single()
+          .then(async ({ data: existing, error }) => {
+            if (!existing && !error) {
+              const { error: insertError } = await supabase
+                .from("task_completion_log")
+                .insert({ user_id: newUser.id, daily_log: {} });
+
+              if (insertError) {
+                console.error("Task log insert error:", insertError.message);
+              }
+            }
           });
       }
     });
