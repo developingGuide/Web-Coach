@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         // Fire and forget — but still handle the response
         supabase
           .from("user_state")
-          .upsert({ user_id: newUser.id, exp: 0 }, { onConflict: ['user_id'] })
+          .upsert({ user_id: newUser.id, exp: 0, level: 0 }, { onConflict: ['user_id'] })
           .then(({ error }) => {
             if (error) console.error("User state upsert error:", error.message);
           });
