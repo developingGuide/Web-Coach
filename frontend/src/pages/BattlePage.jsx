@@ -37,29 +37,13 @@ const BattlePage = () => {
 
   const {user} = useContext(AuthContext)
   const user_id = user?.id; // safe fallback
-
-  const [userReady, setUserReady] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      setUserReady(true);
-    }
-  }, [user]);
-
-  // Place this return AFTER all hooks
-  if (!userReady) {
-    return <div>Loading...</div>;
-  }
-  // if (!user) {
-  //   return <div>Loading...</div>; // or show a spinner, or redirect to login
-  // }
-  // const user_id = user.id
-
-
+  
   const compiledCode = generatePreviewHTML(htmlCode, cssCode, jsCode);
   const opponentCompiledCode = generatePreviewHTML(opponentHtml, opponentCss, opponentJs);
 
   useEffect(() => {
+    if (!user) return;
+
     const chan = supabase.channel(`match-${match_id}`);
 
     chan
