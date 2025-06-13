@@ -19,7 +19,7 @@ const Dashboard = () => {
   
   const navigate = useNavigate()
   const [isLaunching, setIsLaunching] = useState(false);
-  const [currentMap, setCurrentMap] = useState("No map selected!");
+  const [currentMap, setCurrentMap] = useState("BeachIsland");
   const [userLvl, setUserLvl] = useState(0);
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [currentTask, setCurrentTask] = useState(null);
@@ -144,12 +144,9 @@ const Dashboard = () => {
             <div className="devdash-label">Commits Today</div>
             <div className="devdash-value">{count}</div>
             <div className="devdash-label">Daily Tracker</div>
-            {/* <div className="devdash-value">(Inser github square thingie)</div> */}
             <CalendarHeatmap
               startDate={startDate}
               endDate={endDate}
-              // startDate={new Date('2025-06-01')}
-              // endDate={new Date('2025-12-01')}
               values={heatmapData}
               classForValue={(value) => {
                 if (!value || value.count === 0) return 'color-empty';
@@ -211,12 +208,6 @@ const Dashboard = () => {
             
             <button disabled className="chat-button">Open Chat</button>
           </div>
-
-          {/* <div className="devdash-panel devdash-compact">
-            <div className="devdash-title">Status</div>
-            <div className="devdash-value">Logged In</div>
-            <div className="devdash-value neon-glow">[LIVE]</div>
-          </div> */}
         </div>
       </div>
     </div>
