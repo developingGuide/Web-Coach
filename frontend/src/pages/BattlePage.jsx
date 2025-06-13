@@ -36,6 +36,7 @@ const BattlePage = () => {
   const [jsCode, setJsCode] = useState("");
 
   const {user} = useContext(AuthContext)
+  const user_id = user?.id; // safe fallback
 
   const [userReady, setUserReady] = useState(false);
 
@@ -49,8 +50,6 @@ const BattlePage = () => {
   if (!userReady) {
     return <div>Loading...</div>;
   }
-
-  const user_id = user.id;
   // if (!user) {
   //   return <div>Loading...</div>; // or show a spinner, or redirect to login
   // }
