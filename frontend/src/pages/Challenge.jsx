@@ -31,6 +31,7 @@ export default function ChallengeMap() {
     <>
     {isCoverVisible && <div className="cloud-cover-opening"></div>}
 
+    <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
     <div className="challenge-container">
       <div className={`grid ${selected ? 'compressed' : ''}`}>
         {challenges.map(ch => (

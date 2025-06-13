@@ -1,4 +1,9 @@
-
+.backBtn{
+  position: absolute;
+  z-index: 1;
+  left: 1rem;
+  top: 1rem;
+}
 
 .challenge-container {
   display: flex;

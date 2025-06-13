@@ -1,3 +1,10 @@
+.backBtn{
+  position: absolute;
+  z-index: 1;
+  left: 1rem;
+  top: 1rem;
+}
+
 .map-container {
   overflow: hidden;
   position: fixed;

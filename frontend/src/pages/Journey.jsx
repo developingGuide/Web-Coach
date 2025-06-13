@@ -287,6 +287,8 @@ export default function Journey() {
       <img src="/cloud-cover.png" className={`cloud-cover ${isTransitioning ? "visible" : ""}`} />
     </div>
 
+    <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
+
     <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>
     <div
       className="map-container"
