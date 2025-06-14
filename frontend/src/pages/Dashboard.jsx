@@ -191,11 +191,6 @@ const Dashboard = () => {
           <div className="devdash-panel">
             <div className="devdash-title">Current Map: {currentMap}</div>
             <img src={`/${currentMap}.png`} className="devdash-map" />
-            <div className="devdash-value">Progress:</div>
-            <div className="devdash-progress-bar">
-              <div className="devdash-progress-fill" style={{ width: "45%" }} />
-              <span className="devdash-progress-percent">45%</span>
-            </div>
           </div>
 
 
