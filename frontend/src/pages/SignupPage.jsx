@@ -17,14 +17,7 @@ const plans = [
     description: "For learners who want more guidance.",
     features: ["All Starter features", "Daily projects", "Progress tracking"],
     highlighted: true,
-  },
-  {
-    name: "Legend",
-    price: "$29/mo",
-    description: "For serious devs building real skills fast.",
-    features: ["Everything in Pro", "1v1 Feedback", "Monthly Championship"],
-    highlighted: false,
-  },
+  }
 ];
 
 export default function SignupPage() {
@@ -54,7 +47,7 @@ export default function SignupPage() {
         email,
         password,
         options: {
-            emailRedirectTo: "http://localhost:5173/goback"
+            emailRedirectTo: "https://devsim.app/goback"
         }
       });
       
@@ -64,9 +57,20 @@ export default function SignupPage() {
         navigate("/login")
       }
     } else {
-      console.log(`User wants to upgrade to ${plan.name}!`);
+      // Call your Stripe endpoint
+      try {
+        const res = await fetch("http://localhost:4000/create-checkout-session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, display_name }),
+        });
+
+        const { url } = await res.json();
+        window.location.href = url; // Redirect to Stripe Checkout
+      } catch (err) {
+        console.error("Stripe checkout error:", err);
+      }
     }
-    // Later you can add: save plan, trigger Stripe, etc.
   };
 
   return (
