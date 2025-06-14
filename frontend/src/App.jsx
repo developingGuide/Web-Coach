@@ -20,6 +20,7 @@ import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import { AuthContext } from './components/AuthContext';
 import GoBack from './pages/GoBack';
+import SuccessPage from './pages/SuccessPage';
 
 function App() {
     const {user} = useContext(AuthContext)
@@ -84,6 +85,10 @@ function App() {
                         <Route
                             path='/signup'
                             element={<SignupPage/>}
+                        />
+                        <Route 
+                            path="/success"
+                            element={<SuccessPage/>}
                         />
                         <Route
                             path='/login'
