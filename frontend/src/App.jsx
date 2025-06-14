@@ -24,7 +24,7 @@ import GoBack from './pages/GoBack';
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard/", "/challenge", "/signup", "/login", "/goback"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard", "/challenges", "/signup", "/login", "/goback"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     

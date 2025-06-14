@@ -56,33 +56,23 @@ const Home = () => {
             name: "Starter",
             price: "$0",
             description: "Great for curious beginners trying things out.",
-            features: ["Daily Challenges", "Core Journey Access", "Skill Tracking"],
+            features: [
+            "2 Tasks/day",
+            "Daily Tracking",
+            ],
             highlighted: false,
         },
         {
             name: "Pro",
-            price: "$9/mo",
-            description: "Unlock full access to projects, feedback & battles.",
+            price: "$19/mo",
+            description: "Unlock full access to projects, community & battles.",
             features: [
-            "All Starter Features",
-            "Full Project Journeys",
-            "Client Simulations",
+            "UNLIMTED Tasks/day",
+            "Daily Tracking",
+            "Community",
             "Coding Battles & Leaderboards",
-            "Weekly Feedback Reports",
             ],
             highlighted: true,
-        },
-        {
-            name: "Legend",
-            price: "$19/mo",
-            description: "For ambitious devs who want to level up fast.",
-            features: [
-            "All Pro Features",
-            "Custom Character + Dashboard",
-            "Priority Matchmaking",
-            "Exclusive Seasonal Competitions",
-            ],
-            highlighted: false,
         },
     ];
 
