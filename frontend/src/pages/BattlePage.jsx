@@ -29,6 +29,8 @@ const BattlePage = () => {
   const [opponentHtml, setOpponentHtml] = useState("");
   const [opponentCss, setOpponentCss] = useState("");
   const [opponentJs, setOpponentJs] = useState("");
+  const [timeLeft, setTimeLeft] = useState(10); // 5 minutes in seconds
+  const [matchOver, setMatchOver] = useState(false);
 
   const [activeTab, setActiveTab] = useState("html");
   const [htmlCode, setHtmlCode] = useState("<h1>Start</h1>");
@@ -40,6 +42,12 @@ const BattlePage = () => {
   
   const compiledCode = generatePreviewHTML(htmlCode, cssCode, jsCode);
   const opponentCompiledCode = generatePreviewHTML(opponentHtml, opponentCss, opponentJs);
+
+  function formatTime(seconds) {
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    return `${m}:${s}`;
+  }
 
   useEffect(() => {
     if (!user) return;
@@ -100,6 +108,45 @@ const BattlePage = () => {
     return () => clearTimeout(timeout);
   }, [htmlCode, cssCode, jsCode]);
 
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      setMatchOver(true);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
+
+  useEffect(() => {
+    const sendFinalCode = async () => {
+      const { error } = await supabase.from('match_submissions').insert([
+        {
+          match_id,
+          user_id,
+          html: htmlCode,
+          css: cssCode,
+          js: jsCode,
+        },
+      ]);
+
+      if (error) {
+        console.error("Error submitting code:", error.message);
+      } else {
+        console.log("Code submitted!");
+      }
+    };
+
+    if (matchOver) {
+      sendFinalCode();
+    }
+  }, [matchOver]);
+
+
 
   return (
     <div className="battleContainer">
@@ -121,10 +168,20 @@ const BattlePage = () => {
       </div>
 
       <div className="editorWrapper">
-        {activeTab === "html" && <HtmlCodeEditor code={htmlCode} setCode={setHtmlCode} />}
-        {activeTab === "css" && <CssCodeEditor code={cssCode} setCode={setCssCode} />}
-        {activeTab === "js" && <JsCodeEditor code={jsCode} setCode={setJsCode} />}
+        {activeTab === "html" && <HtmlCodeEditor code={htmlCode} setCode={setHtmlCode} matchOver={matchOver} />}
+        {activeTab === "css" && <CssCodeEditor code={cssCode} setCode={setCssCode} matchOver={matchOver} />}
+        {activeTab === "js" && <JsCodeEditor code={jsCode} setCode={setJsCode} matchOver={matchOver} />}
       </div>
+
+      <div className="matchTimer">
+        {matchOver ? "Time's up!" : `Time Left: ${formatTime(timeLeft)}`}
+      </div>
+
+      {matchOver && (
+        <div className="checkingStatus">
+          ⏳ Checking submissions...
+        </div>
+      )}
     </div>
   );
 }

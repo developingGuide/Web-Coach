@@ -57,3 +57,26 @@
   border: none;
   background: white;
 }
+
+
+.matchTimer {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #111;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #3cff99;
+  font-weight: bold;
+  font-family: monospace;
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+
+.checkingStatus {
+  margin-top: 16px;
+  color: #ccc;
+  font-style: italic;
+  text-align: center;
+}

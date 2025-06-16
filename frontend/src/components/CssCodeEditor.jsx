@@ -1,18 +1,19 @@
 import Editor from '@monaco-editor/react';
 
-function CssCodeEditor({code, setCode}) {
+function CssCodeEditor({code, setCode, matchOver}) {
     return (
         <Editor
+        height="100%"
         language="css"
         theme="vs-dark"
-        // height="80vh"
-        height="100%"
         value={code}
         onChange={(value) => setCode(value)}
         options={{
             tabCompletion: "on",
             quickSuggestions: true,
             suggestOnTriggerCharacters: true,
+            readOnly: matchOver,
+            minimap: { enabled: false },
         }}
         onMount={(editor, monaco) => {
             monaco.languages.registerCompletionItemProvider("css", {

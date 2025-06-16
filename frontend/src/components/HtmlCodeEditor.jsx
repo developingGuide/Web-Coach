@@ -1,9 +1,8 @@
 import Editor from "@monaco-editor/react";
 
-function HtmlCodeEditor({code, setCode}) {
+function HtmlCodeEditor({code, setCode, matchOver}) {
   return (
     <Editor
-    //   height="80vh"
       height="100%"
       defaultLanguage="html"
       defaultValue="<h1>Hello</h1>"
@@ -16,6 +15,8 @@ function HtmlCodeEditor({code, setCode}) {
         suggestOnTriggerCharacters: true,
         autoClosingBrackets: "always",
         autoClosingQuotes: "always",
+        readOnly: matchOver,
+        minimap: { enabled: false },
       }}
       onMount={(editor, monaco) => {
         monaco.languages.registerCompletionItemProvider("html", {

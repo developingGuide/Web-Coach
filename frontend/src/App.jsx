@@ -25,7 +25,7 @@ import SuccessPage from './pages/SuccessPage';
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard", "/challenges", "/signup", "/login", "/goback", "/success"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard", "/challenges", "/signup", "/login", "/goback", "/success", "/battle/:match_id"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     

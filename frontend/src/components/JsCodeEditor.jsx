@@ -1,18 +1,20 @@
 import { Editor } from "@monaco-editor/react";
 
-function JsCodeEditor({code, setCode}) {
+function JsCodeEditor({code, setCode, matchOver}) {
   return (
     <Editor
+    height="100%"
       language="javascript"
       theme="vs-dark"
-      height="100%"
       value={code}
       onChange={(value) => setCode(value)}
       options={{
         tabCompletion: "on",
         quickSuggestions: true,
         suggestOnTriggerCharacters: true,
-        wordBasedSuggestions: true
+        wordBasedSuggestions: true,
+        readOnly: matchOver,
+        minimap: { enabled: false },
       }}
       onMount={(editor, monaco) => {
         monaco.languages.registerCompletionItemProvider("javascript", {
