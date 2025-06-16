@@ -63,16 +63,28 @@ const Home = () => {
             highlighted: false,
         },
         {
-            name: "Pro",
-            price: "$19/mo",
-            description: "Unlock full access to projects, community & battles.",
+            name: "Warrior",
+            price: "$9/mo",
+            description: "For learners who want to compete.",
             features: [
-            "UNLIMTED Tasks/day",
+            "8 Tasks/day",
             "Daily Tracking",
-            "Community",
             "Coding Battles & Leaderboards",
             ],
             highlighted: true,
+        },
+        {
+            name: "Pro",
+            price: "$19/mo",
+            description: "Unlock full access to projects, community & courses.",
+            features: [
+            "UNLIMTED Tasks/day",
+            "Daily Tracking",
+            "Coding Battles & Leaderboards",
+            "Community",
+            "Courses (Coming Soon)"
+            ],
+            highlighted: false,
         },
     ];
 

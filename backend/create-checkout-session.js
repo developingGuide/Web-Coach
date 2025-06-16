@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/create-checkout-session", async (req, res) => {
-  const { email, display_name } = req.body;
+  const { email, display_name, priceId, planName } = req.body;
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -17,11 +17,11 @@ app.post("/create-checkout-session", async (req, res) => {
       customer_email: email,
       line_items: [
         {
-          price: "price_1RZtZYJomOLGn4VAZonkQ56V", // Replace with your actual Stripe price ID
+          price: priceId,
           quantity: 1,
         },
       ],
-      success_url: `http://localhost:5173/success?email=${email}`,
+      success_url: `http://localhost:5173/success?plan=${planName}&email=${email}`,
       cancel_url: "https://devsim.app/cancel",
       metadata: { display_name },
     });

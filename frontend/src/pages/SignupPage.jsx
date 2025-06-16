@@ -8,15 +8,24 @@ const plans = [
     name: "Starter",
     price: "$0",
     description: "For curious minds just starting out.",
-    features: ["Basic challenges", "Community access"],
+    features: ["2 Tasks/day", "Daily Tracking"],
     highlighted: false,
   },
   {
-    name: "Pro",
+    name: "Warrior",
     price: "$9/mo",
-    description: "For learners who want more guidance.",
-    features: ["All Starter features", "Daily projects", "Progress tracking"],
+    description: "For learners who want to compete.",
+    features: ["8 Tasks/day", "Daily Tracking", "Coding Battles & Leaderboards"],
     highlighted: true,
+    priceId: "price_1RaRJgJomOLGn4VAJGjdGU1I"
+  },
+  {
+    name: "Pro",
+    price: "$19/mo",
+    description: "Unlock unlimited tasks, community, and courses.",
+    features: ["UNLIMITED Tasks/day", "Daily Tracking", "Coding Battles & Leaderboards", "Community", "Courses (coming soon)"],
+    highlighted: true,
+    priceId: "price_1RZtZYJomOLGn4VAZonkQ56V"
   }
 ];
 
@@ -62,7 +71,12 @@ export default function SignupPage() {
         const res = await fetch("http://localhost:4000/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, display_name }),
+          body: JSON.stringify({
+            email,
+            display_name,
+            priceId: plan.priceId,
+            planName: plan.name
+           }),
         });
 
         const { url } = await res.json();

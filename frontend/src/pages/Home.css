@@ -5,11 +5,13 @@
 }
 
 .homePage{
-  background-image: url('/space.png');
+  background-image: url('/homeSpace.png');
+  /* background-image: url('/space.png'); */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: top center;
+  image-rendering: optimizeQuality;
   margin: 0;
 }
 
