@@ -55,17 +55,14 @@ const BattlePage = () => {
     const userDoc = parser.parseFromString(userHtml, 'text/html');
     const expectedDoc = parser.parseFromString(expectedHtml, 'text/html');
 
-    const clean = (node) => node.innerHTML.replace(/\s+/g, '').toLowerCase();
+    const clean = (html) => html.replace(/[\s\n]+/g, '').toLowerCase();
 
-    return clean(userDoc.body) === clean(expectedDoc.body);
+    return clean(userDoc.body.innerHTML).includes(clean(expectedDoc.body.innerHTML));
   }
 
   function cssMatches(userCss, expectedCss) {
-    // Remove all whitespace and lowercase both
-    const cleanUserCss = userCss.replace(/\s+/g, '').toLowerCase();
-    const cleanExpectedCss = expectedCss.replace(/\s+/g, '').toLowerCase();
-
-    return cleanUserCss.includes(cleanExpectedCss);
+    return userCss.replace(/\s+/g, '').toLowerCase()
+      .includes(expectedCss.replace(/\s+/g, '').toLowerCase());
   }
 
 
@@ -75,17 +72,43 @@ const BattlePage = () => {
 
     const grade = (submission) => {
       let score = 0;
+      console.log("▶️ Grading submission for:", submission.user_id);
 
       try {
-        if (html_check && htmlStructuresMatch(submission.html, html_check)) score++;
-        if (css_check && cssMatches(submission.css, css_check)) score++;
-        if (js_check && submission.js.includes(js_check)) score++;
+        if (html_check) {
+          const htmlPass = htmlStructuresMatch(submission.html, html_check);
+          console.log("HTML Check:", htmlPass);
+          if (htmlPass) score++;
+        }
+
+        if (css_check) {
+          const cssPass = cssMatches(submission.css, css_check);
+          console.log("CSS Check:", cssPass);
+          if (cssPass) score++;
+        }
+
+        if (js_check) {
+          const jsPass = submission.js.includes(js_check);
+          console.log("JS Check:", jsPass);
+          if (jsPass) score++;
+        }
+
+        console.log("🧪 Comparing HTML:");
+        console.log("Submission:", submission.html);
+        console.log("Expected:", html_check);
+
+        console.log("🧪 Comparing CSS:");
+        console.log("Submission:", submission.css);
+        console.log("Expected:", css_check);
+
       } catch (e) {
-        console.error("Error grading submission:", e);
+        console.error("❌ Error grading submission:", e);
       }
 
+      console.log("✅ Final score:", score);
       return score;
     };
+
 
     const results = subs.map(sub => ({
       user_id: sub.user_id,
