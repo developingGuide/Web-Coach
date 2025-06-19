@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import supabase from '../../config/supabaseClient';
 import { AuthContext } from '../components/AuthContext';
@@ -11,21 +11,32 @@ export default function QueuePage() {
   const [channel, setChannel] = useState(null);
   const navigate = useNavigate();
   const challengeId = searchParams.get('challenge_id');
-  const {user} = useContext(AuthContext)
-  
+  const { user } = useContext(AuthContext);
+
+  const hasJoinedRef = useRef(false);
+
   if (!user) return <div>Loading...</div>;
 
   useEffect(() => {
-    const userId = user.id
-    
-    let active = true;
+    if (!user || hasJoinedRef.current) return;
+    hasJoinedRef.current = true; // ensure it only runs once
+
+    const userId = user.id;
+
     const joinQueue = async () => {
-      // const { data: { user } } = await supabase.auth.getUser();
-      // if (!user) return;
+      const { data: existing } = await supabase
+        .from('queue')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('challenge_id', challengeId)
+        .maybeSingle();
+
+      if (existing) {
+        await supabase.from('queue').delete().eq('id', existing.id);
+      }
 
       const { data: entry, error } = await supabase
         .from('queue')
-        // .insert([{ user_id: user.id, challenge_id: challengeId }])
         .insert([{ user_id: userId, challenge_id: challengeId }])
         .select()
         .single();
@@ -86,9 +97,13 @@ export default function QueuePage() {
 
     return () => {
       if (channel) supabase.removeChannel(channel);
-      if (entryId) supabase.from('queue').delete().eq('id', entryId);
+      if (entryId) {
+        supabase.from('queue').delete().eq('id', entryId).then(() => {
+          console.log("Queue entry cleaned up");
+        });
+      }
     };
-  }, [challengeId, navigate]);
+  }, [challengeId, user, channel, entryId]);
 
   const handleCancel = async () => {
     if (entryId) await supabase.from('queue').delete().eq('id', entryId);
