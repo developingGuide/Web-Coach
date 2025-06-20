@@ -2,8 +2,9 @@ import './Home.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../components/AuthContext';
 
 const Home = () => {
     const journeySteps = [
@@ -130,6 +131,16 @@ const Home = () => {
     ];
 
     const navigate = useNavigate()
+
+    const {user, loading} = useContext(AuthContext)
+
+    useEffect(() => {
+        if (!loading && user) {
+        navigate('/dashboard'); // auto-redirect to dashboard
+        }
+    }, [loading, user]);
+
+    if (loading) return <div>Loading...</div>;
 
     return (
         // Hero Section

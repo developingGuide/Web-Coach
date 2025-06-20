@@ -97,6 +97,22 @@ button:hover {
   background: rgba(0, 255, 120, 0.3);
 }
 
+.logoutBtn{
+  background: rgba(255, 0, 0, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 0, 0, 0.3);
+}
+
 .devdash-panel {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);

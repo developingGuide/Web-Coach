@@ -6,12 +6,14 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const setupAuth = async () => {
       const { data } = await supabase.auth.getSession();
       const sessionUser = data.session?.user || null;
       setUser(sessionUser);
+      setLoading(false);
 
       if (sessionUser) {
         const { data: existing, error } = await supabase

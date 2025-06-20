@@ -103,29 +103,33 @@ const Dashboard = () => {
       }
       
       setTasksToday(data.daily_log || {});
-    };
+  };
     
-    const today = new Date().toISOString().split("T")[0];
-    const count = tasksToday[today]?.length || 0;
+  const today = new Date().toISOString().split("T")[0];
+  const count = tasksToday[today]?.length || 0;
+  
+  
+  // Github square thingies
+  const heatmapData = Object.entries(tasksToday).map(([date, tasks]) => ({
+    date,
+    count: tasks.length,
+  }));
     
+  const startDate = moment().subtract(5, 'months').format('YYYY-MM-DD');
+  const endDate = moment().format('YYYY-MM-DD');
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/'); // or your homepage
+  };
+      
     
-    // Github square thingies
-    const heatmapData = Object.entries(tasksToday).map(([date, tasks]) => ({
-      date,
-      count: tasks.length,
-    }));
-    
-    const startDate = moment().subtract(5, 'months').format('YYYY-MM-DD');
-    const endDate = moment().format('YYYY-MM-DD');
-    
-    
-    return (
-      <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
+  return (
+    <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
       <div className="cloud-transition">
         <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching ? "visible" : ""}`} />
       </div>
       <div className="devdash-layout">
-
         {/* Left Side */}
         <div className="devdash-column">
           <div className="devdash-panel">
@@ -169,7 +173,6 @@ const Dashboard = () => {
             />
 
             <ReactTooltip id="heatmap-tooltip" />
-
           </div>
         </div>
 
@@ -178,6 +181,7 @@ const Dashboard = () => {
           <div className="devdash-level-circle">
             <h1>LEVEL {userLvl}</h1>
             <p>Status: <span className="neon-glow">Live</span></p>
+            <button className="logoutBtn" onClick={handleLogout}>Log Out</button>
           </div>
 
           <div className="devdash-controls">
@@ -199,12 +203,11 @@ const Dashboard = () => {
               <h1>COMING SOON!</h1>
             </div>
             <div className="devdash-title">Global Chat</div>
-            
+                
             <div className="chat-preview">
               <div className="chat-message"><span className="chat-username">dev_goblin:</span> yo anyone shipping today?</div>
               <div className="chat-message"><span className="chat-username">pixelwitch:</span> still stuck on that snowglobe lol</div>
             </div>
-            
             <button disabled className="chat-button">Open Chat</button>
           </div>
         </div>
