@@ -1,6 +1,6 @@
 import './BattlePage.css';
 import { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import HtmlCodeEditor from '../components/HtmlCodeEditor';
 import CssCodeEditor from '../components/CssCodeEditor';
 import JsCodeEditor from '../components/JsCodeEditor';
@@ -24,6 +24,7 @@ function generatePreviewHTML(html, css, js) {
 
 }
 const BattlePage = () => {
+  const navigate = useNavigate()
   const { match_id } = useParams();
   const [channel, setChannel] = useState(null);
   const [opponentHtml, setOpponentHtml] = useState("");
@@ -31,6 +32,8 @@ const BattlePage = () => {
   const [opponentJs, setOpponentJs] = useState("");
   const [timeLeft, setTimeLeft] = useState(10); // 5 minutes in seconds
   const [matchOver, setMatchOver] = useState(false);
+  const [opponentRageQuit, setOpponentRageQuit] = useState(false);
+
 
   const [activeTab, setActiveTab] = useState("html");
   const [htmlCode, setHtmlCode] = useState("<h1>Start</h1>");
@@ -128,6 +131,23 @@ const BattlePage = () => {
   };
 
 
+  const handleRageQuit = () => {
+    if (!channel) return;
+
+    channel.send({
+      type: "broadcast",
+      event: "rage-quit",
+      payload: {
+        sender_id: user_id,
+      },
+    });
+
+    setMatchOver(true); // end the match immediately for this user
+    navigate('/challenges')
+  };
+
+
+
 
   useEffect(() => {
     if (!user) return;
@@ -146,6 +166,17 @@ const BattlePage = () => {
       .subscribe();
 
     setChannel(chan);
+
+    chan
+      .on("broadcast", { event: "rage-quit" }, (payload) => {
+        const { sender_id } = payload.payload;
+        if (sender_id !== user_id) {
+          // alert("😱 Your opponent rage quit!");
+          setOpponentRageQuit(true);
+          setMatchOver(true);
+        }
+      })
+
 
     return () => {
       supabase.removeChannel(chan);
@@ -324,11 +355,28 @@ const BattlePage = () => {
         {matchOver ? "Time's up!" : `Time Left: ${formatTime(timeLeft)}`}
       </div>
 
+      {!matchOver && (
+        <button className="rageQuitButton" onClick={handleRageQuit}>
+          Rage Quit 💥
+        </button>
+      )}
+
+
       {matchOver && (
         <div className="checkingStatus">
           ⏳ Checking submissions...
         </div>
       )}
+
+
+      {opponentRageQuit && (
+        <div className="rageQuitPopup">
+          <h2>Your opponent has rage quit 💥</h2>
+          <p>You survived. Nice.</p>
+          <button onClick={() => navigate('/challenges')}>Back to Challenges</button>
+        </div>
+      )}
+
     </div>
   );
 }
