@@ -52,11 +52,11 @@ export default function SignupPage() {
     if (plan.name === "Starter") {
       console.log("Free plan selected!");
       const {error: signUpError} = await supabase.auth.signUp({
-        display_name,
         email,
         password,
         options: {
-            emailRedirectTo: "https://devsim.app/goback"
+            emailRedirectTo: "https://devsim.app/goback",
+            data: {display_name}
         }
       });
       
