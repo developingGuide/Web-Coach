@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
             if (!existing && !error) {
               const { error: insertError } = await supabase
                 .from("user_state")
-                .insert({ user_id: newUser.id, exp: 0, level: 0, display_name: newUser.user_metadata?.display_name || "Unnamed" });
+                .insert({ user_id: newUser.id, exp: 0, level: 0, plan: "starter", display_name: newUser.user_metadata?.display_name || "Unnamed" });
               if (insertError) console.error("Insert error:", insertError.message);
             }
           });

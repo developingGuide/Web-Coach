@@ -51,11 +51,12 @@ export default function SignupPage() {
   const handlePlanClick = async (plan) => {
     if (plan.name === "Starter") {
       console.log("Free plan selected!");
+      window.alert("Check your email to confirm your account!");
       const {error: signUpError} = await supabase.auth.signUp({
         email,
         password,
         options: {
-            emailRedirectTo: "https://devsim.app/goback",
+            emailRedirectTo: "http://localhost:5173/newUser",
             data: {display_name}
         }
       });
@@ -78,6 +79,12 @@ export default function SignupPage() {
             planName: plan.name
            }),
         });
+
+        // Save to local/session storage
+        sessionStorage.setItem("email", email);
+        sessionStorage.setItem("password", password);
+        sessionStorage.setItem("display_name", display_name);
+
 
         const { url } = await res.json();
         window.location.href = url; // Redirect to Stripe Checkout
