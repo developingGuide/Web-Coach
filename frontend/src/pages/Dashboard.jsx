@@ -199,16 +199,13 @@ const Dashboard = () => {
 
 
           <div className="devdash-panel">
-            <div className="comingSoon">
-              <h1>COMING SOON!</h1>
-            </div>
             <div className="devdash-title">Global Chat</div>
                 
             <div className="chat-preview">
               <div className="chat-message"><span className="chat-username">dev_goblin:</span> yo anyone shipping today?</div>
               <div className="chat-message"><span className="chat-username">pixelwitch:</span> still stuck on that snowglobe lol</div>
             </div>
-            <button disabled className="chat-button">Open Chat</button>
+            <button onClick={() => {navigate('/chat')}} className="chat-button">Open Chat</button>
           </div>
         </div>
       </div>

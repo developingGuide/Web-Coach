@@ -22,11 +22,12 @@ import { AuthContext } from './components/AuthContext';
 import GoBack from './pages/GoBack';
 import SuccessPage from './pages/SuccessPage';
 import OnboardingPage from './pages/onboarding';
+import ChatPage from './pages/ChatPage';
 
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard", "/challenges", "/signup", "/login", "/goback", "/success", "/battle/:match_id"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard", "/challenges", "/signup", "/login", "/goback", "/success", "/battle/:match_id", "/chat"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     
@@ -142,6 +143,10 @@ function App() {
                         <Route
                             path="/journey"
                             element={<Journey/>}
+                        />
+                        <Route
+                            path="/chat"
+                            element={<ChatPage/>}
                         />
                     </Routes>
                 </div>
