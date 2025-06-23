@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import supabase from "../../config/supabaseClient";
 import "./ChatPage.css"
+import { useNavigate } from "react-router-dom";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([])
@@ -8,6 +9,7 @@ const ChatPage = () => {
   const bottomRef = useRef();
   const [currentChannel, setCurrentChannel] = useState("general");
   const channels = ["general", "help", "feedback"];
+  const navigate = useNavigate()
 
   function formatTime(isoString) {
     const date = new Date(isoString);
@@ -80,9 +82,19 @@ const ChatPage = () => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    useEffect(() => {
+        const textarea = document.querySelector(".chat-textarea");
+        if (textarea) {
+            textarea.style.height = "auto";
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
+        }
+    }, [newMsg]);
+
+
 
   return (
     <div className="chat-container">
+      <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
       <div className="chat-header">🌍 Global Chat</div>
       <div className="chat-tabs">
             {channels.map((ch) => (
@@ -110,12 +122,17 @@ const ChatPage = () => {
         <div ref={bottomRef}></div>
       </div>
       <div className="chat-input-row">
-        <input
-          type="text"
-          value={newMsg}
-          onChange={(e) => setNewMsg(e.target.value)}
-          placeholder="Type your message..."
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+        <textarea
+            value={newMsg}
+            onChange={(e) => setNewMsg(e.target.value)}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+                }
+            }}
+            placeholder="Type your message..."
+            className="chat-textarea"
         />
         <button onClick={sendMessage}>Send</button>
       </div>

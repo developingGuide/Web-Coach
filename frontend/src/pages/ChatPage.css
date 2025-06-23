@@ -68,19 +68,31 @@
 
 .chat-input-row {
   display: flex;
+  gap: 0.5rem;
   border-top: 1px solid #333;
   padding: 0.5rem;
   background: #1a1a1a;
+  align-items: flex-end;
 }
 
-.chat-input-row input {
+
+
+.chat-textarea {
   flex: 1;
+  resize: none;
   padding: 0.5rem;
   border: none;
   background: #333;
   color: white;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 1rem;
+  line-height: 1.4;
+  max-height: 120px;  /* max expansion height */
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
+
 
 .chat-input-row button {
   margin-left: 0.5rem;
