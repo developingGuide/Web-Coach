@@ -143,7 +143,7 @@ const Dashboard = () => {
               {currentTask ? "In Progress" : "Not Started!"}
             </div>
             <div>
-              {currentTask ? <button onClick={() => {navigate('/inbox')}}>Go Straight In!</button> : ""}
+              {currentTask ? <button onClick={() => {navigate('/inbox')}}>Go Inbox!</button> : ""}
             </div>
           </div>
 

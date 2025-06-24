@@ -60,6 +60,18 @@
   background-color: #222;
 }
 
+.inbox-preview-text{
+  max-height: 100px;
+  overflow: hidden;
+  width: 100%;
+  color: var(--text);
+  background-color: transparent;
+  border: none;
+  resize: none;
+  margin-top: 4px;
+  pointer-events: none;
+}
+
 .inbox-selected {
   background-color: #333;
 }

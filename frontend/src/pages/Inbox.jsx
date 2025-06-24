@@ -144,7 +144,7 @@ const Inbox = () => {
             >
               <h3>{task.subject}</h3>
               <p className="inbox-sender"><strong>From:</strong> {task.sender}</p>
-              <p>{task.description}</p>
+              <textarea readOnly disabled className='inbox-preview-text'>{task.body}</textarea>
             </div>
           ))
         )}
@@ -155,7 +155,7 @@ const Inbox = () => {
           <>
             <h2>{selectedTask.subject}</h2>
             <p className="inbox-sender"><strong>From:</strong> {selectedTask.sender}</p>
-            <div className="inbox-content">{selectedTask.description}</div>
+            <div className="inbox-content">{selectedTask.body}</div>
             <button className="inbox-start-task-button" onClick={handleStartTask}>
               Start Task
             </button>
