@@ -21,7 +21,25 @@ function HtmlCodeEditor({code, setCode, matchOver}) {
       onMount={(editor, monaco) => {
         monaco.languages.registerCompletionItemProvider("html", {
           provideCompletionItems: () => {
-            const tags = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "div", "section", "button", "form", "nav", "input", "li", "ul", "ol"];
+            const tags = [
+              "h1",
+              "h2",
+              "h3",
+              "h4",
+              "h5",
+              "h6",
+              "p",
+              "div",
+              "section",
+              "button",
+              "form",
+              "nav",
+              "input",
+              "li",
+              "ul",
+              "ol",
+              "a"
+            ];
             const suggestions = tags.map(tag => ({
               label: tag,
               kind: monaco.languages.CompletionItemKind.Snippet,

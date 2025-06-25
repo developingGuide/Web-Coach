@@ -103,17 +103,54 @@ const fetchCurrentTask = async () => {
     return clean(userDoc.body.innerHTML).includes(clean(expectedDoc.body.innerHTML));
   }
 
+  function extractTags(html) {
+    const tagRegex = /<([a-zA-Z0-9\-]+)/g;
+    const tags = new Set();
+    let match;
+
+    while ((match = tagRegex.exec(html)) !== null) {
+      tags.add(match[1].toLowerCase());
+    }
+
+    return Array.from(tags);
+  }
+
+
   function cssMatches(userCss, expectedCss) {
     const cleanUser = userCss.replace(/\s+/g, '').toLowerCase();
     const cleanExpected = expectedCss.replace(/\s+/g, '').toLowerCase();
     return cleanUser.includes(cleanExpected);
   }
 
+  function extractCssSelectors(css) {
+    const selectorRegex = /([^{]+)\s*\{/g;
+    const selectors = new Set();
+    let match;
+
+    while ((match = selectorRegex.exec(css)) !== null) {
+      selectors.add(match[1].trim());
+    }
+
+    return Array.from(selectors);
+  }
+
+
   function jsMatches(userJs, expectedJs) {
     const cleanUser = userJs.replace(/\s+/g, '').toLowerCase();
     const cleanExpected = expectedJs.replace(/\s+/g, '').toLowerCase();
     return cleanUser.includes(cleanExpected);
   }
+
+  function extractJsSnippets(js) {
+    // You can make this smarter later (like extracting only function names)
+    const cleaned = js
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith("//")); // ignore comments
+    return cleaned;
+  }
+
+
 
   const handleRun = () => {
     const finalCode = `
@@ -144,33 +181,57 @@ const fetchCurrentTask = async () => {
     if (!currentTask) return { correct: false, tips: [] };
 
     const strict = currentTask.strict_check;
+    const expectedHtml = currentTask.html_check || "";
+    const expectedCss = currentTask.css_check || "";
+    const expectedJs = currentTask.js_check || "";
 
     let tips = [];
 
-    const htmlOk = currentTask.html_check
-      ? strict
-        ? htmlCode.trim() === currentTask.html_check.trim()
-        : htmlStructuresMatch(htmlCode, currentTask.html_check)
-      : true;
+    if (strict) {
+      // Full strict matching
+      const htmlOk = htmlCode.trim() === expectedHtml.trim();
+      const cssOk = cssCode.trim() === expectedCss.trim();
+      const jsOk = jsCode.trim() === expectedJs.trim();
 
-    const cssOk = currentTask.css_check
-      ? strict
-        ? cssCode.trim() === currentTask.css_check.trim()
-        : cssMatches(cssCode, currentTask.css_check)
-      : true;
+      if (!htmlOk) tips.push("HTML doesn’t match exactly.");
+      if (!cssOk) tips.push("CSS doesn’t match exactly.");
+      if (!jsOk) tips.push("JavaScript doesn’t match exactly.");
 
-    const jsOk = currentTask.js_check
-      ? strict
-        ? jsCode.trim() === currentTask.js_check.trim()
-        : jsMatches(jsCode, currentTask.js_check)
-      : true;
+      return { correct: htmlOk && cssOk && jsOk, tips };
+    } else {
+      // Non-strict: check presence of required tags or keywords
+      const requiredTags = extractTags(expectedHtml); // get ['h1', 'p', 'a']
+      const missingTags = [];
 
-    if (!htmlOk) tips.push("HTML doesn’t match the expected structure.");
-    if (!cssOk) tips.push("CSS styles don’t match the expected output.");
-    if (!jsOk) tips.push("JavaScript behavior seems off.");
+      requiredTags.forEach(tag => {
+        const regex = new RegExp(`<${tag}\\b`, "i");
+        if (!regex.test(htmlCode)) {
+          missingTags.push(`<${tag}> tag is missing.`);
+        }
+      });
 
-    return { correct: htmlOk && cssOk && jsOk, tips };
+      // CSS: check for presence of selectors
+      const requiredSelectors = extractCssSelectors(expectedCss);
+      requiredSelectors.forEach(sel => {
+        const regex = new RegExp(sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); // escape
+        if (!regex.test(cssCode)) {
+          tips.push(`Missing CSS selector or rule: ${sel}`);
+        }
+      });
+
+      // JS: check for presence of expected function/words
+      const requiredSnippets = extractJsSnippets(expectedJs);
+      requiredSnippets.forEach(snippet => {
+        const regex = new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "i");
+        if (!regex.test(jsCode)) {
+          tips.push(`Missing JS code: ${snippet}`);
+        }
+      });
+
+      return { correct: tips.length === 0, tips };
+    }
   };
+
 
 
 
