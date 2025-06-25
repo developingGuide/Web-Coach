@@ -40,7 +40,7 @@ function HtmlCodeEditor({code, setCode, matchOver}) {
               "ol",
               "a"
             ];
-            const suggestions = tags.map(tag => ({
+            const tagSuggestions = tags.map(tag => ({
               label: tag,
               kind: monaco.languages.CompletionItemKind.Snippet,
               insertText: `<${tag}>$1</${tag}>`,
@@ -48,8 +48,30 @@ function HtmlCodeEditor({code, setCode, matchOver}) {
                 monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
               documentation: `${tag} tag`,
             }));
-            return { suggestions };
+
+            const boilerplateSnippet = {
+              label: "!",
+              kind: monaco.languages.CompletionItemKind.Snippet,
+              insertText: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>$1</title>
+</head>
+<body>
+  $2
+</body>
+</html>`,
+        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+        documentation: "Basic HTML5 boilerplate",
+            };
+
+            return {
+              suggestions: [...tagSuggestions, boilerplateSnippet],
+            };
           },
+          triggerCharacters: ["!"],
         });
       }}
     />
