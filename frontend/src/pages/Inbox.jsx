@@ -155,7 +155,7 @@ const Inbox = () => {
           <>
             <h2>{selectedTask.subject}</h2>
             <p className="inbox-sender"><strong>From:</strong> {selectedTask.sender}</p>
-            <div className="inbox-content">{selectedTask.body}</div>
+            <div style={{ whiteSpace: 'pre-line' }} className="inbox-content">{selectedTask.body}</div>
             <button className="inbox-start-task-button" onClick={handleStartTask}>
               Start Task
             </button>

@@ -87,12 +87,33 @@ const fetchCurrentTask = async () => {
 
       setCurrentTask(taskData);
       setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
-    setHtmlCode(taskData.startingHtml || defaultTemplate);
-    setCssCode(taskData.startingCss || "body { background: white; }");
-    setJsCode(taskData.startingJs || "console.log('Hello');");
-
+      setHtmlCode(taskData.startingHtml);
+      setCssCode(taskData.startingCss || "body { background: white; }");
+      setJsCode(taskData.startingJs || "console.log('Hello');");
   };
 
+
+
+  function htmlStructuresMatch(userHtml, expectedHtml) {
+    const parser = new DOMParser();
+    const userDoc = parser.parseFromString(userHtml, 'text/html');
+    const expectedDoc = parser.parseFromString(expectedHtml, 'text/html');
+
+    const clean = (html) => html.replace(/[\s\n]+/g, '').toLowerCase();
+    return clean(userDoc.body.innerHTML).includes(clean(expectedDoc.body.innerHTML));
+  }
+
+  function cssMatches(userCss, expectedCss) {
+    const cleanUser = userCss.replace(/\s+/g, '').toLowerCase();
+    const cleanExpected = expectedCss.replace(/\s+/g, '').toLowerCase();
+    return cleanUser.includes(cleanExpected);
+  }
+
+  function jsMatches(userJs, expectedJs) {
+    const cleanUser = userJs.replace(/\s+/g, '').toLowerCase();
+    const cleanExpected = expectedJs.replace(/\s+/g, '').toLowerCase();
+    return cleanUser.includes(cleanExpected);
+  }
 
   const handleRun = () => {
     const finalCode = `
@@ -120,26 +141,39 @@ const fetchCurrentTask = async () => {
 
 
   const checkUserCode = () => {
-    const lowerCode = htmlCode.toLowerCase();
+    if (!currentTask) return { correct: false, tips: [] };
 
-    const hasNav = lowerCode.includes('<nav');
-    const hasUL = lowerCode.includes('<ul');
-    const hasHome = lowerCode.includes('>home<');
-    const hasAbout = lowerCode.includes('>about<');
+    const strict = currentTask.strict_check;
 
     let tips = [];
-    if (!hasNav) tips.push("Try adding a <nav> tag.");
-    if (!hasUL) tips.push("Did you use an unordered list (<ul>)?");
-    if (!hasHome) tips.push("Missing a link to 'Home'.");
-    if (!hasAbout) tips.push("Missing a link to 'About'.");
 
-    if (tips.length > 0) {
-      // alert("Hmm... not quite there yet.\n\nSuggestions:\n" + tips.join('\n'));
-      return false;
-    }
+    const htmlOk = currentTask.html_check
+      ? strict
+        ? htmlCode.trim() === currentTask.html_check.trim()
+        : htmlStructuresMatch(htmlCode, currentTask.html_check)
+      : true;
 
-    return true;
+    const cssOk = currentTask.css_check
+      ? strict
+        ? cssCode.trim() === currentTask.css_check.trim()
+        : cssMatches(cssCode, currentTask.css_check)
+      : true;
+
+    const jsOk = currentTask.js_check
+      ? strict
+        ? jsCode.trim() === currentTask.js_check.trim()
+        : jsMatches(jsCode, currentTask.js_check)
+      : true;
+
+    if (!htmlOk) tips.push("HTML doesn’t match the expected structure.");
+    if (!cssOk) tips.push("CSS styles don’t match the expected output.");
+    if (!jsOk) tips.push("JavaScript behavior seems off.");
+
+    return { correct: htmlOk && cssOk && jsOk, tips };
   };
+
+
+
 
 
   const shipTask = async () => {
@@ -216,7 +250,7 @@ const fetchCurrentTask = async () => {
     const confirmShip = window.confirm("Are you sure you want to ship? Mistakes will lose you exp!");
     if (!confirmShip) return;
 
-    const isCorrect = checkUserCode();
+    const { correct, tips } = checkUserCode();
     const { data, error } = await supabase
       .from("user_state")
       .select("exp")
@@ -228,15 +262,16 @@ const fetchCurrentTask = async () => {
       return;
     }
 
-    let tips = [];
-    const lowerCode = htmlCode.toLowerCase();
-    if (!lowerCode.includes('<nav')) tips.push("Try adding a <nav> tag.");
-    if (!lowerCode.includes('<ul')) tips.push("Did you use an unordered list (<ul>)?");
-    if (!lowerCode.includes('>home<')) tips.push("Missing a link to 'Home'.");
-    if (!lowerCode.includes('>about<')) tips.push("Missing a link to 'About'.");
+
+    // let tips = [];
+    // const lowerCode = htmlCode.toLowerCase();
+    // if (!lowerCode.includes('<nav')) tips.push("Try adding a <nav> tag.");
+    // if (!lowerCode.includes('<ul')) tips.push("Did you use an unordered list (<ul>)?");
+    // if (!lowerCode.includes('>home<')) tips.push("Missing a link to 'Home'.");
+    // if (!lowerCode.includes('>about<')) tips.push("Missing a link to 'About'.");
 
     let gainedExp = 0;
-    if (!isCorrect) {
+    if (!correct) {
       const min = -30;
       const max = -10;
       gainedExp = Math.floor(Math.random() * (max - min + 1)) + min;
