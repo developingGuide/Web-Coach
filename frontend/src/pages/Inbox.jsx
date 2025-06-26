@@ -128,44 +128,44 @@ const Inbox = () => {
   };
 
   return (
-    <>
-    <button className="inboxBackBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
-    <div className="inbox-main">
-      <div className="inbox-sidebar">
-        <h2>Inbox</h2>
-        {inboxItems.length === 0 ? (
-          <p className="inbox-no-selection">No tasks yet. Try selecting a journey!</p>
-        ) : (
-          inboxItems.map((task) => (
-            <div
-              key={task.id}
-              className={`inbox-email-preview ${selectedTask?.id === task.id ? 'inbox-selected' : ''}`}
-              onClick={() => handleTaskClick(task)}
-            >
-              <h3>{task.subject}</h3>
-              <p className="inbox-sender"><strong>From:</strong> {task.sender}</p>
-              <textarea readOnly disabled className='inbox-preview-text'>{task.body}</textarea>
-            </div>
-          ))
-        )}
-      </div>
+    <div className='inbox-background'>
+      <button className="inboxBackBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
+      <div className="inbox-main">
+        <div className="inbox-sidebar">
+          <h2>Inbox</h2>
+          {inboxItems.length === 0 ? (
+            <p className="inbox-no-selection">No tasks yet. Try selecting a journey!</p>
+          ) : (
+            inboxItems.map((task) => (
+              <div
+                key={task.id}
+                className={`inbox-email-preview ${selectedTask?.id === task.id ? 'inbox-selected' : ''}`}
+                onClick={() => handleTaskClick(task)}
+              >
+                <h3>{task.subject}</h3>
+                <p className="inbox-sender"><strong>From:</strong> {task.sender}</p>
+                <textarea readOnly disabled className='inbox-preview-text'>{task.body}</textarea>
+              </div>
+            ))
+          )}
+        </div>
 
-      <div className="inbox-body">
-        {selectedTask ? (
-          <>
-            <h2>{selectedTask.subject}</h2>
-            <p className="inbox-sender"><strong>From:</strong> {selectedTask.sender}</p>
-            <div style={{ whiteSpace: 'pre-line' }} className="inbox-content">{selectedTask.body}</div>
-            <button className="inbox-start-task-button" onClick={handleStartTask}>
-              Start Task
-            </button>
-          </>
-        ) : (
-          <p className="inbox-no-selection">Select a task to view details</p>
-        )}
+        <div className="inbox-body">
+          {selectedTask ? (
+            <>
+              <h2>{selectedTask.subject}</h2>
+              <p className="inbox-sender"><strong>From:</strong> {selectedTask.sender}</p>
+              <div style={{ whiteSpace: 'pre-line' }} className="inbox-content">{selectedTask.body}</div>
+              <button className="inbox-start-task-button" onClick={handleStartTask}>
+                Start Task
+              </button>
+            </>
+          ) : (
+            <p className="inbox-no-selection">Select a task to view details</p>
+          )}
+        </div>
       </div>
     </div>
-    </>
   );
 };
 

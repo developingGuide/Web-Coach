@@ -187,13 +187,13 @@ export default function Journey() {
   
   const checkpointLayouts = {
     BeachIsland: [
-      { top: "20%", left: "10%", label: "🏝️ Welcome Dock", projectId: 0 },
-      { top: "40%", left: "60%", label: "🏝️ HTML Hut", projectId: 1 },
-      { top: "30%", left: "40%", label: "📦 CSS Cove", projectId: 2 },
+      { top: "69%", left: "25%", label: "🎊", projectId: 0 },
+      { top: "70%", left: "40%", label: "1", projectId: 1 },
+      { top: "68%", left: "60%", label: "2", projectId: 2 },
     ],
     MountainIsland: [
-      { top: "25%", left: "15%", label: "🌴 JS Trail", projectId: 3 },
-      { top: "35%", left: "50%", label: "🧠 Logic Lake", projectId: 4 },
+      { top: "25%", left: "15%", label: "", projectId: 3 },
+      { top: "35%", left: "50%", label: "", projectId: 4 },
     ]
   };
   {/* Add other checkpoints here */}
@@ -330,7 +330,10 @@ export default function Journey() {
               style={{ top, left }}
               onClick={() => handleOverlayOpen(projectId)}
             >
-              <span>{label}</span>
+              <div className="checkpoint-glow" />
+              <div className="checkpoint-orb">{label}</div>
+
+              {/* <span>{label}</span> */}
             </div>
           ))}
         </div>

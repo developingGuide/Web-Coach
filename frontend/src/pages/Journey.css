@@ -39,15 +39,65 @@
 .checkpoint {
   position: absolute;
   transform: translate(-50%, -50%);
-  background: rgba(27, 27, 31, 0.9);
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  color: var(--accent);
+  width: 60px;
+  height: 60px;
+  pointer-events: auto;
   cursor: pointer;
-  transition: transform 0.2s;
-  border: 1px solid #444;
-  pointer-events: auto; 
+  z-index: 2;
 }
+
+.checkpoint-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, var(--accent) 10%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+  animation: pulse 2s infinite ease-in-out;
+  filter: blur(4px);
+  z-index: 1;
+}
+
+.checkpoint-orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle at center, var(--accent), #222);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 12px var(--accent), inset 0 0 6px rgba(255, 255, 255, 0.1);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  animation: float 2s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+}
+
+.checkpoint:hover .checkpoint-orb {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 0 18px var(--accent), inset 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-4px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+
 
 .project-overlay {
   position: fixed;
