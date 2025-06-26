@@ -45,14 +45,24 @@ const Dashboard = () => {
   
   const userId = user.id
   
-  const handleLaunch = (destination) => {
-    setIsLaunching(true);
+  const handleLaunch = (destination, type) => {
+    setIsLaunching(type); // now holds "cloud" or "slide"
 
-    setTimeout(() => {
-      setIsLaunching(false);
-      navigate(`${destination}`)
-    }, 2000);
-  }
+    if (type === "cloud") {
+      setTimeout(() => {
+        navigate(destination);
+        setIsLaunching(false); // optional: reset after navigation
+      }, 1000); // give time for cloud fade in
+    } else {
+      setTimeout(() => {
+        navigate(destination, {
+          state: { transition: 'slide-in' }
+        });
+        setIsLaunching(false);
+      }, 800);
+    }
+  };
+
 
   const fetchUserState = async () => {
     const { data: userState, error: stateError } = await supabase
@@ -125,87 +135,89 @@ const Dashboard = () => {
       
     
   return (
-    <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
-      <div className="cloud-transition">
-        <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching ? "visible" : ""}`} />
-      </div>
-      <div className="devdash-layout">
-        {/* Left Side */}
-        <div className="devdash-column">
-          <div className="devdash-panel">
-            <div className="devdash-title">Current Task</div>
-            <div className="devdash-label">Title</div>
-            <div className="devdash-value">
-              {currentTask ? currentTask.title : "No Task Started Yet!"}
-            </div>
-            <div className="devdash-label">Status</div>
-            <div className="devdash-value">
-              {currentTask ? "In Progress" : "Not Started!"}
-            </div>
-            <div>
-              {currentTask ? <button onClick={() => {navigate('/inbox')}}>Go Inbox!</button> : ""}
-            </div>
-          </div>
-
-          <div className="devdash-panel devdash-compact">
-            <div className="devdash-title">Dev Stats</div>
-            <div className="devdash-label">Commits Today</div>
-            <div className="devdash-value">{count}</div>
-            <div className="devdash-label">Daily Tracker</div>
-            <CalendarHeatmap
-              startDate={startDate}
-              endDate={endDate}
-              values={heatmapData}
-              classForValue={(value) => {
-                if (!value || value.count === 0) return 'color-empty';
-                if (value.count < 2) return 'color-github-1';
-                if (value.count < 4) return 'color-github-2';
-                if (value.count < 6) return 'color-github-3';
-                return 'color-github-4';
-              }}
-              tooltipDataAttrs={(value) => {
-                if (!value || !value.date) return null;
-                return {
-                  'data-tooltip-id': 'heatmap-tooltip',
-                  'data-tooltip-content': `${moment(value.date).format('MMM D')}: ${value.count || 0} tasks`,
-                };
-              }}
-            />
-
-            <ReactTooltip id="heatmap-tooltip" />
-          </div>
+    <div className={`page-slide ${isLaunching === 'slide' ? 'exit-to-left-active' : ''}`}>
+      <div className={`devdash-root ${isLaunching === "cloud" ? "launching" : ""}`}>
+        <div className="cloud-transition">
+          <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`} />
         </div>
-
-        {/* Center Area */}
-        <div className="devdash-center">
-          <div className="devdash-level-circle">
-            <h1>LEVEL {userLvl}</h1>
-            <p>Status: <span className="neon-glow">Live</span></p>
-            <button className="logoutBtn" onClick={handleLogout}>Log Out</button>
-          </div>
-
-          <div className="devdash-controls">
-            <button onClick={() => handleLaunch('/challenges')}>Start Challenge</button>
-            <button onClick={() => handleLaunch('/journey')}>View Journey</button>
-          </div>
-        </div>
-
-        {/* Right Side */}
-        <div className="devdash-column">
-          <div className="devdash-panel">
-            <div className="devdash-title">Current Map: {currentMap}</div>
-            <img src={`/${currentMap}.png`} className="devdash-map" />
-          </div>
-
-
-          <div className="devdash-panel">
-            <div className="devdash-title">Global Chat</div>
-                
-            <div className="chat-preview">
-              <div className="chat-message"><span className="chat-username">dev_goblin:</span> yo anyone shipping today?</div>
-              <div className="chat-message"><span className="chat-username">pixelwitch:</span> still stuck on that snowglobe lol</div>
+        <div className="devdash-layout">
+          {/* Left Side */}
+          <div className="devdash-column">
+            <div className="devdash-panel">
+              <div className="devdash-title">Current Task</div>
+              <div className="devdash-label">Title</div>
+              <div className="devdash-value">
+                {currentTask ? currentTask.title : "No Task Started Yet!"}
+              </div>
+              <div className="devdash-label">Status</div>
+              <div className="devdash-value">
+                {currentTask ? "In Progress" : "Not Started!"}
+              </div>
+              <div>
+                {currentTask ? <button onClick={() => handleLaunch('/inbox', 'slide')}>Go Inbox!</button> : ""}
+              </div>
             </div>
-            <button onClick={() => {navigate('/chat')}} className="chat-button">Open Chat</button>
+
+            <div className="devdash-panel devdash-compact">
+              <div className="devdash-title">Dev Stats</div>
+              <div className="devdash-label">Commits Today</div>
+              <div className="devdash-value">{count}</div>
+              <div className="devdash-label">Daily Tracker</div>
+              <CalendarHeatmap
+                startDate={startDate}
+                endDate={endDate}
+                values={heatmapData}
+                classForValue={(value) => {
+                  if (!value || value.count === 0) return 'color-empty';
+                  if (value.count < 2) return 'color-github-1';
+                  if (value.count < 4) return 'color-github-2';
+                  if (value.count < 6) return 'color-github-3';
+                  return 'color-github-4';
+                }}
+                tooltipDataAttrs={(value) => {
+                  if (!value || !value.date) return null;
+                  return {
+                    'data-tooltip-id': 'heatmap-tooltip',
+                    'data-tooltip-content': `${moment(value.date).format('MMM D')}: ${value.count || 0} tasks`,
+                  };
+                }}
+              />
+
+              <ReactTooltip id="heatmap-tooltip" />
+            </div>
+          </div>
+
+          {/* Center Area */}
+          <div className="devdash-center">
+            <div className="devdash-level-circle">
+              <h1>LEVEL {userLvl}</h1>
+              <p>Status: <span className="neon-glow">Live</span></p>
+              <button className="logoutBtn" onClick={handleLogout}>Log Out</button>
+            </div>
+
+            <div className="devdash-controls">
+              <button onClick={() => handleLaunch('/challenges', 'cloud')}>Start Challenge</button>
+              <button onClick={() => handleLaunch('/journey', 'cloud')}>View Journey</button>
+            </div>
+          </div>
+
+          {/* Right Side */}
+          <div className="devdash-column">
+            <div className="devdash-panel">
+              <div className="devdash-title">Current Map: {currentMap}</div>
+              <img src={`/${currentMap}.png`} className="devdash-map" />
+            </div>
+
+
+            <div className="devdash-panel">
+              <div className="devdash-title">Global Chat</div>
+                  
+              <div className="chat-preview">
+                <div className="chat-message"><span className="chat-username">dev_goblin:</span> yo anyone shipping today?</div>
+                <div className="chat-message"><span className="chat-username">pixelwitch:</span> still stuck on that snowglobe lol</div>
+              </div>
+              <button onClick={() => {navigate('/chat')}} className="chat-button">Open Chat</button>
+            </div>
           </div>
         </div>
       </div>

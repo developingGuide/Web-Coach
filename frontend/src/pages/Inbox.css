@@ -9,10 +9,6 @@
 .inbox-background{
   height: 100vh;
   width: 100vw;
-  background-image: url('/space.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center top;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -140,4 +136,23 @@
 .inbox-no-selection {
   color: var(--muted);
   font-style: italic;
+}
+
+
+
+
+
+.page-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s ease;
+}
+
+.enter-from-right {
+  transform: translateX(100%);
+}
+
+.enter-from-right-active {
+  transform: translateX(0%);
 }
