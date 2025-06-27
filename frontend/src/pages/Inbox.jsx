@@ -36,15 +36,7 @@ const Inbox = () => {
 
 
   const location = useLocation();
-  const [slideClass, setSlideClass] = useState('enter-from-right');
-
-  useEffect(() => {
-    if (location.state?.transition === 'slide-in') {
-      setTimeout(() => {
-        setSlideClass('enter-from-right-active');
-      }, 20);
-    }
-  }, []);
+  const transition = location.state?.transition
 
 
   useEffect(() => {
@@ -139,7 +131,7 @@ const Inbox = () => {
 
 
   return (
-    <div className={`page-slide ${slideClass}`}>
+    <div className={`page-slide ${transition === 'slide-in' ? 'page-slide-in' : ''}`}>
       <div className="inbox-background">
         <button className="inboxBackBtn" onClick={() => {navigate('/dashboard', {state: { transition: 'slide', direction: 'backward' }})}}>Back</button>
         <div className="inbox-main">

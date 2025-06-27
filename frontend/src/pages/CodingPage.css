@@ -57,7 +57,7 @@
   font-family: 'Courier New', Courier, monospace;
   display: flex;
   gap: 1rem;
-  height: calc(100vh - 150px); /* adjust based on header height */
+  height: calc(100vh - 125px); /* adjust based on header height */
   position: relative;
   z-index: 1;
 }

@@ -166,15 +166,12 @@ const fetchCurrentTask = async () => {
       </html>
     `;
 
-    const previewWindow = window.open('', 'Preview', 'width=800,height=600');
-    if (!previewWindow) {
-      alert("Popup blocked! Please allow popups to preview your code.");
-      return;
-    }
-    previewWindow.document.open();
-    previewWindow.document.write(finalCode);
-    previewWindow.document.close();
+    const blob = new Blob([finalCode], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+
+    window.open(url, '_blank');
   };
+
 
 
   const checkUserCode = () => {

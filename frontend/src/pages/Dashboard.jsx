@@ -46,22 +46,23 @@ const Dashboard = () => {
   const userId = user.id
   
   const handleLaunch = (destination, type) => {
-    setIsLaunching(type); // now holds "cloud" or "slide"
+    setIsLaunching(type); // keep in launching mode
 
     if (type === "cloud") {
+      // Let the cloud appear before routing
       setTimeout(() => {
         navigate(destination);
-        setIsLaunching(false); // optional: reset after navigation
-      }, 1000); // give time for cloud fade in
+      }, 1000);
     } else {
+      // Slide — don’t reset isLaunching immediately!
       setTimeout(() => {
         navigate(destination, {
           state: { transition: 'slide-in' }
         });
-        setIsLaunching(false);
-      }, 800);
+      }, 800); // give the slide enough time to animate *before* unmount
     }
   };
+
 
 
   const fetchUserState = async () => {
