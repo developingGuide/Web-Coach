@@ -53,6 +53,12 @@ const Dashboard = () => {
       setTimeout(() => {
         navigate(destination);
       }, 1000);
+    } else if (type === "slide-left") {
+      setTimeout(() => {
+        navigate(destination, {
+          state: { transition: 'slide-left' }
+        });
+      }, 800);
     } else {
       // Slide — don’t reset isLaunching immediately!
       setTimeout(() => {
@@ -136,7 +142,7 @@ const Dashboard = () => {
       
     
   return (
-    <div className={`page-slide ${isLaunching === 'slide' ? 'exit-to-left-active' : ''}`}>
+    <div className={`page-slide ${isLaunching === 'slide' ? 'exit-to-left-active' : ''} ${isLaunching === 'slide-left' ? 'exit-to-right-active' : ''}`}>
       <div className={`devdash-root ${isLaunching === "cloud" ? "launching" : ""}`}>
         <div className="cloud-transition">
           <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`} />
@@ -197,7 +203,7 @@ const Dashboard = () => {
             </div>
 
             <div className="devdash-controls">
-              <button onClick={() => handleLaunch('/challenges', 'cloud')}>Start Challenge</button>
+              <button onClick={() => handleLaunch('/challenges', 'slide-left')}>Start Challenge</button>
               <button onClick={() => handleLaunch('/journey', 'cloud')}>View Journey</button>
             </div>
           </div>
