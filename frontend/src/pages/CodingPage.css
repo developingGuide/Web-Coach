@@ -157,6 +157,7 @@
   border-radius: 4px;
   overflow-x: auto;
 }
+
 @keyframes fadeInUp {
   from {
     transform: translate(-50%, 20%);

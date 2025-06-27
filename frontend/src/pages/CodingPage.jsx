@@ -153,6 +153,8 @@ const fetchCurrentTask = async () => {
 
 
   const handleRun = () => {
+    let previewWindow = null;
+
     const finalCode = `
       <!DOCTYPE html>
       <html lang="en">
@@ -166,10 +168,15 @@ const fetchCurrentTask = async () => {
       </html>
     `;
 
-    const blob = new Blob([finalCode], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
+    if (!previewWindow || previewWindow.closed) {
+      previewWindow = window.open('', 'preview', 'width=800,height=600');
+    }
 
-    window.open(url, '_blank');
+    previewWindow.document.open();
+    previewWindow.document.write(finalCode);
+    previewWindow.document.close();
+
+
   };
 
 
@@ -411,9 +418,9 @@ const fetchCurrentTask = async () => {
       </div>
       <div className="codingBody">
         <div className="editorWrapper">
-          {activeTab === "html" && <HtmlCodeEditor code={htmlCode} setCode={setHtmlCode} />}
-          {activeTab === "css" && <CssCodeEditor code={cssCode} setCode={setCssCode} />}
-          {activeTab === "js" && <JsCodeEditor code={jsCode} setCode={setJsCode} />}
+          {activeTab === "html" && <HtmlCodeEditor key="html" code={htmlCode} setCode={setHtmlCode} />}
+          {activeTab === "css" && <CssCodeEditor key="css" code={cssCode} setCode={setCssCode} />}
+          {activeTab === "js" && <JsCodeEditor key="js" code={jsCode} setCode={setJsCode} />}
         </div>
 
 

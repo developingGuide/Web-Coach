@@ -148,7 +148,7 @@ const Inbox = () => {
                 >
                   <h3>{task.subject}</h3>
                   <p className="inbox-sender"><strong>From:</strong> {task.sender}</p>
-                  <textarea readOnly disabled className='inbox-preview-text'>{task.body}</textarea>
+                  <textarea readOnly disabled className='inbox-preview-text' value={task.body}></textarea>
                 </div>
               ))
             )}

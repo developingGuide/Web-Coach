@@ -5,7 +5,6 @@ function HtmlCodeEditor({code, setCode, matchOver}) {
     <Editor
       height="100%"
       defaultLanguage="html"
-      defaultValue="<h1>Hello</h1>"
       theme="vs-dark"
       value={code}
       onChange={(value) => setCode(value)}
@@ -63,8 +62,15 @@ function HtmlCodeEditor({code, setCode, matchOver}) {
   $2
 </body>
 </html>`,
-        insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-        documentation: "Basic HTML5 boilerplate",
+              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+              documentation: "Basic HTML5 boilerplate",
+              filterText: "!",
+              range: {
+                startLineNumber: editor.getPosition().lineNumber,
+                startColumn: editor.getPosition().column - 1, // go back 1 character to remove "!"
+                endLineNumber: editor.getPosition().lineNumber,
+                endColumn: editor.getPosition().column,
+              },
             };
 
             return {
