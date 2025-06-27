@@ -33,6 +33,23 @@ const CodingPage = () => {
     tips: [],
     expectedOutput: "",
   });
+
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const isMac = navigator.platform.toUpperCase().includes("MAC");
+      const ctrlOrCmd = isMac ? e.metaKey : e.ctrlKey;
+
+      if (ctrlOrCmd && e.key.toLowerCase() === "s") {
+        e.preventDefault(); // prevent browser refresh
+        handleRun();        // trigger your Run function
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [htmlCode, cssCode, jsCode]);
+
   
   
   useEffect(() => {
@@ -92,17 +109,6 @@ const fetchCurrentTask = async () => {
       setJsCode(taskData.startingJs || "console.log('Hello');");
   };
 
-
-
-  function htmlStructuresMatch(userHtml, expectedHtml) {
-    const parser = new DOMParser();
-    const userDoc = parser.parseFromString(userHtml, 'text/html');
-    const expectedDoc = parser.parseFromString(expectedHtml, 'text/html');
-
-    const clean = (html) => html.replace(/[\s\n]+/g, '').toLowerCase();
-    return clean(userDoc.body.innerHTML).includes(clean(expectedDoc.body.innerHTML));
-  }
-
   function extractTags(html) {
     const tagRegex = /<([a-zA-Z0-9\-]+)/g;
     const tags = new Set();
@@ -115,13 +121,6 @@ const fetchCurrentTask = async () => {
     return Array.from(tags);
   }
 
-
-  function cssMatches(userCss, expectedCss) {
-    const cleanUser = userCss.replace(/\s+/g, '').toLowerCase();
-    const cleanExpected = expectedCss.replace(/\s+/g, '').toLowerCase();
-    return cleanUser.includes(cleanExpected);
-  }
-
   function extractCssSelectors(css) {
     const selectorRegex = /([^{]+)\s*\{/g;
     const selectors = new Set();
@@ -132,13 +131,6 @@ const fetchCurrentTask = async () => {
     }
 
     return Array.from(selectors);
-  }
-
-
-  function jsMatches(userJs, expectedJs) {
-    const cleanUser = userJs.replace(/\s+/g, '').toLowerCase();
-    const cleanExpected = expectedJs.replace(/\s+/g, '').toLowerCase();
-    return cleanUser.includes(cleanExpected);
   }
 
   function extractJsSnippets(js) {

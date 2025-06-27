@@ -102,3 +102,45 @@
   border: none;
   border-radius: 4px;
 }
+
+
+
+.chat-code-block {
+  margin-top: 0.5rem;
+  background: #222;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-family: monospace;
+  color: #eee;
+}
+
+.chat-code-block button {
+  margin-top: 0.5rem;
+  background: #64f4ac;
+  color: black;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.code-output {
+  margin-top: 0.5rem;
+  background: #111;
+  padding: 0.5rem;
+  border-left: 3px solid #64f4ac;
+  color: #ccc;
+}
+
+
+.code-helper {
+  margin-bottom: 0.5rem;
+}
+
+.code-helper select {
+  background: #222;
+  color: white;
+  border: 1px solid #444;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}

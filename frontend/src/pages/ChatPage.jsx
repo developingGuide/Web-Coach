@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import supabase from "../../config/supabaseClient";
 import "./ChatPage.css"
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([])
@@ -58,37 +59,100 @@ const ChatPage = () => {
             setNewMsg("");
         }
   };
-    
-    useEffect(() => {
-        fetchMessages();
 
-        const subscription = supabase
-            .channel(`public:messages:${currentChannel}`) // unique name per channel
-            .on('postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'messages',
-            filter: `channel=eq.${currentChannel}`,
-            }, (payload) => {
-            setMessages(prev => [...prev, payload.new]);
-            })
-            .subscribe();
+  const CodeBlock = ({ language, value }) => {
+    const iframeRef = useRef();
+    const [output, setOutput] = useState("");
 
-        return () => supabase.removeChannel(subscription);
-    }, [currentChannel]);
-
-    
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+    const runCode = () => {
+      const iframe = iframeRef.current;
+      const code = `
+        <script>
+          const log = (...args) => parent.postMessage({ type: 'code-output', output: args.join(' ') }, '*');
+          console.log = log;
+          try {
+            ${value}
+          } catch (e) {
+            log("⚠️ " + e.message);
+          }
+        <\/script>
+      `;
+      const blob = new Blob([code], { type: "text/html" });
+      iframe.src = URL.createObjectURL(blob);
+    };
 
     useEffect(() => {
-        const textarea = document.querySelector(".chat-textarea");
-        if (textarea) {
-            textarea.style.height = "auto";
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
+      const handleMsg = (e) => {
+        if (e.data.type === "code-output") {
+          setOutput(e.data.output);
         }
-    }, [newMsg]);
+      };
+      window.addEventListener("message", handleMsg);
+      return () => window.removeEventListener("message", handleMsg);
+    }, []);
+
+    return (
+      <div className="chat-code-block">
+        <pre><code>{value}</code></pre>
+        <button onClick={runCode}>Run</button>
+        <iframe
+          ref={iframeRef}
+          sandbox="allow-scripts"
+          style={{ display: "none" }}
+          title="sandbox"
+        />
+        {output && <div className="code-output">👉 {output}</div>}
+      </div>
+    );
+  };
+
+
+  const insertCodeBlock = (lang) => {
+    const block = `\`\`\`${lang}\n\n\`\`\``;
+    setNewMsg((prev) => prev + (prev ? "\n" : "") + block);
+
+    // Refocus textarea and move cursor inside code block
+    setTimeout(() => {
+      const textarea = document.querySelector(".chat-textarea");
+      if (textarea) {
+        textarea.focus();
+        const cursorPos = textarea.value.indexOf("\n\n") + 1;
+        textarea.selectionStart = textarea.selectionEnd = cursorPos;
+      }
+    }, 0);
+  };
+
+    
+  useEffect(() => {
+      fetchMessages();
+
+      const subscription = supabase
+          .channel(`public:messages:${currentChannel}`) // unique name per channel
+          .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `channel=eq.${currentChannel}`,
+          }, (payload) => {
+          setMessages(prev => [...prev, payload.new]);
+          })
+          .subscribe();
+
+      return () => supabase.removeChannel(subscription);
+  }, [currentChannel]);
+
+  
+  useEffect(() => {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  useEffect(() => {
+      const textarea = document.querySelector(".chat-textarea");
+      if (textarea) {
+          textarea.style.height = "auto";
+          textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
+      }
+  }, [newMsg]);
 
 
 
@@ -113,7 +177,19 @@ const ChatPage = () => {
             <img src={`/${msg.avatar_url  || "noobie"}.png`} alt="avatar" className="chat-avatar" />
             <div>
                 <div>
-                <span className="chat-username">{msg.display_name}:</span> {msg.message}
+                  <span className="chat-username">{msg.display_name}:</span>
+                  <ReactMarkdown
+                    children={msg.message}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const language = className?.replace("language-", "") || "js";
+                        const code = String(children).trim();
+
+                        if (inline) return <code {...props}>{children}</code>;
+                        return <CodeBlock language={language} value={code} />;
+                      },
+                    }}
+                  />
                 </div>
                 <div className="chat-timestamp">{formatTime(msg.created_at)}</div>
             </div>
@@ -134,6 +210,17 @@ const ChatPage = () => {
             placeholder="Type your message..."
             className="chat-textarea"
         />
+        <div className="code-helper">
+          <select
+            onChange={(e) => insertCodeBlock(e.target.value)}
+            defaultValue=""
+          >
+            <option value="" disabled>Pasting code?</option>
+            <option value="js">JavaScript</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+          </select>
+        </div>
         <button onClick={sendMessage}>Send</button>
       </div>
     </div>

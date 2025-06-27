@@ -33,7 +33,7 @@ export default function ChallengeMap() {
               className={`challenge-box ${selected?.id === ch.id ? 'active' : ''}`} 
               onClick={() => setSelected(ch)}>
               
-              <img src="https://placehold.co/600x1000" alt="challenge" />
+              <img src="/1v1.png" alt="challenge" />
 
               <div className="challengeDesc">
                 <h3>{ch.title}</h3>
