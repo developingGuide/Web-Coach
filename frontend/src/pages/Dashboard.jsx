@@ -160,9 +160,6 @@ const Dashboard = () => {
               <div className="devdash-value">
                 {currentTask ? "In Progress" : "Not Started!"}
               </div>
-              <div>
-                {currentTask ? <button onClick={() => handleLaunch('/inbox', 'slide')}>Go Inbox!</button> : ""}
-              </div>
             </div>
 
             <div className="devdash-panel devdash-compact">
@@ -201,11 +198,6 @@ const Dashboard = () => {
               <p>Status: <span className="neon-glow">Live</span></p>
               <button className="logoutBtn" onClick={handleLogout}>Log Out</button>
             </div>
-
-            <div className="devdash-controls">
-              <button onClick={() => handleLaunch('/challenges', 'slide-left')}>Start Challenge</button>
-              <button onClick={() => handleLaunch('/journey', 'cloud')}>View Journey</button>
-            </div>
           </div>
 
           {/* Right Side */}
@@ -227,6 +219,20 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        <div className="arrow-group arrow-left" onClick={() => handleLaunch('/challenges', 'slide-left')}>
+          <div className="arrow-circle"><i className="fa-solid fa-angles-left"></i></div>
+          <div className="arrow-label">Challenges</div>
+        </div>
+        <div className="arrow-group arrow-right" onClick={() => handleLaunch('/inbox', 'slide')}>
+          <div className="arrow-circle"><i className="fa-solid fa-angles-right"></i></div>
+          <div className="arrow-label">Inbox</div>
+        </div>
+        <div className="arrow-group arrow-bottom" onClick={() => handleLaunch('/journey', 'cloud')}>
+          <div className="arrow-circle"><i className="fa-solid fa-angles-down"></i></div>
+          <div className="arrow-label">View Journey</div>
+        </div>
+
       </div>
     </div>
   );

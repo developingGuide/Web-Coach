@@ -21,6 +21,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .chat-tabs button {
@@ -45,6 +46,30 @@
   overflow-y: auto;
   padding: 1rem;
 }
+
+
+/* WebKit (Chrome, Safari, Edge) */
+.chat-feed::-webkit-scrollbar{
+  width: 8px;
+}
+
+.chat-feed::-webkit-scrollbar-track{
+  background: transparent; /* or use a soft color */
+}
+
+.chat-feed::-webkit-scrollbar-thumb {
+  background-color: var(--muted); /* your green */
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Firefox */
+.chat-feed{
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+
 
 .chat-message {
   display: flex;
@@ -87,6 +112,7 @@
   border-radius: 6px;
   font-size: 1rem;
   line-height: 1.4;
+  min-height: 32px;
   max-height: 120px;  /* max expansion height */
   overflow-y: auto;
   white-space: pre-wrap;
@@ -112,6 +138,10 @@
   border-radius: 8px;
   font-family: monospace;
   color: #eee;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
 }
 
 .chat-code-block button {
@@ -121,7 +151,8 @@
   padding: 0.25rem 0.5rem;
   border: none;
   border-radius: 4px;
-  z-index: 10;
+  width: 5rem;
+  cursor: pointer;
 }
 
 .code-output {
@@ -130,6 +161,7 @@
   padding: 0.5rem;
   border-left: 3px solid #64f4ac;
   color: #ccc;
+  word-break: break-word;
 }
 
 
@@ -143,4 +175,10 @@
   border: 1px solid #444;
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
+}
+
+
+.chat-code-block iframe {
+  margin-top: 0.5rem;
+  background: white;
 }

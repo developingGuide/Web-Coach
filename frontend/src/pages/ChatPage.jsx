@@ -10,6 +10,8 @@ const ChatPage = () => {
   const bottomRef = useRef();
   const [currentChannel, setCurrentChannel] = useState("general");
   const channels = ["general", "help", "feedback"];
+  const [showIframe, setShowIframe] = useState(false);
+
   const navigate = useNavigate()
 
   function formatTime(isoString) {
@@ -63,22 +65,38 @@ const ChatPage = () => {
   const CodeBlock = ({ language, value }) => {
     const iframeRef = useRef();
     const [output, setOutput] = useState("");
+    const [showIframe, setShowIframe] = useState(false);
+    const [src, setSrc] = useState(""); // ← ensures iframe updates fully
 
     const runCode = () => {
-      const iframe = iframeRef.current;
-      const code = `
-        <script>
-          const log = (...args) => parent.postMessage({ type: 'code-output', output: args.join(' ') }, '*');
-          console.log = log;
-          try {
-            ${value}
-          } catch (e) {
-            log("⚠️ " + e.message);
-          }
-        <\/script>
-      `;
-      const blob = new Blob([code], { type: "text/html" });
-      iframe.src = URL.createObjectURL(blob);
+      setShowIframe(true);
+      let html = "";
+
+      if (language === "js") {
+        html = `
+          <script>
+            const log = (...args) => parent.postMessage({ type: 'code-output', output: args.join(' ') }, '*');
+            console.log = log;
+            try {
+              ${value}
+            } catch (e) {
+              log("⚠️ " + e.message);
+            }
+          <\/script>
+        `;
+        setOutput(""); // reset output
+      } else if (language === "html") {
+        html = value;
+      } else if (language === "css") {
+        html = `<style>\${value}</style><div>CSS applied. Try styling this text!</div>`;
+      } else {
+        setOutput("⚠️ Unsupported language");
+        setShowIframe(false);
+        return;
+      }
+
+      const blob = new Blob([html], { type: "text/html" });
+      setSrc(URL.createObjectURL(blob)); // ← trigger iframe to reload
     };
 
     useEffect(() => {
@@ -95,13 +113,27 @@ const ChatPage = () => {
       <div className="chat-code-block">
         <pre><code>{value}</code></pre>
         <button onClick={runCode}>Run</button>
-        <iframe
-          ref={iframeRef}
-          sandbox="allow-scripts"
-          style={{ display: "none" }}
-          title="sandbox"
-        />
-        {output && <div className="code-output">👉 {output}</div>}
+
+        {language === "js" && output && (
+          <div className="code-output">👉 {output}</div>
+        )}
+
+        {showIframe && (
+          <iframe
+            ref={iframeRef}
+            sandbox="allow-scripts"
+            src={src}
+            style={{
+              marginTop: "0.5rem",
+              width: "100%",
+              height: "150px",
+              border: "1px solid #333",
+              borderRadius: "6px",
+              background: "#fff"
+            }}
+            title="code-preview"
+          />
+        )}
       </div>
     );
   };
