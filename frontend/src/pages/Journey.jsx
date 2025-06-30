@@ -188,7 +188,6 @@ export default function Journey() {
   
   const checkpointLayouts = {
     BeachIsland: [
-      { top: "69%", left: "25%", label: "❌", projectId: 0 },
       { top: "70%", left: "40%", label: "❌", projectId: 1 },
       { top: "68%", left: "60%", label: "❌", projectId: 2 },
     ],
@@ -278,6 +277,38 @@ export default function Journey() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const step = 30; // how many pixels to move per keypress
+
+    const handleKeyDown = (e) => {
+      if (["w", "a", "s", "d"].includes(e.key.toLowerCase())) {
+        e.preventDefault(); // avoid default scrolling
+
+        setPosition((prev) => {
+          const newX = e.key === "a" ? prev.x + step : e.key === "d" ? prev.x - step : prev.x;
+          const newY = e.key === "w" ? prev.y + step : e.key === "s" ? prev.y - step : prev.y;
+
+          const mapWidth = 2000;
+          const mapHeight = 1300;
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+
+          const minX = -(mapWidth - viewportWidth);
+          const minY = -(mapHeight - viewportHeight);
+
+          const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+
+          return {
+            x: clamp(newX, minX, 0),
+            y: clamp(newY, minY, 0),
+          };
+        });
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
 
   return (

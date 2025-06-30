@@ -14,7 +14,6 @@
   padding: 4rem 3rem;
   width: 50rem;
   color: #222;
-  font-family: 'Georgia', serif;
   background-image: url('/scroll-bg.png'); /* use a real scroll image */
   background-repeat: no-repeat;
   background-position: center;
@@ -23,7 +22,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: glowIn 0.5s ease;
+  animation: glowIn 1s ease;
 }
 
 
@@ -31,7 +30,7 @@
   font-size: 1.6rem;
   margin-bottom: 1rem;
   color: #3b2d1f;
-  text-shadow: 0 0 2px #fff;
+  font-family: 'Merienda', 'Indie Flower', 'Georgia', serif;
 }
 
 .scroll-container p {
@@ -39,7 +38,8 @@
   font-size: 1.1rem;
   text-align: center;
   line-height: 1.5;
-  max-width: 90%;
+  max-width: 85%;
+  font-family: 'Merienda', 'Indie Flower', 'Georgia', serif;
 }
 
 .scroll-note {
