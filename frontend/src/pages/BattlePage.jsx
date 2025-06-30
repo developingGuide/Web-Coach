@@ -33,6 +33,8 @@ const BattlePage = () => {
   const [timeLeft, setTimeLeft] = useState(10); // 5 minutes in seconds
   const [matchOver, setMatchOver] = useState(false);
   const [opponentRageQuit, setOpponentRageQuit] = useState(false);
+  const [battleInfo, setBattleInfo] = useState({ title: "", description: "" });
+  const [battleResult, setBattleResult] = useState(null); // "win", "lose", "tie"
 
 
   const [activeTab, setActiveTab] = useState("html");
@@ -121,12 +123,11 @@ const BattlePage = () => {
     // pick winner
     const [userA, userB] = results;
     if (userA.score > userB.score) {
-      console.log(`🏆 User ${userA.user_id} wins!`);
+      setBattleResult(userA.user_id === user_id ? "win" : "lose");
     } else if (userB.score > userA.score) {
-      console.log(`🏆 User ${userB.user_id} wins!`);
+      setBattleResult(userB.user_id === user_id ? "win" : "lose");
     } else {
-      console.log("🤝 It's a tie!");
-      console.log(`UserA ${userA.score} UserB ${userB.score}`)
+      setBattleResult("tie");
     }
   };
 
@@ -145,6 +146,42 @@ const BattlePage = () => {
     setMatchOver(true); // end the match immediately for this user
     navigate('/challenges')
   };
+
+
+  useEffect(() => {
+    const fetchBattleInfo = async () => {
+      // Get match to find challenge_id
+      const { data: matchData, error: matchErr } = await supabase
+        .from('matches')
+        .select('challenge_id')
+        .eq('id', match_id)
+        .single();
+
+      if (matchErr || !matchData) {
+        console.error("Match fetch error:", matchErr?.message);
+        return;
+      }
+
+      // Use challenge_id to get title & description
+      const { data: battleData, error: battleErr } = await supabase
+        .from('battles')
+        .select('title, description')
+        .eq('challenge_id', matchData.challenge_id)
+        .single();
+
+      if (battleErr || !battleData) {
+        console.error("Battle fetch error:", battleErr?.message);
+        return;
+      }
+
+      setBattleInfo({
+        title: battleData.title || "Untitled Battle",
+        description: battleData.description || "",
+      });
+    };
+
+    fetchBattleInfo();
+  }, [match_id]);
 
 
 
@@ -280,7 +317,7 @@ const BattlePage = () => {
       // 2. Get challenge test/check info
       const { data: challengeData, error: challengeErr } = await supabase
         .from('battles')
-        .select('html_check, css_check, js_check, expected_output')
+        .select('html_check, css_check, js_check, expected_output, title, description')
         .eq('challenge_id', challengeId)
         .single();
 
@@ -328,6 +365,10 @@ const BattlePage = () => {
 
   return (
     <div className="battleContainer">
+      <div className="battleHeader">
+        <h1>{battleInfo.title}</h1>
+        <p>{battleInfo.description}</p>
+      </div>
       <div className="outputRow">
         <div className="outputBox">
           <h3>You</h3>
@@ -367,6 +408,18 @@ const BattlePage = () => {
           ⏳ Checking submissions...
         </div>
       )}
+
+      {battleResult && (
+        <div className="battleResultCard">
+          <h2>
+            {battleResult === "win" && "🏆 You Won!"}
+            {battleResult === "lose" && "😞 You Lost.."}
+            {battleResult === "tie" && "🤝 It's a Tie!"}
+          </h2>
+          <button onClick={() => navigate('/challenges')}>Back to Challenges</button>
+        </div>
+      )}
+
 
 
       {opponentRageQuit && (

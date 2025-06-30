@@ -28,6 +28,28 @@
   box-sizing: border-box;
 }
 
+.battleHeader {
+  margin-bottom: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.battleHeader h1 {
+  font-size: 28px;
+  color: #3cff99;
+}
+
+.battleHeader p {
+  font-size: 16px;
+  color: #ccc;
+  margin: 0 auto;
+  margin-left: 2rem;
+}
+
+
+
 .outputRow {
   display: flex;
   gap: 16px;
@@ -115,6 +137,30 @@
 }
 
 .rageQuitPopup button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #44ff99;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+.battleResultCard {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  background: #1c1c1c;
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.battleResultCard button {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   background: #44ff99;

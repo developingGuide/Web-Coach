@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './Challenge.css';
 
 const challenges = [
-  { id: 'c1', type: '1v1', title: 'Speed CSS Battle', difficulty: 'Medium' },
+  { id: 'c1', type: '1v1', title: 'Speed CSS Battle', difficulty: 'Medium', img: "/1v1.png" },
   { id: 'c2', type: '2v2', title: 'Team Flexbox Showdown', difficulty: 'Hard' },
   { id: 'c3', type: 'Minigame', title: 'DOM Ninja', difficulty: 'Easy' },
   { id: 'c4', type: 'Monthly Championship', title: 'June Arena', difficulty: 'Expert' }
@@ -33,7 +33,7 @@ export default function ChallengeMap() {
               className={`challenge-box ${selected?.id === ch.id ? 'active' : ''}`} 
               onClick={() => setSelected(ch)}>
               
-              <img src="/1v1.png" alt="challenge" />
+              <img src={ch.img} alt="challenge" />
 
               <div className="challengeDesc">
                 <h3>{ch.title}</h3>
