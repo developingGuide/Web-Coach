@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from "react";
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
 import CloudLayer from "../components/CloudLayer";
 import { AuthContext } from "../components/AuthContext";
+import ScrollOverlay from "../components/ScrollOverlay";
 
 
 export default function Journey() {
@@ -187,13 +188,13 @@ export default function Journey() {
   
   const checkpointLayouts = {
     BeachIsland: [
-      { top: "69%", left: "25%", label: "🎊", projectId: 0 },
-      { top: "70%", left: "40%", label: "1", projectId: 1 },
-      { top: "68%", left: "60%", label: "2", projectId: 2 },
+      { top: "69%", left: "25%", label: "❌", projectId: 0 },
+      { top: "70%", left: "40%", label: "❌", projectId: 1 },
+      { top: "68%", left: "60%", label: "❌", projectId: 2 },
     ],
     MountainIsland: [
-      { top: "25%", left: "15%", label: "", projectId: 3 },
-      { top: "35%", left: "50%", label: "", projectId: 4 },
+      { top: "25%", left: "15%", label: "❌", projectId: 3 },
+      { top: "35%", left: "50%", label: "❌", projectId: 4 },
     ]
   };
   {/* Add other checkpoints here */}
@@ -281,11 +282,31 @@ export default function Journey() {
 
   return (
     <>
-    {isCoverVisible && <div className="cloud-cover-opening"></div>}
-
     <div className="cloud-transition">
       <img src="/cloud-cover.png" className={`cloud-cover ${isTransitioning ? "visible" : ""}`} />
     </div>
+
+    {selectedProject && !showIpad && (
+      <ScrollOverlay
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+        onAccept={() => {
+          setTimeout(() => {
+            setIsTransitioning(true);
+
+            setTimeout(() => {
+              handleSelect(selectedProject.id);
+            }, 1000); // Give the cloud 1 second to appear
+          }, 1600); // Match the scan delay
+
+          setSelectedProject(null);
+        }}
+        projectImg={selectedProject.image_url}
+      />
+    )}
+
+    {isCoverVisible && <div className="cloud-cover-opening"></div>}
+
 
     <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
 
@@ -330,10 +351,7 @@ export default function Journey() {
               style={{ top, left }}
               onClick={() => handleOverlayOpen(projectId)}
             >
-              <div className="checkpoint-glow" />
-              <div className="checkpoint-orb">{label}</div>
-
-              {/* <span>{label}</span> */}
+              <span className="x-on-map">{label}</span>
             </div>
           ))}
         </div>
@@ -351,7 +369,7 @@ export default function Journey() {
       </div>
     </div>
 
-    {selectedProject && (
+    {/* {selectedProject && (
       <div className="project-overlay" onClick={() => setSelectedProject(null)}>
         <div className="project-card" onClick={(e) => e.stopPropagation()}>
           <img src={selectedProject.image_url} alt={selectedProject.name} className="project-image" />
@@ -368,7 +386,7 @@ export default function Journey() {
           </button>
         </div>
       </div>
-    )}
+    )} */}
     </>
   );
 }

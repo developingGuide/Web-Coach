@@ -1,0 +1,128 @@
+.scroll-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.scroll-container {
+  position: relative;
+  padding: 4rem 3rem;
+  width: 50rem;
+  color: #222;
+  font-family: 'Georgia', serif;
+  background-image: url('/scroll-bg.png'); /* use a real scroll image */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: glowIn 0.5s ease;
+}
+
+
+.scroll-container h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: #3b2d1f;
+  text-shadow: 0 0 2px #fff;
+}
+
+.scroll-container p {
+  color: #3b2d1f;
+  font-size: 1.1rem;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+.scroll-note {
+  margin-top: 2rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+
+.build-btn {
+  margin-top: 1.5rem;
+  padding: 0.6rem 2rem;
+  background: #0ff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #000;
+  font-weight: bold;
+}
+
+@keyframes glowIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
+.scanbeam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 255, 255, 0.05) 0%,
+    rgba(0, 255, 255, 0.15) 50%,
+    rgba(0, 255, 255, 0.05) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.scanbeam.active {
+  animation: scanDown 1.5s ease-out forwards;
+}
+
+@keyframes scanDown {
+  0% {
+    opacity: 0.2;
+    transform: translateY(-100%);
+  }
+  20% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.scan-popup {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 255, 255, 0.2);
+  border: 2px solid #0ff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  color: #0ff;
+  font-weight: bold;
+  box-shadow: 0 0 12px #0ff;
+  animation: fadeInOut 2s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, 10px); }
+  10% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -10px); }
+}
