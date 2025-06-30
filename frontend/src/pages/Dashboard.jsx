@@ -24,6 +24,40 @@ const Dashboard = () => {
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [currentTask, setCurrentTask] = useState(null);
   const [tasksToday, setTasksToday] = useState({})
+  const [previewMessages, setPreviewMessages] = useState([]);
+
+  useEffect(() => {
+    const fetchPreview = async () => {
+      const { data, error } = await supabase
+        .from("messages")
+        .select("id, display_name, message")
+        .eq("channel", "general")
+        .order("created_at", { ascending: false })
+        .limit(2);
+
+      if (!error) setPreviewMessages(data.reverse()); // oldest first
+    };
+
+    fetchPreview();
+
+    const channel = supabase
+      .channel("chat-preview-general")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages", filter: "channel=eq.general" },
+        (payload) => {
+          setPreviewMessages((prev) => {
+            const next = [...prev, payload.new].slice(-2);
+            return next;
+          });
+        }
+      )
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
+  }, []);
+
+
   
   useEffect(() => {
     if (currentTaskId) {
@@ -212,8 +246,11 @@ const Dashboard = () => {
               <div className="devdash-title">Global Chat</div>
                   
               <div className="chat-preview">
-                <div className="chat-message"><span className="chat-username">dev_goblin:</span> yo anyone shipping today?</div>
-                <div className="chat-message"><span className="chat-username">pixelwitch:</span> still stuck on that snowglobe lol</div>
+                {previewMessages.map((msg) => (
+                  <div key={msg.id} className="chat-message">
+                    <span className="chat-username">{msg.display_name}:</span> {msg.message}
+                  </div>
+                ))}
               </div>
               <button onClick={() => {navigate('/chat')}} className="chat-button">Open Chat</button>
             </div>
@@ -226,7 +263,7 @@ const Dashboard = () => {
         </div>
         <div className="arrow-group arrow-right" onClick={() => handleLaunch('/inbox', 'slide')}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-right"></i></div>
-          <div className="arrow-label">Inbox</div>
+          <div className="arrow-label">HUD</div>
         </div>
         <div className="arrow-group arrow-bottom" onClick={() => handleLaunch('/journey', 'cloud')}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-down"></i></div>

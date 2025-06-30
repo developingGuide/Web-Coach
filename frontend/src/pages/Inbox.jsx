@@ -136,7 +136,7 @@ const Inbox = () => {
         <button className="inboxBackBtn" onClick={() => {navigate('/dashboard', {state: { transition: 'slide', direction: 'backward' }})}}>Back</button>
         <div className="inbox-main">
           <div className="inbox-sidebar">
-            <h2>Inbox</h2>
+            <h2>The HUD</h2>
             {inboxItems.length === 0 ? (
               <p className="inbox-no-selection">No tasks yet. Try selecting a journey!</p>
             ) : (
