@@ -112,6 +112,10 @@
   padding: 1rem;
   border-left: 1px solid #333;
   overflow-y: auto;
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  height: calc(100vh - 170px);
 }
 
 
