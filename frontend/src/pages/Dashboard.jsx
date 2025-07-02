@@ -194,6 +194,7 @@ const Dashboard = () => {
               <div className="devdash-value">
                 {currentTask ? "In Progress" : "Not Started!"}
               </div>
+              <button onClick={() => {navigate('/playground')}}>Go straight to it!</button>
             </div>
 
             <div className="devdash-panel devdash-compact">

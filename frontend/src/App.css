@@ -22,12 +22,12 @@
 
 
 .space-background {
-  background-image: url('/space.png');
+  background-image: url('/homeSpace.png');
   background-size: cover;
   background-position: center top;
-  background-repeat: no-repeat;
   height: 100%;
   width: 100%;
-  overflow: hidden;
   position: relative;
+  overflow-x: hidden;
 }
+
