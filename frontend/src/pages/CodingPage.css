@@ -63,10 +63,48 @@
 }
 
 .editorWrapper {
-  flex: 1;
-  min-width: 0; /* important for editors in flex layout */
-  z-index: 2;
+  overflow: hidden; /* just in case */
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: calc(100% - 200px);
 }
+
+.editorWithSidebar {
+  display: flex;
+  flex: 1; /* make this take up space left by toolsPane */
+  min-width: 0;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #1e1e1e;
+  color: white;
+  padding: 10px;
+  font-family: monospace;
+}
+
+.sidebar h4 {
+  margin-bottom: 10px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  text-decoration: underline;
+}
+
 
 .toolsPane {
   width: 300px;

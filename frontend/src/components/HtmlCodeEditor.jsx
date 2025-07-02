@@ -37,7 +37,8 @@ function HtmlCodeEditor({code, setCode, matchOver}) {
               "li",
               "ul",
               "ol",
-              "a"
+              "a",
+              "img"
             ];
             const tagSuggestions = tags.map(tag => ({
               label: tag,

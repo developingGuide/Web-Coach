@@ -147,7 +147,7 @@ const Inbox = () => {
                   onClick={() => handleTaskClick(task)}
                 >
                   <h3>{task.subject}</h3>
-                  <p className="inbox-sender"><strong>From:</strong> {task.sender}</p>
+                  <p className="inbox-sender"><strong>Completing For:</strong> {task.sender}</p>
                   <textarea readOnly disabled className='inbox-preview-text' value={task.body}></textarea>
                 </div>
               ))

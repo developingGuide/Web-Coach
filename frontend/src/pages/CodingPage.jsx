@@ -34,6 +34,12 @@ const CodingPage = () => {
     expectedOutput: "",
   });
 
+  const [imageAssets, setImageAssets] = useState([
+    { name: "beach.jpg", url: "/beach.jpg" },
+    { name: "avatar.jpg", url: "/assets/avatar.jpg" },
+    { name: "bg.jpg", url: "/assets/bg.jpg" },
+  ]);
+
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -409,10 +415,30 @@ const fetchCurrentTask = async () => {
         <button className={activeTab === "js" ? "active" : ""} onClick={() => setActiveTab("js")}>JavaScript</button>
       </div>
       <div className="codingBody">
-        <div className="editorWrapper">
-          {activeTab === "html" && <HtmlCodeEditor key="html" code={htmlCode} setCode={setHtmlCode} />}
-          {activeTab === "css" && <CssCodeEditor key="css" code={cssCode} setCode={setCssCode} />}
-          {activeTab === "js" && <JsCodeEditor key="js" code={jsCode} setCode={setJsCode} />}
+        <div className="editorWithSidebar">
+          <div className="sidebar">
+            <h4>Assets</h4>
+            <ul>
+              {imageAssets.map((img, index) => (
+                <li
+                  key={index}
+                  onClick={() =>
+                    setHtmlCode(
+                      prev => prev + `\n<img src="${img.url}" alt="${img.name}" />`
+                    )
+                  }
+                >
+                  🖼 {img.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="editorWrapper">
+            {activeTab === "html" && <HtmlCodeEditor key="html" code={htmlCode} setCode={setHtmlCode} />}
+            {activeTab === "css" && <CssCodeEditor key="css" code={cssCode} setCode={setCssCode} />}
+            {activeTab === "js" && <JsCodeEditor key="js" code={jsCode} setCode={setJsCode} />}
+          </div>
         </div>
 
 
