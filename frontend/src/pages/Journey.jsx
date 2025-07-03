@@ -188,22 +188,12 @@ export default function Journey() {
   
   const checkpointLayouts = {
     BeachIsland: [
-<<<<<<< HEAD
       { top: "70%", left: "40%", label: "❌", projectId: 1 },
       { top: "68%", left: "60%", label: "❌", projectId: 2 },
     ],
     MountainIsland: [
       { top: "25%", left: "15%", label: "❌", projectId: 3 },
       { top: "35%", left: "50%", label: "❌", projectId: 4 },
-=======
-      { top: "20%", left: "10%", label: "🏝️ Welcome Dock", projectId: 0 },
-      { top: "40%", left: "60%", label: "🏝️ HTML Hut", projectId: 1 },
-      { top: "30%", left: "40%", label: "📦 CSS Cove", projectId: 2 },
-    ],
-    MountainIsland: [
-      { top: "25%", left: "15%", label: "🌴 JS Trail", projectId: 3 },
-      { top: "35%", left: "50%", label: "🧠 Logic Lake", projectId: 4 },
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
     ]
   };
   {/* Add other checkpoints here */}
@@ -327,7 +317,6 @@ export default function Journey() {
       <img src="/cloud-cover.png" className={`cloud-cover ${isTransitioning ? "visible" : ""}`} />
     </div>
 
-<<<<<<< HEAD
     {selectedProject && !showIpad && (
       <ScrollOverlay
         project={selectedProject}
@@ -350,8 +339,6 @@ export default function Journey() {
     {isCoverVisible && <div className="cloud-cover-opening"></div>}
 
 
-=======
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
     <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
 
     <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>

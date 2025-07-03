@@ -1,13 +1,6 @@
 .devdash-root {
   height: 100vh;
   width: 100vw;
-<<<<<<< HEAD
-=======
-  background-image: url('/space.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center top;
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
   padding: 2rem;
   box-sizing: border-box;
   color: #ccffcc;
@@ -235,11 +228,7 @@ button:active {
 /* Animate starfall background */
 .launching {
   animation: fallThroughStars 1.2s ease-in forwards;
-<<<<<<< HEAD
   background-image: url('/homeSpace.png');
-=======
-  background-image: url('/space.png');
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center top;

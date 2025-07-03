@@ -25,11 +25,7 @@ export const AuthProvider = ({ children }) => {
         if (!existing && !error) {
           await supabase
             .from("user_state")
-<<<<<<< HEAD
             .insert({ user_id: sessionUser.id, exp: 0, display_name: sessionUser.user_metadata?.display_name || "Unnamed" });
-=======
-            .insert({ user_id: sessionUser.id, exp: 0 });
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
         }
       }
     };
@@ -51,11 +47,7 @@ export const AuthProvider = ({ children }) => {
             if (!existing && !error) {
               const { error: insertError } = await supabase
                 .from("user_state")
-<<<<<<< HEAD
                 .insert({ user_id: newUser.id, exp: 0, level: 0, plan: "starter", display_name: newUser.user_metadata?.display_name || "Unnamed" });
-=======
-                .insert({ user_id: newUser.id, exp: 0, level: 0 });
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
               if (insertError) console.error("Insert error:", insertError.message);
             }
           });

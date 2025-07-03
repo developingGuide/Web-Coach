@@ -21,20 +21,13 @@ import LoginPage from './pages/LoginPage';
 import { AuthContext } from './components/AuthContext';
 import GoBack from './pages/GoBack';
 import SuccessPage from './pages/SuccessPage';
-<<<<<<< HEAD
 import OnboardingPage from './pages/onboarding';
 import ChatPage from './pages/ChatPage';
-=======
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-<<<<<<< HEAD
     const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard", "/challenges", "/signup", "/login", "/goback", "/success", "/battle/:match_id", "/chat"];
-=======
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/dashboard", "/dashboard", "/challenges", "/signup", "/login", "/goback"];
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     
@@ -90,7 +83,6 @@ function App() {
                 />
             )}
                 <div className='pages'>
-<<<<<<< HEAD
                     <div className="space-background">
                         <Routes>
                             <Route
@@ -159,66 +151,6 @@ function App() {
                             />
                         </Routes>
                     </div>
-=======
-                    <Routes>
-                        <Route
-                            path='/signup'
-                            element={<SignupPage/>}
-                        />
-                        <Route 
-                            path="/success"
-                            element={<SuccessPage/>}
-                        />
-                        <Route
-                            path='/login'
-                            element={<LoginPage/>}
-                        />
-                        <Route
-                            path="/goback"
-                            element={<GoBack/>}
-                        />
-                        <Route
-                            path="/"
-                            element={<Home/>}
-                        />
-                        <Route
-                            path="/dashboard"
-                            element={<Dashboard/>}
-                        />
-                        <Route
-                            path="/playground"
-                            element={<CodingPage/>}
-                        />
-                        <Route
-                            path="/test"
-                            element={<Test/>}
-                        />
-                        <Route
-                            path="/inbox"
-                            element={<Inbox/>}
-                        />
-                        <Route
-                            path="/challenges"
-                            element={<ChallengeMap/>}
-                        />
-                        <Route
-                            path='/queue'
-                            element={<QueuePage/>}
-                        />
-                        <Route
-                            path='/battle/:match_id'
-                            element={<BattlePage/>}
-                        />
-                        <Route
-                            path="/testing"
-                            element={<AuthContext/>}
-                        />
-                        <Route
-                            path="/journey"
-                            element={<Journey/>}
-                        />
-                    </Routes>
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
                 </div>
         </div>
     )

@@ -25,10 +25,7 @@ const plans = [
     description: "Unlock unlimited tasks, community, and courses.",
     features: ["UNLIMITED Tasks/day", "Daily Tracking", "Coding Battles & Leaderboards", "Community", "Courses (coming soon)"],
     highlighted: true,
-<<<<<<< HEAD
     priceId: "price_1RZtZYJomOLGn4VAZonkQ56V"
-=======
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
   }
 ];
 
@@ -59,12 +56,8 @@ export default function SignupPage() {
         email,
         password,
         options: {
-<<<<<<< HEAD
             emailRedirectTo: "http://localhost:5173/newUser",
             data: {display_name}
-=======
-            emailRedirectTo: "https://devsim.app/goback"
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
         }
       });
       
@@ -79,7 +72,6 @@ export default function SignupPage() {
         const res = await fetch("http://localhost:4000/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-<<<<<<< HEAD
           body: JSON.stringify({
             email,
             display_name,
@@ -94,11 +86,6 @@ export default function SignupPage() {
         sessionStorage.setItem("display_name", display_name);
 
 
-=======
-          body: JSON.stringify({ email, display_name }),
-        });
-
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
         const { url } = await res.json();
         window.location.href = url; // Redirect to Stripe Checkout
       } catch (err) {

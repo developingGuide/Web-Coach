@@ -24,7 +24,6 @@ const Dashboard = () => {
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [currentTask, setCurrentTask] = useState(null);
   const [tasksToday, setTasksToday] = useState({})
-<<<<<<< HEAD
   const [previewMessages, setPreviewMessages] = useState([]);
   const location = useLocation();
   const transition = location.state?.transition;
@@ -37,31 +36,6 @@ const Dashboard = () => {
         .eq("channel", "general")
         .order("created_at", { ascending: false })
         .limit(2);
-=======
-  
-  useEffect(() => {
-    if (currentTaskId) {
-      fetchCurrentTask(currentTaskId);
-    }
-  }, [currentTaskId]);
-  
-  
-  useEffect(() => {
-    if (user?.id) {
-      fetchUserState();
-      fetchTasksToday();
-    }
-  }, [user]);
-  
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-  
-  const userId = user.id
-  
-  const handleLaunch = (destination) => {
-    setIsLaunching(true);
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
       if (!error) setPreviewMessages(data.reverse()); // oldest first
     };
@@ -182,7 +156,6 @@ const Dashboard = () => {
       }
       
       setTasksToday(data.daily_log || {});
-<<<<<<< HEAD
   };
     
   const today = new Date().toISOString().split("T")[0];
@@ -268,72 +241,6 @@ const Dashboard = () => {
               <button className="logoutBtn" onClick={handleLogout}>Log Out</button>
             </div>
           </div>
-=======
-    };
-    
-    const today = new Date().toISOString().split("T")[0];
-    const count = tasksToday[today]?.length || 0;
-    
-    
-    // Github square thingies
-    const heatmapData = Object.entries(tasksToday).map(([date, tasks]) => ({
-      date,
-      count: tasks.length,
-    }));
-    
-    const startDate = moment().subtract(5, 'months').format('YYYY-MM-DD');
-    const endDate = moment().format('YYYY-MM-DD');
-    
-    
-    return (
-      <div className={`devdash-root ${isLaunching ? "launching" : ""}`}>
-      <div className="cloud-transition">
-        <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching ? "visible" : ""}`} />
-      </div>
-      <div className="devdash-layout">
-
-        {/* Left Side */}
-        <div className="devdash-column">
-          <div className="devdash-panel">
-            <div className="devdash-title">Current Task</div>
-            <div className="devdash-label">Title</div>
-            <div className="devdash-value">
-              {currentTask ? currentTask.title : "No Task Started Yet!"}
-            </div>
-            <div className="devdash-label">Status</div>
-            <div className="devdash-value">
-              {currentTask ? "In Progress" : "Not Started!"}
-            </div>
-            <div>
-              {currentTask ? <button onClick={() => {navigate('/inbox')}}>Go Straight In!</button> : ""}
-            </div>
-          </div>
-
-          <div className="devdash-panel devdash-compact">
-            <div className="devdash-title">Dev Stats</div>
-            <div className="devdash-label">Commits Today</div>
-            <div className="devdash-value">{count}</div>
-            <div className="devdash-label">Daily Tracker</div>
-            <CalendarHeatmap
-              startDate={startDate}
-              endDate={endDate}
-              values={heatmapData}
-              classForValue={(value) => {
-                if (!value || value.count === 0) return 'color-empty';
-                if (value.count < 2) return 'color-github-1';
-                if (value.count < 4) return 'color-github-2';
-                if (value.count < 6) return 'color-github-3';
-                return 'color-github-4';
-              }}
-              tooltipDataAttrs={(value) => {
-                if (!value || !value.date) return null;
-                return {
-                  'data-tooltip-id': 'heatmap-tooltip',
-                  'data-tooltip-content': `${moment(value.date).format('MMM D')}: ${value.count || 0} tasks`,
-                };
-              }}
-            />
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
           {/* Right Side */}
           <div className="devdash-column">
@@ -358,7 +265,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
         <div className="arrow-group arrow-left" onClick={() => handleLaunch('/challenges', 'slide-left')}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-left"></i></div>
           <div className="arrow-label">Challenges</div>
@@ -372,43 +278,6 @@ const Dashboard = () => {
           <div className="arrow-label">View Journey</div>
         </div>
 
-=======
-        {/* Center Area */}
-        <div className="devdash-center">
-          <div className="devdash-level-circle">
-            <h1>LEVEL {userLvl}</h1>
-            <p>Status: <span className="neon-glow">Live</span></p>
-          </div>
-
-          <div className="devdash-controls">
-            <button onClick={() => handleLaunch('/challenges')}>Start Challenge</button>
-            <button onClick={() => handleLaunch('/journey')}>View Journey</button>
-          </div>
-        </div>
-
-        {/* Right Side */}
-        <div className="devdash-column">
-          <div className="devdash-panel">
-            <div className="devdash-title">Current Map: {currentMap}</div>
-            <img src={`/${currentMap}.png`} className="devdash-map" />
-          </div>
-
-
-          <div className="devdash-panel">
-            <div className="comingSoon">
-              <h1>COMING SOON!</h1>
-            </div>
-            <div className="devdash-title">Global Chat</div>
-            
-            <div className="chat-preview">
-              <div className="chat-message"><span className="chat-username">dev_goblin:</span> yo anyone shipping today?</div>
-              <div className="chat-message"><span className="chat-username">pixelwitch:</span> still stuck on that snowglobe lol</div>
-            </div>
-            
-            <button disabled className="chat-button">Open Chat</button>
-          </div>
-        </div>
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
       </div>
     </div>
   );

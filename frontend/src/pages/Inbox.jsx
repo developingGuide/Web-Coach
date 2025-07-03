@@ -3,11 +3,7 @@ import Sidebar from '../components/Sidebar';
 import './Inbox.css';
 import supabase from '../../config/supabaseClient';
 import { AuthContext } from '../components/AuthContext';
-<<<<<<< HEAD
 import { useNavigate, useLocation } from 'react-router-dom';
-=======
-import { useNavigate } from 'react-router-dom';
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
 const Inbox = () => {
   const {user} = useContext(AuthContext)
@@ -20,7 +16,6 @@ const Inbox = () => {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [allTasks, setAllTasks] = useState([]);
   const navigate = useNavigate()
-<<<<<<< HEAD
 
   const handleTaskClick = async (task) => {
     setSelectedTask(task);
@@ -42,8 +37,6 @@ const Inbox = () => {
 
   const location = useLocation();
   const transition = location.state?.transition
-=======
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
 
   useEffect(() => {
@@ -130,20 +123,13 @@ const Inbox = () => {
 
     fetchInbox();
   }, [user]);
-<<<<<<< HEAD
 
-=======
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
   if (!user) {
     return <div>Loading...</div>;
   }
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
 
-<<<<<<< HEAD
   return (
     <div className={`page-slide
       ${transition === 'slide-in' ? 'slide-in-from-right' : ''}
@@ -172,48 +158,6 @@ const Inbox = () => {
               ))
             )}
           </div>
-=======
-
-  const handleTaskClick = async (task) => {
-    setSelectedTask(task);
-
-    const { error } = await supabase
-      .from("user_state")
-      .update({ current_task_id: task.id })
-      .eq("user_id", user.id);
-
-    if (error) console.error("Failed to update selected task:", error);
-  };
-
-  const handleStartTask = () => {
-    if (selectedTask) {
-      navigate("/playground");
-    }
-  };
-
-  return (
-    <>
-    <button className="inboxBackBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
-    <div className="inbox-main">
-      <div className="inbox-sidebar">
-        <h2>Inbox</h2>
-        {inboxItems.length === 0 ? (
-          <p className="inbox-no-selection">No tasks yet. Try selecting a journey!</p>
-        ) : (
-          inboxItems.map((task) => (
-            <div
-              key={task.id}
-              className={`inbox-email-preview ${selectedTask?.id === task.id ? 'inbox-selected' : ''}`}
-              onClick={() => handleTaskClick(task)}
-            >
-              <h3>{task.subject}</h3>
-              <p className="inbox-sender"><strong>From:</strong> {task.sender}</p>
-              <p>{task.description}</p>
-            </div>
-          ))
-        )}
-      </div>
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
           <div className="inbox-body">
             {selectedTask ? (
@@ -232,7 +176,6 @@ const Inbox = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };
 
