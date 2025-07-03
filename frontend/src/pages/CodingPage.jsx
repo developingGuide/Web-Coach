@@ -33,6 +33,7 @@ const CodingPage = () => {
     tips: [],
     expectedOutput: "",
   });
+<<<<<<< HEAD
 
   const [imageAssets, setImageAssets] = useState([
     { name: "beach.jpg", url: "/beach.jpg" },
@@ -56,6 +57,8 @@ const CodingPage = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [htmlCode, cssCode, jsCode]);
 
+=======
+>>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
   
   
   useEffect(() => {
@@ -110,6 +113,7 @@ const fetchCurrentTask = async () => {
 
       setCurrentTask(taskData);
       setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
+<<<<<<< HEAD
       setHtmlCode(taskData.startingHtml);
       setCssCode(taskData.startingCss || "body { background: white; }");
       setJsCode(taskData.startingJs || "console.log('Hello');");
@@ -149,6 +153,14 @@ const fetchCurrentTask = async () => {
   }
 
 
+=======
+    setHtmlCode(taskData.startingHtml || defaultTemplate);
+    setCssCode(taskData.startingCss || "body { background: white; }");
+    setJsCode(taskData.startingJs || "console.log('Hello');");
+
+  };
+
+>>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 
   const handleRun = () => {
     let previewWindow = null;

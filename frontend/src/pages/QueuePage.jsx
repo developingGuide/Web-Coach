@@ -11,6 +11,7 @@ export default function QueuePage() {
   const [channel, setChannel] = useState(null);
   const navigate = useNavigate();
   const challengeId = searchParams.get('challenge_id');
+<<<<<<< HEAD
   const { user } = useContext(AuthContext);
 
   const hasJoinedRef = useRef(false);
@@ -23,6 +24,16 @@ export default function QueuePage() {
 
     const userId = user.id;
 
+=======
+  const {user} = useContext(AuthContext)
+  
+  if (!user) return <div>Loading...</div>;
+
+  useEffect(() => {
+    const userId = user.id
+    
+    let active = true;
+>>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
     const joinQueue = async () => {
       const { data: existing } = await supabase
         .from('queue')
@@ -37,6 +48,10 @@ export default function QueuePage() {
 
       const { data: entry, error } = await supabase
         .from('queue')
+<<<<<<< HEAD
+=======
+        // .insert([{ user_id: user.id, challenge_id: challengeId }])
+>>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
         .insert([{ user_id: userId, challenge_id: challengeId }])
         .select()
         .single();

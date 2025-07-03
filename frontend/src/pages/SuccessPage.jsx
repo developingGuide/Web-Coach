@@ -1,4 +1,5 @@
 // frontend/src/pages/SuccessPage.jsx
+<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import supabase from "../../config/supabaseClient";
@@ -70,6 +71,13 @@ export default function SuccessPage() {
     // </div>
     <div className="centered-page">
       <h1>{status}</h1>
+=======
+export default function SuccessPage() {
+  return (
+    <div className="centered-page">
+      <h1>🎉 You're all set!</h1>
+      <p>Thanks for subscribing to Pro! You can now access all features.</p>
+>>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
     </div>
   );
 }

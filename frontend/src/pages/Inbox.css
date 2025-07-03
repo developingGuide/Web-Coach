@@ -43,10 +43,7 @@
   display: flex;
   overflow: hidden;
   padding: 1rem;
-  width: 70%; /* or whatever fixed size you want */
-  height: 80%;
-  max-height: 80%;
-  max-width: 90vw;
+  height: 100%;
 }
 
 

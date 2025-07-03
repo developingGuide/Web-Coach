@@ -1,6 +1,10 @@
 import './BattlePage.css';
 import { useState, useEffect, useContext } from 'react';
+<<<<<<< HEAD
 import { useNavigate, useParams } from 'react-router-dom';
+=======
+import { useParams } from 'react-router-dom';
+>>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 import HtmlCodeEditor from '../components/HtmlCodeEditor';
 import CssCodeEditor from '../components/CssCodeEditor';
 import JsCodeEditor from '../components/JsCodeEditor';
@@ -149,6 +153,7 @@ const BattlePage = () => {
 
 
   useEffect(() => {
+<<<<<<< HEAD
     const fetchBattleInfo = async () => {
       // Get match to find challenge_id
       const { data: matchData, error: matchErr } = await supabase
@@ -187,6 +192,8 @@ const BattlePage = () => {
 
 
   useEffect(() => {
+=======
+>>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
     if (!user) return;
 
     const chan = supabase.channel(`match-${match_id}`);
