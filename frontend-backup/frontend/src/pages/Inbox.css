@@ -1,0 +1,245 @@
+:root {
+  --bg: #0e0e10;
+  --panel: #1b1b1f;
+  --accent: #91f42f;
+  --text: #e0e0e0;
+  --muted: #888;
+}
+
+.inbox-background{
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.inbox-wrapper {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: sans-serif;
+}
+
+
+.inboxBackBtn{
+  position: absolute;
+  z-index: 1;
+  left: 2rem;
+  top: 1.5rem;
+}
+
+/* Inbox specific */
+.inbox-main {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: white;
+  border-radius: 20px;
+  display: flex;
+  overflow: hidden;
+  padding: 1rem;
+  width: 70%; /* or whatever fixed size you want */
+  height: 80%;
+  max-height: 80%;
+  max-width: 90vw;
+}
+
+
+.inbox-sidebar {
+  width: 300px;
+  background-color: transparent;
+  border-right: 1px solid #676767;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.inbox-sidebar h2 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: var(--accent);
+  text-align: center;
+}
+
+.inbox-email-preview {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  color: var(--text);
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  opacity: 0;
+  animation: fadeWave 0.4s ease forwards;
+}
+
+@keyframes fadeWave {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.inbox-email-preview:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.inbox-preview-text{
+  max-height: 100px;
+  overflow: hidden;
+  width: 100%;
+  color: #ffffff47;
+  background-color: transparent;
+  border: none;
+  resize: none;
+  margin-top: 4px;
+  pointer-events: none;
+}
+
+.inbox-task-content{
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.inbox-selected {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.inbox-sender {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
+.inbox-body {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  /* scrollbar-width: none;
+  -ms-overflow-style: none; */
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+.inbox-sidebar::-webkit-scrollbar,
+.inbox-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.inbox-sidebar::-webkit-scrollbar-track,
+.inbox-body::-webkit-scrollbar-track {
+  background: transparent; /* or use a soft color */
+}
+
+.inbox-sidebar::-webkit-scrollbar-thumb,
+.inbox-body::-webkit-scrollbar-thumb {
+  background-color: var(--muted); /* your green */
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Firefox */
+.inbox-sidebar,
+.inbox-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+
+
+
+.inbox-body h2 {
+  margin-top: 0;
+  color: var(--text);
+}
+
+.inbox-content {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.inbox-start-task-button {
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.inbox-start-task-button:hover {
+  background-color: #b5ff4d;
+}
+
+.inbox-no-selection {
+  color: var(--muted);
+  font-style: italic;
+}
+
+
+
+
+
+.page-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s ease;
+}
+.page-slide-in {
+  transform: translateX(100%);
+  animation: slideInFromRight 0.6s ease-out forwards;
+}
+
+/* Incoming */
+.slide-in-from-right {
+  animation-name: slideInFromRight;
+}
+.slide-in-from-left {
+  animation-name: slideInFromLeft;
+}
+
+/* Exiting */
+.exit-to-left-active {
+  animation-name: slideOutToLeft;
+}
+.exit-to-right-active {
+  animation-name: slideOutToRight;
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideInFromLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutToLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes slideOutToRight {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}

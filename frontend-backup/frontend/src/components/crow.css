@@ -1,0 +1,13 @@
+.flapping-crow {
+  width: 100px;
+  animation: crowBounce 2s ease-in-out infinite;
+}
+
+@keyframes crowBounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

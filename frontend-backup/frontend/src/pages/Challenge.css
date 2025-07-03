@@ -1,0 +1,153 @@
+.backBtn{
+  position: absolute;
+  z-index: 1;
+  left: 1rem;
+  top: 1rem;
+}
+
+.challenge-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  /* background: url('/space.png'); */
+  position: relative;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 24px;
+  transition: width 0.3s ease;
+  flex: 1;
+  margin-top: 5rem;
+}
+
+
+.challenge-box {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: white;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+  transition: transform 0.2s;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-height: 30rem;
+}
+
+
+.challenge-box img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* keeps aspect ratio, fills space */
+  display: block;
+}
+
+
+.challenge-box:hover {
+  transform: scale(1.03);
+}
+
+.challenge-box.active {
+  outline: 2px solid #00ff99;
+}
+
+.challenge-preview-panel {
+  width: 40%;
+  background-color: #121212;
+  color: white;
+  padding: 24px;
+  border-left: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.enter-btn {
+  margin-top: 20px;
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: #00cc88;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+.enter-btn:hover {
+  background-color: #00aa77;
+}
+
+
+.cloud-cover-opening {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/cloud-cover.png'); /* Replace with your path */
+  background-size: cover;
+  background-position: center;
+  z-index: 1000;
+  animation: fadeOut 1s ease forwards;
+}
+
+/* Fade animation */
+@keyframes fadeOut {
+  from{
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+
+
+
+
+/* Shared transition styles */
+.page-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s ease;
+}
+
+.inbox-page-slide-in {
+  transform: translateX(-100%);
+  animation: slideInFromLeft 0.6s ease-out forwards;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
