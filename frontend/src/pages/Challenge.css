@@ -124,7 +124,6 @@
     opacity: 0;
     pointer-events: none;
   }
-<<<<<<< HEAD
 }
 
 
@@ -151,6 +150,4 @@
   100% {
     transform: translateX(0%);
   }
-=======
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
 }

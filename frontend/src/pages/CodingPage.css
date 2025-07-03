@@ -1,9 +1,5 @@
 .codingPage {
-<<<<<<< HEAD
   background-color: transparent;
-=======
-  background-color: #0e0e10;
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
   color: #e0e0e0;
   /* padding: 1rem 2rem; */
 }
@@ -61,11 +57,7 @@
   font-family: 'Courier New', Courier, monospace;
   display: flex;
   gap: 1rem;
-<<<<<<< HEAD
   height: calc(100vh - 125px); /* adjust based on header height */
-=======
-  height: calc(100vh - 150px); /* adjust based on header height */
->>>>>>> 0e1e7c4b6e793b79d7bb1c6ab15c02605663cc14
   position: relative;
   z-index: 1;
 }
