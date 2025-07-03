@@ -131,9 +131,13 @@ const Inbox = () => {
 
 
   return (
-    <div className={`page-slide ${transition === 'slide-in' ? 'page-slide-in' : ''}`}>
+    <div className={`page-slide
+      ${transition === 'slide-in' ? 'slide-in-from-right' : ''}
+      ${transition === 'slide-left' ? 'slide-in-from-left' : ''}
+      ${transition === 'slide' ? 'exit-to-right-active' : ''}
+    `}>
       <div className="inbox-background">
-        <button className="inboxBackBtn" onClick={() => {navigate('/dashboard', {state: { transition: 'slide', direction: 'backward' }})}}>Back</button>
+        <button className="inboxBackBtn" onClick={() => {navigate('/dashboard', { state: { transition: 'slide-left' } })}}>Back</button>
         <div className="inbox-main">
           <div className="inbox-sidebar">
             <h2>The HUD</h2>

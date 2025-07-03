@@ -211,11 +211,35 @@
   animation: slideInFromRight 0.6s ease-out forwards;
 }
 
+/* Incoming */
+.slide-in-from-right {
+  animation-name: slideInFromRight;
+}
+.slide-in-from-left {
+  animation-name: slideInFromLeft;
+}
+
+/* Exiting */
+.exit-to-left-active {
+  animation-name: slideOutToLeft;
+}
+.exit-to-right-active {
+  animation-name: slideOutToRight;
+}
+
 @keyframes slideInFromRight {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideInFromLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutToLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes slideOutToRight {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
 }

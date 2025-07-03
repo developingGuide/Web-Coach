@@ -24,7 +24,7 @@ export default function ChallengeMap() {
     <>
     {/* {isCoverVisible && <div className="cloud-cover-opening"></div>} */}
     <div className={`page-slide ${transition === 'slide-left' ? 'inbox-page-slide-in' : ''}`}>
-      <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
+      <button className="backBtn" onClick={() => {navigate('/dashboard', { state: { transition: 'slide' } })}}>Back</button>
       <div className="challenge-container">
         <div className={`grid ${selected ? 'compressed' : ''}`}>
           {challenges.map(ch => (

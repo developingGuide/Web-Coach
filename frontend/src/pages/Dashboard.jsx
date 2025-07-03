@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import "./Dashboard.css";
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useLocation} from "react-router-dom"
 import supabase from "../../config/supabaseClient";
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
@@ -25,6 +25,8 @@ const Dashboard = () => {
   const [currentTask, setCurrentTask] = useState(null);
   const [tasksToday, setTasksToday] = useState({})
   const [previewMessages, setPreviewMessages] = useState([]);
+  const location = useLocation();
+  const transition = location.state?.transition;
 
   useEffect(() => {
     const fetchPreview = async () => {
@@ -176,7 +178,12 @@ const Dashboard = () => {
       
     
   return (
-    <div className={`page-slide ${isLaunching === 'slide' ? 'exit-to-left-active' : ''} ${isLaunching === 'slide-left' ? 'exit-to-right-active' : ''}`}>
+    <div className={`page-slide
+      ${transition === 'slide-left' ? 'slide-in-from-left' : ''}
+      ${transition === 'slide' ? 'slide-in-from-right' : ''}
+      ${isLaunching === 'slide' ? 'exit-to-left-active' : ''}
+      ${isLaunching === 'slide-left' ? 'exit-to-right-active' : ''}
+    `}>
       <div className={`devdash-root ${isLaunching === "cloud" ? "launching" : ""}`}>
         <div className="cloud-transition">
           <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`} />
