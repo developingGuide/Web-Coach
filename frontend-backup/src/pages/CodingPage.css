@@ -1,0 +1,185 @@
+.codingPage {
+  background-color: transparent;
+  color: #e0e0e0;
+  /* padding: 1rem 2rem; */
+}
+
+.codingHeader {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.codingHeaderTop {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.backButton {
+  background: none;
+  color: #91f42f;
+  border: 1px solid #91f42f;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.taskText{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.taskDescription {
+  color: #999;
+}
+
+.codingButtons button {
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #91f42f;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.shipButton {
+  background-color: #fff;
+  color: #000;
+}
+
+.codingBody {
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  gap: 1rem;
+  height: calc(100vh - 125px); /* adjust based on header height */
+  position: relative;
+  z-index: 1;
+}
+
+.editorWrapper {
+  flex: 1;
+  min-width: 0; /* important for editors in flex layout */
+  z-index: 2;
+}
+
+.toolsPane {
+  width: 300px;
+  background: #1e1e1e;
+  padding: 1rem;
+  border-left: 1px solid #333;
+  overflow-y: auto;
+}
+
+
+.toolsPane h3 {
+  color: #91f42f;
+  margin-bottom: 0.5rem;
+}
+
+.toolsPane pre {
+  white-space: pre-wrap;
+  color: #ccc;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+
+.tabButtons {
+  display: flex;
+  border-bottom: 1px solid #444;
+  margin-bottom: 12px;
+}
+
+.tabButtons button {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  color: #bbb;
+  font-size: 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tabButtons button:hover {
+  color: white;
+}
+
+.tabButtons button.active {
+  color: #3cff99;
+  border-bottom: 2px solid #3cff99;
+  font-weight: bold;
+}
+
+
+.resultCard {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: #222;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  width: 400px;
+  max-width: 90%;
+  z-index: 9999;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.resultCard.positive {
+  border: 2px solid #28d07a;
+  background: radial-gradient(circle, #28d07a33, #1e1e1e);
+  box-shadow: 0 0 20px 5px #28d07a55;
+  animation: bounceInCentered 0.4s ease-out;
+}
+
+.resultCard.negative {
+  border: 2px solid #e23d3d;
+}
+
+.resultCard h2 {
+  margin-top: 0;
+}
+.expectedOutput {
+  background: #111;
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translate(-50%, 20%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0%);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceInCentered {
+  0% {
+    transform: translate(-50%, 0) scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, 0) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1.05);
+  }
+}
+

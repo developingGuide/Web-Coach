@@ -1,0 +1,179 @@
+.backBtn{
+  position: absolute;
+  z-index: 1;
+  left: 1rem;
+  top: 1rem;
+}
+
+.map-container {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  cursor: grab;
+  touch-action: none;
+}
+
+.map-content {
+  position: absolute;
+  will-change: transform;
+}
+
+.map-image {
+  image-rendering: optimizeQuality;
+  width: 2000px; /* Or match your image dimensions */
+  height: auto;
+  display: block;
+}
+
+.journey-main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2000px; /* Match image width */
+  height: 1500px; /* Match image height */
+}
+
+.checkpoint {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.x-on-map{
+  font-size: 3rem;
+}
+
+
+
+.project-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.project-card {
+  background: #111;
+  color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 80%;
+  text-align: center;
+  box-shadow: 0 0 20px #0ff;
+}
+
+
+.project-image {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.cloud-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: #fff; fallback if image doesn't load */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.cloud-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  pointer-events: none;
+}
+
+.cloud-cover.visible{
+  opacity: 1;
+}
+
+
+
+.map-container {
+  position: relative;
+  height: 100vh;
+}
+
+.map-content {
+  text-align: center;
+}
+
+/* Dot nav styles */
+.dot-navigation {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  padding: 0;
+  background-color: gray;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.dot:hover {
+  background-color: darkgray;
+}
+
+.dot.active {
+  background-color: limegreen;
+  transform: scale(1.4);
+}
+
+
+/* Cloud overlay */
+.cloud-cover-opening {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/cloud-cover.png'); /* Replace with your path */
+  background-size: cover;
+  background-position: center;
+  z-index: 1000;
+  animation: fadeOut 1s ease forwards;
+}
+
+/* Fade animation */
+@keyframes fadeOut {
+  from{
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
