@@ -140,11 +140,12 @@ const Inbox = () => {
             {inboxItems.length === 0 ? (
               <p className="inbox-no-selection">No tasks yet. Try selecting a journey!</p>
             ) : (
-              inboxItems.map((task) => (
+              inboxItems.map((task, index) => (
                 <div
                   key={task.id}
                   className={`inbox-email-preview ${selectedTask?.id === task.id ? 'inbox-selected' : ''}`}
                   onClick={() => handleTaskClick(task)}
+                  style={{ animationDelay: `${index * 150}ms` }}
                 >
                   <h3>{task.subject}</h3>
                   <p className="inbox-sender"><strong>Completing For:</strong> {task.sender}</p>
@@ -156,14 +157,14 @@ const Inbox = () => {
 
           <div className="inbox-body">
             {selectedTask ? (
-              <>
+              <div className='inbox-task-content'>
                 <h2>{selectedTask.subject}</h2>
                 <p className="inbox-sender"><strong>From:</strong> {selectedTask.sender}</p>
                 <div style={{ whiteSpace: 'pre-line' }} className="inbox-content">{selectedTask.body}</div>
                 <button className="inbox-start-task-button" onClick={handleStartTask}>
                   Start Task
                 </button>
-              </>
+              </div>
             ) : (
               <p className="inbox-no-selection">Select a task to view details</p>
             )}

@@ -89,11 +89,23 @@ button {
   font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.2s;
+  overflow: hidden;
 }
 
 button:hover {
   background: rgba(0, 255, 120, 0.3);
 }
+
+button:active {
+  animation: bounceTap 0.25s ease;
+}
+
+@keyframes bounceTap {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
 
 .logoutBtn{
   background: rgba(255, 0, 0, 0.2);
