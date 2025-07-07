@@ -146,7 +146,7 @@ const Home = () => {
         // Hero Section
         <div className="homePage">
             <div className="darkFilter"></div>
-            <button className='logInBtn' onClick={() => {navigate('/login')}}>Log In</button>
+            <button disabled className='logInBtn' onClick={() => {navigate('/login')}}>Log In</button>
             <div className="content">
                 <div className="hero">
                     <div className="textAndButton">

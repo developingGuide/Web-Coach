@@ -116,17 +116,20 @@ const fetchCurrentTask = async () => {
       setJsCode(taskData.startingJs || "console.log('Hello');");
   };
 
-  function extractTags(html) {
-    const tagRegex = /<([a-zA-Z0-9\-]+)/g;
-    const tags = new Set();
-    let match;
+  function extractTagsFromBody(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const bodyElements = doc.body.getElementsByTagName("*");
 
-    while ((match = tagRegex.exec(html)) !== null) {
-      tags.add(match[1].toLowerCase());
+    const tags = new Set();
+
+    for (let el of bodyElements) {
+      tags.add(el.tagName.toLowerCase());
     }
 
     return Array.from(tags);
   }
+
 
   function extractCssSelectors(css) {
     const selectorRegex = /([^{]+)\s*\{/g;
@@ -203,14 +206,12 @@ const fetchCurrentTask = async () => {
       return { correct: htmlOk && cssOk && jsOk, tips };
     } else {
       // Non-strict: check presence of required tags or keywords
-      const requiredTags = extractTags(expectedHtml); // get ['h1', 'p', 'a']
-      const missingTags = [];
+      const requiredTags = extractTagsFromBody(expectedHtml); // get ['h1', 'p', 'a']
+      const userTags = extractTagsFromBody(htmlCode);
+      const missingTags = requiredTags.filter(tag => !userTags.includes(tag));
 
-      requiredTags.forEach(tag => {
-        const regex = new RegExp(`<${tag}\\b`, "i");
-        if (!regex.test(htmlCode)) {
-          missingTags.push(`<${tag}> tag is missing.`);
-        }
+      missingTags.forEach(tag => {
+        tips.push(`<${tag}> tag is missing.`);
       });
 
       // CSS: check for presence of selectors
@@ -434,7 +435,7 @@ const fetchCurrentTask = async () => {
       </div>
 
       {showResultCard && (
-        <div className={`resultCard ${resultData.gainedExp >= 0 ? "positive" : "negative"}`}>
+        <div className={`resultCard ${resultData.gainedExp > 0 ? "positive" : "negative"}`}>
           <h2>{resultData.gainedExp >= 0 ? "✅ Task Shipped!" : "⚠️ Task Shipped with Mistakes"}</h2>
           <p>
             <strong>{resultData.gainedExp >= 0 ? "EXP Gained:" : "EXP Lost:"}</strong>

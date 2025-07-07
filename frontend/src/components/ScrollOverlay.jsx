@@ -32,7 +32,7 @@ export default function ScrollOverlay({ project, onClose, onAccept, projectImg }
           <img src={projectImg} alt="scroll" className="scroll-bg" />
           <h2>{project.name}</h2>
           <p>{project.description}</p>
-          <p className="scroll-note">Originally dreamt by Aethera, the Idealist of Light.</p>
+          <p className="scroll-note">Originally dreamt by {project.idealist}.</p>
           <button className="build-btn" onClick={handleBuildClick}>
             Let’s Build!
           </button>
