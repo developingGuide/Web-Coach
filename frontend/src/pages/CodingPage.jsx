@@ -5,6 +5,7 @@ import './CodingPage.css';
 import supabase from '../../config/supabaseClient';
 import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
 import { useNavigate } from "react-router-dom";
+import { fireConfetti } from '../utils/confetti';
 import HtmlCodeEditor from '../components/HtmlCodeEditor';
 import CssCodeEditor from '../components/CssCodeEditor';
 import JsCodeEditor from '../components/JsCodeEditor';
@@ -335,13 +336,12 @@ const fetchCurrentTask = async () => {
 
     let gainedExp = 0;
     if (!correct) {
-      const min = -30;
-      const max = -10;
-      gainedExp = Math.floor(Math.random() * (max - min + 1)) + min;
+      gainedExp = 0;
     } else {
       const min = 20;
       const max = 50;
       gainedExp = Math.floor(Math.random() * (max - min + 1)) + min;
+      fireConfetti()
     }
 
     const newExp = data.exp + gainedExp;

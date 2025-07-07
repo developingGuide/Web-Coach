@@ -11,8 +11,8 @@
 
 .scroll-container {
   position: relative;
-  padding: 4rem 3rem;
-  width: 50rem;
+  width: fit-content;
+  height: fit-content;
   color: #222;
   background-image: url('/scroll-bg.png'); /* use a real scroll image */
   background-repeat: no-repeat;
@@ -25,17 +25,29 @@
   animation: glowIn 1s ease;
 }
 
+.scrollItems{
+  width: 70%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-.scroll-container h2 {
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
+.scrollItems img{
+  width: 40%;
+  margin-top: 1rem;
+}
+
+.scrollItems h2 {
+  /* font-size: 1.6rem; */
+  margin-bottom: 2rem;
   color: #3b2d1f;
   font-family: 'Merienda', 'Indie Flower', 'Georgia', serif;
 }
 
-.scroll-container p {
+.scrollItems p {
   color: #3b2d1f;
-  font-size: 1.1rem;
+  /* font-size: 1.1rem; */
   text-align: center;
   line-height: 1.5;
   max-width: 85%;
@@ -51,14 +63,19 @@
 
 .build-btn {
   margin-top: 1.5rem;
+  margin-bottom: 1rem;
   padding: 0.6rem 2rem;
-  background: #0ff;
+  background: rgb(247, 156, 81);
   border: none;
   border-radius: 10px;
   font-size: 1rem;
   cursor: pointer;
   color: #000;
   font-weight: bold;
+}
+
+.build-btn:hover{
+  background: rgb(240, 168, 110);
 }
 
 @keyframes glowIn {
@@ -107,14 +124,15 @@
 
 .scan-popup {
   position: absolute;
-  bottom: -60px;
+  bottom: 50%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 255, 255, 0.2);
+  transform: translateY(-50%);
+  background: rgba(0, 255, 255, 0.663);
   border: 2px solid #0ff;
   padding: 0.6rem 1.2rem;
   border-radius: 12px;
-  color: #0ff;
+  color: rgb(255, 255, 255);
   font-weight: bold;
   box-shadow: 0 0 12px #0ff;
   animation: fadeInOut 2s ease-in-out forwards;

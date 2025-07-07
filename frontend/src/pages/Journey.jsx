@@ -188,12 +188,12 @@ export default function Journey() {
   
   const checkpointLayouts = {
     BeachIsland: [
-      { top: "70%", left: "40%", label: "❌", projectId: 1 },
-      { top: "68%", left: "60%", label: "❌", projectId: 2 },
+      { top: "70%", left: "40%", projectId: 1 },
+      { top: "68%", left: "60%", projectId: 2 },
     ],
     MountainIsland: [
-      { top: "25%", left: "15%", label: "❌", projectId: 3 },
-      { top: "35%", left: "50%", label: "❌", projectId: 4 },
+      { top: "25%", left: "15%", projectId: 3 },
+      { top: "35%", left: "50%", projectId: 4 },
     ]
   };
   {/* Add other checkpoints here */}
@@ -341,7 +341,6 @@ export default function Journey() {
 
     <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
 
-    <Navbar exp={currentLevelExp} level={userLevel} maxExp={nextLevelExp}/>
     <div
       className="map-container"
       onMouseDown={handleMouseDown}
@@ -375,14 +374,14 @@ export default function Journey() {
         <img src={`/${currentMap}.png`} alt="Map" className="map-image" />
 
         <div className="journey-main">
-          {checkpointLayouts[currentMap]?.map(({ top, left, label, projectId }) => (
+          {checkpointLayouts[currentMap]?.map(({ top, left, projectId }) => (
             <div
               key={projectId}
               className="checkpoint"
               style={{ top, left }}
               onClick={() => handleOverlayOpen(projectId)}
             >
-              <span className="x-on-map">{label}</span>
+              <span className="x-on-map"><img src="/red-x.png" alt="redcross" /></span>
             </div>
           ))}
         </div>

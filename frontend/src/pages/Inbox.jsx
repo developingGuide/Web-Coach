@@ -4,6 +4,7 @@ import './Inbox.css';
 import supabase from '../../config/supabaseClient';
 import { AuthContext } from '../components/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { fireConfetti } from '../utils/confetti';
 
 const Inbox = () => {
   const {user} = useContext(AuthContext)
@@ -15,6 +16,7 @@ const Inbox = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [allTasks, setAllTasks] = useState([]);
+  const [showProjectDonePopup, setShowProjectDonePopup] = useState(false);
   const navigate = useNavigate()
 
   const handleTaskClick = async (task) => {
@@ -81,13 +83,17 @@ const Inbox = () => {
         const nextTask = allTasksData[currentIndex + 1];
 
         if (!nextTask) {
-          // No more tasks, just reset the flag
           await supabase
             .from("user_state")
             .update({ task_just_shipped: false })
             .eq("user_id", user.id);
+
+          fireConfetti()
+          // 👇 Show popup
+          setShowProjectDonePopup(true);
           return;
         }
+
 
         // 🚫 Don't add nextTask if it's already in inbox_history
         const alreadyInInbox = userState.inbox_history.includes(nextTask.id);
@@ -174,6 +180,15 @@ const Inbox = () => {
             )}
           </div>
         </div>
+        {showProjectDonePopup && (
+          <div className="project-popup-overlay">
+            <div className="project-popup">
+              <h2>🎉 Project Done!</h2>
+              <p>You’ve completed all tasks for this project.</p>
+              <button onClick={() => setShowProjectDonePopup(false)}>Close</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

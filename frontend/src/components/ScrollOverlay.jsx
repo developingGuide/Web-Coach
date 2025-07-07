@@ -28,17 +28,19 @@ export default function ScrollOverlay({ project, onClose, onAccept, projectImg }
             </div>
         )}
 
-        <img src={projectImg} alt="scroll" className="scroll-bg" />
-        <h2>{project.name}</h2>
-        <p>{project.description}</p>
+        <div className="scrollItems">
+          <img src={projectImg} alt="scroll" className="scroll-bg" />
+          <h2>{project.name}</h2>
+          <p>{project.description}</p>
+          <p className="scroll-note">Originally dreamt by Aethera, the Idealist of Light.</p>
+          <button className="build-btn" onClick={handleBuildClick}>
+            Let’s Build!
+          </button>
+        </div>
 
         <div className={`scanbeam ${scanActive ? "active" : ""}`} />
 
-        <p className="scroll-note">Originally dreamt by Aethera, the Idealist of Light.</p>
 
-        <button className="build-btn" onClick={handleBuildClick}>
-          Let’s Build!
-        </button>
       </div>
     </div>
     </>
