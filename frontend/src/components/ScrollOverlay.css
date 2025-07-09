@@ -11,48 +11,63 @@
 
 .scroll-container {
   position: relative;
-  width: fit-content;
-  height: fit-content;
-  color: #222;
-  background-image: url('/scroll-bg.png'); /* use a real scroll image */
+  width: 90vw;
+  max-width: 600px;
+  aspect-ratio: 3 / 4; /* forces consistent scroll shape */
+  background-image: url('/scroll-bg.png');
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: glowIn 1s ease;
+  box-sizing: border-box;
+}
+
+
+
+.scrollItems {
+  position: absolute;
+  top: 8%;
+  left: 8%;
+  right: 8%;
+  bottom: 8%;
+  overflow-y: auto;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: glowIn 1s ease;
-}
-
-.scrollItems{
-  width: 70%;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 1rem;
 }
 
-.scrollItems img{
-  width: 40%;
-  margin-top: 1rem;
+
+.scrollItems img {
+  width: 80%;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
 }
+
+
 
 .scrollItems h2 {
-  /* font-size: 1.6rem; */
-  margin-bottom: 2rem;
+  font-size: 1.5rem;
   color: #3b2d1f;
-  font-family: 'Merienda', 'Indie Flower', 'Georgia', serif;
+  margin: 0.5rem 0;
 }
 
 .scrollItems p {
+  font-size: 1rem;
   color: #3b2d1f;
-  /* font-size: 1.1rem; */
-  text-align: center;
-  line-height: 1.5;
-  max-width: 85%;
-  font-family: 'Merienda', 'Indie Flower', 'Georgia', serif;
+  line-height: 1.4;
+  margin: 0.2rem 0;
 }
+
 
 .scroll-note {
   margin-top: 2rem;
@@ -62,17 +77,18 @@
 
 
 .build-btn {
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  padding: 0.6rem 2rem;
+  padding: 0.6rem 1.4rem;
   background: rgb(247, 156, 81);
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 1rem;
-  cursor: pointer;
-  color: #000;
   font-weight: bold;
+  margin-top: 1rem;
+  cursor: pointer;
+  color: black;
+  max-width: 200px;
 }
+
 
 .build-btn:hover{
   background: rgb(240, 168, 110);

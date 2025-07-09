@@ -190,9 +190,9 @@ export default function Journey() {
     BeachIsland: [
       { top: "70%", left: "40%", projectId: 1 },
       { top: "68%", left: "60%", projectId: 2 },
+      { top: "50%", left: "38%", projectId: 3 },
     ],
     InfernoInterface: [
-      { top: "25%", left: "15%", projectId: 3 },
       { top: "35%", left: "50%", projectId: 4 },
     ]
   };

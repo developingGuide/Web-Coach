@@ -112,7 +112,7 @@ const fetchCurrentTask = async () => {
       setCurrentTask(taskData);
       setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
       setHtmlCode(taskData.startingHtml);
-      setCssCode(taskData.startingCss || "body { background: white; }");
+      setCssCode(taskData.startingCss || "body { background-color: white; }");
       setJsCode(taskData.startingJs || "console.log('Hello');");
   };
 
@@ -131,16 +131,22 @@ const fetchCurrentTask = async () => {
   }
 
 
-  function extractCssSelectors(css) {
-    const selectorRegex = /([^{]+)\s*\{/g;
-    const selectors = new Set();
+  function extractCssRules(css) {
+    const ruleRegex = /([^{]+)\{([^}]+)\}/g;
+    const rules = {};
     let match;
 
-    while ((match = selectorRegex.exec(css)) !== null) {
-      selectors.add(match[1].trim());
+    while ((match = ruleRegex.exec(css)) !== null) {
+      const selector = match[1].trim();
+      const declarations = match[2]
+        .split(";")
+        .map(decl => decl.trim())
+        .filter(Boolean); // remove empty strings
+
+      rules[selector] = declarations;
     }
 
-    return Array.from(selectors);
+    return rules;
   }
 
   function extractJsSnippets(js) {
@@ -215,13 +221,24 @@ const fetchCurrentTask = async () => {
       });
 
       // CSS: check for presence of selectors
-      const requiredSelectors = extractCssSelectors(expectedCss);
-      requiredSelectors.forEach(sel => {
-        const regex = new RegExp(sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); // escape
-        if (!regex.test(cssCode)) {
-          tips.push(`Missing CSS selector or rule: ${sel}`);
-        }
-      });
+      const expectedRules = extractCssRules(expectedCss);
+      const userRules = extractCssRules(cssCode);
+
+      for (const selector in expectedRules) {
+        const expectedDeclarations = expectedRules[selector];
+        const userDeclarations = userRules[selector] || [];
+
+        expectedDeclarations.forEach(expectedDecl => {
+          const expectedNormalized = expectedDecl.replace(/\s+/g, "").toLowerCase();
+          const found = userDeclarations.some(userDecl =>
+            userDecl.replace(/\s+/g, "").toLowerCase() === expectedNormalized
+          );
+
+          if (!found) {
+            tips.push(`In selector "${selector}", missing or incorrect declaration: "${expectedDecl}"`);
+          }
+        });
+      }
 
       // JS: check for presence of expected function/words
       const requiredSnippets = extractJsSnippets(expectedJs);
