@@ -112,8 +112,8 @@ const fetchCurrentTask = async () => {
       setCurrentTask(taskData);
       setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
       setHtmlCode(taskData.startingHtml);
-      setCssCode(taskData.startingCss || "body { background-color: white; }");
-      setJsCode(taskData.startingJs || "console.log('Hello');");
+      setCssCode(taskData.startingCss);
+      setJsCode(taskData.startingJs);
   };
 
   function extractTagsFromBody(html) {

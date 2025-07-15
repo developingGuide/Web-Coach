@@ -1,0 +1,79 @@
+.welcome-card {
+  background-color: #1e1e1e;
+  color: white;
+  padding: 32px;
+  max-width: 600px;
+  margin: 40px auto;
+  border-radius: 16px;
+  box-shadow: 0 0 16px rgba(0, 255, 150, 0.2);
+  text-align: center;
+}
+
+.gift-box {
+  margin: 12px 0 24px;
+  font-size: 20px;
+  background: #3cff99;
+  color: #111;
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: bold;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.avatar-grid {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.avatar-img:hover {
+  transform: scale(1.05);
+}
+
+.avatar-img.selected {
+  border: 2px solid #3cff99;
+  box-shadow: 0 0 8px #3cff99;
+}
+
+.upload-section {
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.save-btn {
+  margin-top: 20px;
+  background-color: #3cff99;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.save-btn:hover {
+  background-color: #2ed882;
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

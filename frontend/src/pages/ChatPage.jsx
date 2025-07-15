@@ -47,17 +47,15 @@ const ChatPage = () => {
             console.error("Failed to fetch display name");
             return;
         }
-
-        console.log("avatar_url from user_state:", userState.avatar_url);
         
         if (newMsg.trim() !== "") {
             await supabase.from("messages").insert({
                 user_id: user.id,
                 display_name: userState.display_name,
-                // avatar_url: userState.avatar_url || "noobie", (idk this man)
+                avatar_url: userState.avatar_url || "/noobie.png",
                 message: newMsg.trim(),
                 channel: currentChannel
-            });
+              });
             setNewMsg("");
         }
   };
@@ -67,38 +65,38 @@ const ChatPage = () => {
     const [output, setOutput] = useState("");
     const [showIframe, setShowIframe] = useState(false);
     const [src, setSrc] = useState(""); // ← ensures iframe updates fully
-
+    
     const runCode = () => {
       setShowIframe(true);
       let html = "";
 
       if (language === "js") {
         html = `
-          <script>
-            const log = (...args) => parent.postMessage({ type: 'code-output', output: args.join(' ') }, '*');
-            console.log = log;
-            try {
-              ${value}
-            } catch (e) {
-              log("⚠️ " + e.message);
+        <script>
+        const log = (...args) => parent.postMessage({ type: 'code-output', output: args.join(' ') }, '*');
+        console.log = log;
+        try {
+          ${value}
+          } catch (e) {
+            log("⚠️ " + e.message);
             }
-          <\/script>
-        `;
-        setOutput(""); // reset output
-      } else if (language === "html") {
-        html = value;
-      } else if (language === "css") {
-        html = `<style>\${value}</style><div>CSS applied. Try styling this text!</div>`;
+            <\/script>
+            `;
+            setOutput(""); // reset output
+          } else if (language === "html") {
+            html = value;
+          } else if (language === "css") {
+            html = `<style>\${value}</style><div>CSS applied. Try styling this text!</div>`;
       } else {
         setOutput("⚠️ Unsupported language");
         setShowIframe(false);
         return;
       }
-
+      
       const blob = new Blob([html], { type: "text/html" });
       setSrc(URL.createObjectURL(blob)); // ← trigger iframe to reload
     };
-
+    
     useEffect(() => {
       const handleMsg = (e) => {
         if (e.data.type === "code-output") {
@@ -108,7 +106,7 @@ const ChatPage = () => {
       window.addEventListener("message", handleMsg);
       return () => window.removeEventListener("message", handleMsg);
     }, []);
-
+    
     return (
       <div className="chat-code-block">
         <pre><code>{value}</code></pre>
@@ -206,7 +204,7 @@ const ChatPage = () => {
       <div className="chat-feed">
         {messages.map(msg => (
           <div key={msg.id} className="chat-message">
-            <img src={`/${msg.avatar_url  || "noobie"}.png`} alt="avatar" className="chat-avatar" />
+            <img src={msg.avatar_url || "/noobie.png"} alt="avatar" className="chat-avatar" />
             <div>
                 <div>
                   <span className="chat-username">{msg.display_name}:</span>

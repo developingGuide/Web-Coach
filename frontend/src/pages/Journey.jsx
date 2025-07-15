@@ -250,20 +250,6 @@ export default function Journey() {
 
     const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
     return () => clearInterval(interval);
-
-    const fetchCurrentMap = async () => {
-      const { data, error } = await supabase
-        .from("user_state")
-        .select("current_map")
-        .eq("user_id", userId)
-        .single();
-
-      if (data?.current_map) {
-        setCurrentMap(data.current_map);
-      }
-    };
-    
-    fetchCurrentMap();
   }, []);
 
 
