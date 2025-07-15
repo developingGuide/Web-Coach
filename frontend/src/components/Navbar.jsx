@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Navbar.css";
 
-const Navbar = ({ exp, maxExp, level }) => {
+const Navbar = ({ exp, maxExp, level, avatar }) => {
   const [prevExp, setPrevExp] = useState(exp);
   const [leveledUp, setLeveledUp] = useState(false);
 
@@ -20,7 +20,7 @@ const Navbar = ({ exp, maxExp, level }) => {
     <div className="navbar">
       <div className="navbar-right">
         <div className="profile-circle large">
-          <span>W</span>
+          <img src={avatar} alt="avatar"/>
         </div>
 
         <div className="exp-info">

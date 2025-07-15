@@ -35,6 +35,7 @@ function App() {
     const [userLevel, setUserLevel] = useState(0);
     const [nextLevelExp, setNextLevelExp] = useState(100);
     const [currentLevelExp, setCurrentLevelExp] = useState(0);
+    const [avatar, setAvatar] = useState('');
     
     useEffect(() => {
         if (!user) {
@@ -63,13 +64,28 @@ function App() {
             }
         };
 
+        const fetchAvatar = async () => {
+            const { data: userAvatar, error: avatarError } = await supabase
+            .from("user_state")
+            .select("avatar_url")
+            .eq("user_id", userId)
+            .maybeSingle();
+
+            if (avatarError) {
+                console.error(avatarError)
+            }
+
+            setAvatar(userAvatar?.avatar_url || "/noobie.png");
+        }
+
         fetchExp();
+        fetchAvatar();
 
 
 
         const interval = setInterval(fetchExp, 5000); // re-check every 5 seconds
         return () => clearInterval(interval);
-        }, [user]);
+    }, [user]);
 
 
 
@@ -80,6 +96,7 @@ function App() {
                     exp={currentLevelExp}
                     level={userLevel}
                     maxExp={nextLevelExp}
+                    avatar={avatar}
                 />
             )}
                 <div className='pages'>

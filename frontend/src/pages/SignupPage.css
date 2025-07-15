@@ -1,0 +1,13 @@
+.input-error {
+  color: #ff5c5c;
+  font-size: 14px;
+  margin-bottom: 8px;
+  margin-top: -8px;
+}
+
+.passwordWarning{
+    font-size: smaller;
+    color: gray;
+    margin-top: -8px;
+    margin-bottom: 8px;
+}

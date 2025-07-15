@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Auth.css";
 import supabase from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import './SignupPage.css'
 
 const plans = [
   {
@@ -39,32 +40,44 @@ export default function SignupPage() {
   const [display_name, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState("");
   const navigate = useNavigate()
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
-    if (email && password && display_name) {
-      setStep(2);
+
+    if (!email || !password || !display_name) return;
+
+    const taken = await checkUsernameTaken(display_name.trim());
+
+    if (taken) {
+      alert("That username is already taken. Try something else!");
+      return;
     }
+
+    setStep(2); // move to pricing step
   };
+
 
   const handlePlanClick = async (plan) => {
     if (plan.name === "Starter") {
-      console.log("Free plan selected!");
-      window.alert("Check your email to confirm your account!");
-      const {error: signUpError} = await supabase.auth.signUp({
+      const {data, error: signUpError} = await supabase.auth.signUp({
         email,
         password,
         options: {
-            emailRedirectTo: "http://localhost:5173/newUser",
             data: {display_name}
         }
       });
       
       if(signUpError) {
-        console.error(signUpError)
+        console.error("Signup error:", signUpError.message);
+        return;
       } else{
-        navigate("/login")
+        if (data.session) {
+          navigate("/newUser");
+        } else {
+          console.error("No session returned — check if email confirmation is still enabled?");
+        }
       }
     } else {
       // Call your Stripe endpoint
@@ -94,6 +107,22 @@ export default function SignupPage() {
     }
   };
 
+  const checkUsernameTaken = async (username) => {
+    const { data, error } = await supabase
+      .from("user_state")
+      .select("user_id")
+      .eq("display_name", username)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Username check error:", error.message);
+      return false;
+    }
+
+    return !!data; // true if username exists
+  };
+
+
   return (
     <div className="auth-wrapper">
       <div className={`auth-card ${step === 2 ? "wide" : ""}`}>
@@ -105,11 +134,13 @@ export default function SignupPage() {
                 type="text"
                 placeholder="Display Name"
                 value={display_name}
-                onChange={(e) =>
-                  setDisplayName(e.target.value)
-                }
+                onChange={(e) => {
+                  setDisplayName(e.target.value);
+                  if (usernameError) setUsernameError(""); // clear error while typing
+                }}
                 required
               />
+              {usernameError && <p className="input-error">{usernameError}</p>}
               <input
                 type="email"
                 placeholder="Email"
@@ -128,6 +159,8 @@ export default function SignupPage() {
                 }
                 required
               />
+              <p className="passwordWarning">Minimum 6 Characters & Use a Strong Password!</p>
+
               <button type="submit">Next</button>
             </form>
             <p className="auth-link">

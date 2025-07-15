@@ -44,6 +44,12 @@
   font-weight: bold;
 }
 
+.profile-circle.large img{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
 .exp-info {
   display: flex;
   flex-direction: column;
