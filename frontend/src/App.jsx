@@ -21,7 +21,7 @@ import LoginPage from './pages/LoginPage';
 import { AuthContext } from './components/AuthContext';
 import GoBack from './pages/GoBack';
 import SuccessPage from './pages/SuccessPage';
-import OnboardingPage from './pages/onboarding';
+import OnboardingPage from './pages/Onboarding';
 import ChatPage from './pages/ChatPage';
 
 function App() {
