@@ -57,6 +57,10 @@
   font-size: 14px;
 }
 
+.upload-section label{
+  margin-right: 4px;
+}
+
 .save-btn {
   margin-top: 20px;
   background-color: #3cff99;

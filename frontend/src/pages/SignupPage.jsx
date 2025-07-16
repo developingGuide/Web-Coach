@@ -3,6 +3,7 @@ import "./Auth.css";
 import supabase from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import './SignupPage.css'
+import { fireConfetti } from "../utils/confetti";
 
 const plans = [
   {
@@ -32,6 +33,7 @@ const plans = [
 
 export default function SignupPage() {
   const [step, setStep] = useState(1);
+  const [showNotification, setShowNotification] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -74,7 +76,11 @@ export default function SignupPage() {
         return;
       } else{
         if (data.session) {
-          navigate("/newUser");
+          fireConfetti()
+          setShowNotification(true);
+          setTimeout(() => {
+            navigate("/newUser");
+          }, 2000); // 2 seconds delay
         } else {
           console.error("No session returned — check if email confirmation is still enabled?");
         }
@@ -124,6 +130,12 @@ export default function SignupPage() {
 
 
   return (
+    <>
+    {showNotification && (
+      <div className="notification-card">
+        <p>🎉 Sign up completed!</p>
+      </div>
+    )}
     <div className="auth-wrapper">
       <div className={`auth-card ${step === 2 ? "wide" : ""}`}>
         {step === 1 && (
@@ -210,5 +222,6 @@ export default function SignupPage() {
         )}
       </div>
     </div>
+    </>
   );
 }

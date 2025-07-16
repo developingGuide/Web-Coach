@@ -87,7 +87,7 @@ export default function OnboardingPage() {
 
       <div className="upload-section">
         <label htmlFor="custom-avatar">or upload your own:</label>
-        <input type="file" accept="image/*" onChange={handleCustomUpload} />
+        <input className="file-input" type="file" accept="image/*" onChange={handleCustomUpload} />
       </div>
 
       <button

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import supabase from "../../config/supabaseClient";
 import "./SuccessPage.css"
+import { fireConfetti } from "../utils/confetti";
 
 export default function SuccessPage() {
   const navigate = useNavigate()
@@ -29,24 +30,34 @@ export default function SuccessPage() {
         password,
         options: {
           data: { display_name, plan },
-          emailRedirectTo: "http://localhost:5173/newUser", // after email verify
         },
       });
 
       if (error) {
         setStatus("Signup error: " + error.message);
-      } else {
-        // Insert into user_state once user is available
-        const user = data?.user;
-        if (user) {
-          await supabase.from("user_state").upsert({
-            user_id: user.id,
-            display_name,
-            plan: plan.toLowerCase(), // e.g., "warrior", "pro"
-          });
+        return;
+      }
+
+      if (data.session) {
+        // User is already signed in
+        const user = data.session.user;
+
+        // Insert to user_state (optional, if needed here)
+        const { error: insertError } = await supabase.from("user_state").upsert({
+          user_id: user.id,
+          display_name,
+          plan: plan.toLowerCase(),
+        });
+
+        if (insertError) {
+          console.error("Insert error:", insertError.message);
         }
 
-        setStatus("Check your email to confirm your account!");
+        fireConfetti()
+        setStatus("Account created! Redirecting...");
+        setTimeout(() => navigate("/newUser"), 1500);
+      } else {
+        setStatus("No session returned — check if email confirmation is still enabled.");
       }
     };
 
@@ -55,21 +66,10 @@ export default function SuccessPage() {
 
 
   return (
-    // <div className="centered-page">
-    //   <h1>🎉 You're all set!</h1>
-    //   <p>
-    //     {
-    //       plan === "warrior"
-    //         ? "Welcome to the dojo! You now have access to daily challenges, progress tracking, and community features."
-    //         : plan === "pro"
-    //         ? "You’re now a Pro! Enjoy full access to everything — 1v1 battles, monthly championships, and more."
-    //         : "Thanks for signing up!"
-    //     }
-    //   </p>
-    //   <button onClick={() => {navigate('/login')}}>Go back to Log in!</button>
-    // </div>
     <div className="centered-page">
-      <h1>{status}</h1>
+      <div className="success-card">
+        <h2>{status || "Creating your account..."}</h2>
+      </div>
     </div>
   );
 }
