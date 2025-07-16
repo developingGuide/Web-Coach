@@ -144,14 +144,16 @@
   left: 50%;
   transform: translateX(-50%);
   transform: translateY(-50%);
-  background: rgba(0, 255, 255, 0.663);
+  background: #91f42f;
   border: 2px solid #0ff;
   padding: 0.6rem 1.2rem;
   border-radius: 12px;
-  color: rgb(35, 111, 7);
+  color: #1b1b1f;
   font-weight: bold;
   box-shadow: 0 0 12px #0ff;
   animation: fadeInOut 2s ease-in-out forwards;
+  width: 20rem;
+  text-align: center;
 }
 
 @keyframes fadeInOut {

@@ -143,6 +143,10 @@
   animation: slideInFromLeft 0.6s ease-out forwards;
 }
 
+.exit-to-left-active {
+  animation: slideOutToLeft 0.8s forwards;
+}
+
 @keyframes slideInFromLeft {
   0% {
     transform: translateX(-100%);

@@ -54,7 +54,7 @@ export default function OnboardingPage() {
     setSaving(true);
     const { error } = await supabase
       .from("user_state")
-      .update({ avatar_url: selectedAvatar, exp: 100 }) // give gift too!
+      .update({ avatar_url: selectedAvatar, exp: 50 }) // give gift too!
       .eq("user_id", user.id);
 
     setSaving(false);
@@ -70,7 +70,7 @@ export default function OnboardingPage() {
       <h1>Welcome, {user?.user_metadata?.display_name}!</h1>
       <p>You're officially in. Choose your avatar and claim your first reward:</p>
 
-      <div className="gift-box">🎁 +100 XP Boost!</div>
+      <div className="gift-box">🎁 +50 XP Boost!</div>
 
       <h3>Pick Your Avatar</h3>
       <div className="avatar-grid">

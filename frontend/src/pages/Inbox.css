@@ -259,9 +259,14 @@
 }
 
 .project-popup {
-  background: white;
+  color: green;
+  background: var(--accent);
   padding: 2rem 3rem;
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.project-popup button{
+  margin-top: 12px;
 }

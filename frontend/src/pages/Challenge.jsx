@@ -11,10 +11,18 @@ const challenges = [
 
 export default function ChallengeMap() {
   const [selected, setSelected] = useState(null);
+  const [isExiting, setIsExiting] = useState(false);
   const navigate = useNavigate();
 
   const handleEnter = () => {
     if (selected) navigate(`/queue?challenge_id=${selected.id}`);
+  };
+
+  const handleBack = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      navigate('/dashboard', { state: { transition: 'slide' } });
+    }, 800);
   };
 
   const location = useLocation();
@@ -23,8 +31,8 @@ export default function ChallengeMap() {
   return (
     <>
     {/* {isCoverVisible && <div className="cloud-cover-opening"></div>} */}
-    <div className={`page-slide ${transition === 'slide-left' ? 'inbox-page-slide-in' : ''}`}>
-      <button className="backBtn" onClick={() => {navigate('/dashboard', { state: { transition: 'slide' } })}}>Back</button>
+    <div className={`page-slide ${transition === 'slide-left' ? 'inbox-page-slide-in' : ''} ${isExiting ? 'exit-to-left-active' : ''}`}>
+      <button className="backBtn" onClick={handleBack}>Back</button>
       <div className="challenge-container">
         <div className={`grid ${selected ? 'compressed' : ''}`}>
           {challenges.map(ch => (

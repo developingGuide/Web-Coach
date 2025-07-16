@@ -17,7 +17,15 @@ const Inbox = () => {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [allTasks, setAllTasks] = useState([]);
   const [showProjectDonePopup, setShowProjectDonePopup] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const navigate = useNavigate()
+
+  const handleBack = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      navigate('/dashboard', { state: { transition: 'slide-left' } });
+    }, 800);
+  };
 
   const handleTaskClick = async (task) => {
     setSelectedTask(task);
@@ -140,10 +148,10 @@ const Inbox = () => {
     <div className={`page-slide
       ${transition === 'slide-in' ? 'slide-in-from-right' : ''}
       ${transition === 'slide-left' ? 'slide-in-from-left' : ''}
-      ${transition === 'slide' ? 'exit-to-right-active' : ''}
+      ${isExiting ? 'exit-to-right-active' : ''}
     `}>
       <div className="inbox-background">
-        <button className="inboxBackBtn" onClick={() => {navigate('/dashboard', { state: { transition: 'slide-left' } })}}>Back</button>
+        <button className="inboxBackBtn" onClick={handleBack}>Back</button>
         <div className="inbox-main">
           <div className="inbox-sidebar">
             <h2>The HUD</h2>
