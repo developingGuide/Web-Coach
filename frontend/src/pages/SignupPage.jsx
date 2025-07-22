@@ -100,6 +100,12 @@ export default function SignupPage() {
            }),
         });
 
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("Stripe checkout error:", text);
+          return;
+        }
+
         // Save to local/session storage
         sessionStorage.setItem("email", email);
         sessionStorage.setItem("password", password);
