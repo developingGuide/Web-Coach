@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post("/create-checkout-session", async (req, res) => {
+app.post("/api/create-checkout-session", async (req, res) => {
   const { email, display_name, priceId, planName } = req.body;
 
   try {
