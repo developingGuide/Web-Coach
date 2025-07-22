@@ -89,7 +89,7 @@ export default function SignupPage() {
     } else {
       // Call your Stripe endpoint
       try {
-        const res = await fetch("http://localhost:4000/create-checkout-session", {
+        const res = await fetch("/api/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
