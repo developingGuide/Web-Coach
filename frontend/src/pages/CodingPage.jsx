@@ -29,6 +29,7 @@ const CodingPage = () => {
   const [activeTab, setActiveTab] = useState("html");
   const [taskTools, setTaskTools] = useState(false);
   const [showResultCard, setShowResultCard] = useState(false);
+  const [showTaskBody, setShowTaskBody] = useState(false);
   const [resultData, setResultData] = useState({
     gainedExp: 0,
     tips: [],
@@ -110,7 +111,7 @@ const fetchCurrentTask = async () => {
       }
 
       setCurrentTask(taskData);
-      setTaskTools((taskData.tools || "").split(",").map(t => t.trim()));
+      setTaskTools((taskData.tools || ""));
       setHtmlCode(taskData.startingHtml);
       setCssCode(taskData.startingCss);
       setJsCode(taskData.startingJs);
@@ -412,7 +413,16 @@ const fetchCurrentTask = async () => {
         <div className="codingHeaderTop">
           <button className="backButton" onClick={handleBack}>← Back</button>
           <div className='taskText'>
-            <h2>{currentTask.title}</h2>
+            <div className="taskTitleWithHelp">
+              <h2>{currentTask.title}</h2>
+              <button
+                className="helpIcon"
+                onClick={() => setShowTaskBody(true)}
+                title="Remind me what to do"
+              >
+                ?
+              </button>
+            </div>
             <p className="taskDescription">{currentTask.description}</p>
           </div>
         </div>
@@ -441,12 +451,10 @@ const fetchCurrentTask = async () => {
 
         {showTools && (
           <div className="toolsPane">
-            <h3>Tools for this Task:</h3>
-            <ul>
-              {taskTools?.map((tool, index) => (
-                <li key={index}>{tool}</li>
-              ))}
-            </ul>
+            <h3>Tools for this Project:</h3>
+            <pre>
+              {taskTools}
+            </pre>
           </div>
         )}
       </div>
@@ -481,7 +489,19 @@ const fetchCurrentTask = async () => {
           </button>
         </div>
       )}
+      {showTaskBody && (
+        <div className="taskBodyOverlay" onClick={() => setShowTaskBody(false)}>
+          <div className="taskBodyContent" onClick={e => e.stopPropagation()}>
+            <h3>Task Reminder</h3>
+            <div className="taskBodyText">
+              <pre>{currentTask.body}</pre>
+            </div>
+            <button onClick={() => setShowTaskBody(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
+
   );
 };
 

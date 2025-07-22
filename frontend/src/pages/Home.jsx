@@ -58,7 +58,7 @@ const Home = () => {
             price: "$0",
             description: "Great for curious beginners trying things out.",
             features: [
-            "2 Tasks/day",
+            "5 Tasks/day",
             "Daily Tracking",
             ],
             highlighted: false,
@@ -68,25 +68,27 @@ const Home = () => {
             price: "$9/mo",
             description: "For learners who want to compete.",
             features: [
-            "8 Tasks/day",
+            "UNLIMITED Tasks/day",
             "Daily Tracking",
+            "Community",
             "Coding Battles & Leaderboards",
             ],
             highlighted: true,
-        },
-        {
-            name: "Pro",
-            price: "$19/mo",
-            description: "Unlock full access to projects, community & courses.",
-            features: [
-            "UNLIMTED Tasks/day",
-            "Daily Tracking",
-            "Coding Battles & Leaderboards",
-            "Community",
-            "Courses (Coming Soon)"
-            ],
-            highlighted: false,
-        },
+        }
+        // ,
+        // {
+        //     name: "Pro",
+        //     price: "$19/mo",
+        //     description: "Unlock full access to projects, community & courses.",
+        //     features: [
+        //     "UNLIMTED Tasks/day",
+        //     "Daily Tracking",
+        //     "Coding Battles & Leaderboards",
+        //     "Community",
+        //     "Courses (Coming Soon)"
+        //     ],
+        //     highlighted: false,
+        // },
     ];
 
 
@@ -110,15 +112,11 @@ const Home = () => {
     const faqs = [
         {
         q: "What makes this different than other coding learning apps?",
-        a: "Most apps teach you concepts. This one trains you to *ship*. You're not just learning syntax — you're practicing like a real frontend dev, solving client-style tasks, building actual projects, and staying consistent through habit systems and fun battles.",
+        a: "Most apps teach you concepts. This one trains you to ship. You're not just learning syntax — you're practicing like a real frontend dev, solving client-style tasks, building weird projects, and staying consistent through habit systems and fun battles.",
         },
         {
         q: "Do I need to know HTML/CSS/JavaScript first?",
-        a: "You should know the basics, but you don’t need to be an expert. This app is designed for beginners who want to *apply* what they’ve learned and escape endless tutorials.",
-        },
-        {
-        q: "Can I use this to build portfolio projects?",
-        a: "Yes! The simulated client tasks lead up to complete, polished real-world projects you can proudly showcase in your portfolio.",
+        a: "You should know the basics, but you don’t need to be an expert. This app is designed for beginners who want to apply what they’ve learned and escape endless tutorials.",
         },
         {
         q: "Is this free to use?",
@@ -126,7 +124,7 @@ const Home = () => {
         },
         {
         q: "Will I get feedback on my code?",
-        a: "Yep. You'll get real-time feedback on some tasks and weekly insights on your coding habits and progress if you're on Pro or Legend tier.",
+        a: "Yep. You'll get real-time feedback on some tasks and progress if you're on Warrior tier.",
         },
     ];
 
@@ -143,16 +141,17 @@ const Home = () => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        // Hero Section
+        <>
+        <img src="/space.png" alt="space" className="homePageImg" />
+        <div className="darkFilter"></div>
         <div className="homePage">
-            <div className="darkFilter"></div>
-            <button disabled className='logInBtn' onClick={() => {navigate('/login')}}>Log In</button>
+            <button className='logInBtn' onClick={() => {navigate('/login')}}>Log In</button>
             <div className="content">
                 <div className="hero">
                     <div className="textAndButton">
                         <h1 className='anim-typewriter'>DEVSIM</h1>
-                        <h3>Learn Web Development with Real Projects, Habit Tracking, and a Community that makes it all FUN!</h3>
-                        <button className='ctaButton'>Start Now!</button>
+                        <h3>Learn Web Development with "Weird" Projects, Habit Tracking, and a Community that makes it all FUN!</h3>
+                        <button className='ctaButton' onClick={() => {navigate('/signup')}}>Start Now!</button>
                     </div>
                 </div>
 
@@ -239,7 +238,7 @@ const Home = () => {
                             <div className="plan-name">{plan.name}</div>
                             <div className="plan-desc">{plan.description}</div>
 
-                            <button className="get-started-btn">Get Started</button>
+                            <button className="get-started-btn" onClick={() => {navigate('/signup')}}>Get Started</button>
 
                             <ul className="features-list">
                             {plan.features.map((feature, idx) => (
@@ -268,7 +267,7 @@ const Home = () => {
                 <section className="cta-section" style={{ textAlign: 'center', padding: '4rem 2rem', color: '#fff' }}>
                     <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Ready to Escape Tutorial Hell?</h2>
                     <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>Build real projects. Build real momentum. Build your dev confidence.</p>
-                    <button href="/signup" className='get-started-btn'>
+                    <button onClick={() => {navigate('/signup')}} className='get-started-btn'>
                         Get Started for Free
                     </button>
                 </section>
@@ -277,12 +276,11 @@ const Home = () => {
                     <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                         <div style={{ flex: '1 1 200px', marginBottom: '1.5rem' }}>
                         <h4 style={{ color: '#fff', marginBottom: '0.5rem' }}>DevSim</h4>
-                        <p>Helping beginners practice consistently and build real-world projects with joy.</p>
+                        <p>Helping beginners practice consistently and build fun projects with joy.</p>
                         </div>
                         <div style={{ flex: '1 1 150px', marginBottom: '1.5rem' }}>
                         <h5 style={{ color: '#fff', marginBottom: '0.5rem' }}>Quick Links</h5>
                         <ul style={{ listStyle: 'none', padding: 0 }}>
-                            <li><a href="/journey" style={{ color: '#ccc', textDecoration: 'none' }}>Journey</a></li>
                             <li><a href="/pricing" style={{ color: '#ccc', textDecoration: 'none' }}>Pricing</a></li>
                             <li><a href="/faq" style={{ color: '#ccc', textDecoration: 'none' }}>FAQ</a></li>
                         </ul>
@@ -302,8 +300,7 @@ const Home = () => {
 
             </div>
         </div>
-
-/* Note: All classes used here (e.g. .hero-section, .cta-button, .fire-overlay) must be styled in an external CSS file without Tailwind. */
+        </>
     );
 };
 

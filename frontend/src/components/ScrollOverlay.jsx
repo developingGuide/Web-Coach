@@ -33,6 +33,9 @@ export default function ScrollOverlay({ project, onClose, onAccept, projectImg }
           <h2>{project.name}</h2>
           <p>{project.description}</p>
           <p className="scroll-note">Originally dreamt by {project.idealist}.</p>
+          <p className="difficulty-tag">
+            Difficulty: <span className={`difficulty ${project.difficulty?.toLowerCase()}`}>{project.difficulty}</span>
+          </p>
           <button className="build-btn" onClick={handleBuildClick}>
             Let’s Build!
           </button>

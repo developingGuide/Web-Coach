@@ -194,3 +194,60 @@
   }
 }
 
+
+
+.taskTitleWithHelp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.helpIcon {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  background-color: #444;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+.helpIcon:hover {
+  background-color: #666;
+}
+
+.taskBodyOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.taskBodyContent {
+  background: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 0 20px #000;
+}
+
+.taskBodyContent h3 {
+  margin-top: 0;
+}
+
+.taskBodyText pre {
+  white-space: pre-wrap;
+  font-family: inherit;
+}

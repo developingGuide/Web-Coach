@@ -4,8 +4,22 @@
 }
 
 .homePage{
-  background-image: url('/space.png');
+  /* background-image: url('/space.png'); */
   margin: 0;
+}
+
+.homePageImg{
+  position: fixed;
+  width: 100%;
+  filter: blur(2px);
+}
+
+
+.darkFilter{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #0000005b;
 }
 
 /* WebKit (Chrome, Safari, Edge) */
@@ -96,13 +110,6 @@ body {
 @keyframes blinkTextCursor{
   from{border-right-color: rgba(255,255,255,.75);}
   to{border-right-color: transparent;}
-}
-
-.darkFilter{
-  position: absolute;
-  width: 100%;
-  height: 226.5rem;
-  background-color: #0000005b;
 }
 
 

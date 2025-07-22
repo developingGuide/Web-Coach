@@ -8,7 +8,7 @@ import { getLevelFromExp, getExpForLevel } from "../utils/expCalculator";
 import CloudLayer from "../components/CloudLayer";
 import { AuthContext } from "../components/AuthContext";
 import ScrollOverlay from "../components/ScrollOverlay";
-
+import EffectsOverlay from "../components/EffectsOverlay";
 
 export default function Journey() {
   // const userId = "demo_user"
@@ -193,7 +193,9 @@ export default function Journey() {
       { top: "50%", left: "38%", projectId: 3 },
     ],
     InfernoInterface: [
-      { top: "35%", left: "50%", projectId: 4 },
+      { top: "65%", left: "31%", projectId: 4 },
+      { top: "72%", left: "68%", projectId: 5 },
+      { top: "43%", left: "26%", projectId: 6 },
     ]
   };
   {/* Add other checkpoints here */}
@@ -355,6 +357,7 @@ export default function Journey() {
         >
 
         <CloudLayer/>
+        {/* <EffectsOverlay currentMap={currentMap} /> */}
 
         {/* Put your map image directly here */}
         <img src={`/${currentMap}.png`} alt="Map" className="map-image" />

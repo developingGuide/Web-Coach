@@ -10,25 +10,26 @@ const plans = [
     name: "Starter",
     price: "$0",
     description: "For curious minds just starting out.",
-    features: ["2 Tasks/day", "Daily Tracking"],
+    features: ["5 Tasks/day", "Daily Tracking"],
     highlighted: false,
   },
   {
     name: "Warrior",
     price: "$9/mo",
     description: "For learners who want to compete.",
-    features: ["8 Tasks/day", "Daily Tracking", "Coding Battles & Leaderboards"],
+    features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards"],
     highlighted: true,
-    priceId: "price_1RaRJgJomOLGn4VAJGjdGU1I"
-  },
-  {
-    name: "Pro",
-    price: "$19/mo",
-    description: "Unlock unlimited tasks, community, and courses.",
-    features: ["UNLIMITED Tasks/day", "Daily Tracking", "Coding Battles & Leaderboards", "Community", "Courses (coming soon)"],
-    highlighted: true,
-    priceId: "price_1RZtZYJomOLGn4VAZonkQ56V"
+    priceId: "price_1RaR6WJomOLGn4VASjYvEprO"
   }
+  // ,
+  // {
+  //   name: "Pro",
+  //   price: "$19/mo",
+  //   description: "Unlock unlimited tasks, community, and courses.",
+  //   features: ["UNLIMITED Tasks/day", "Daily Tracking", "Coding Battles & Leaderboards", "Community", "Courses (coming soon)"],
+  //   highlighted: true,
+  //   priceId: "price_1RZtZYJomOLGn4VAZonkQ56V"
+  // }
 ];
 
 export default function SignupPage() {

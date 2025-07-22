@@ -21,7 +21,7 @@ app.post("/create-checkout-session", async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `http://localhost:5173/success?plan=${planName}&email=${email}`,
+      success_url: `http://devsim.app/success?plan=${planName}&email=${email}`,
       cancel_url: "https://devsim.app/cancel",
       metadata: { display_name },
     });
