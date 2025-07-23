@@ -1,0 +1,100 @@
+.profile-settings-page {
+  max-width: 600px;
+  margin: 60px auto;
+  background-color: #111;
+  padding: 30px;
+  border-radius: 12px;
+  color: #eee;
+  box-shadow: 0 0 20px rgba(0, 255, 153, 0.2);
+  font-family: 'Courier New', monospace;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.profile-settings-page h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  color: #00ff99;
+  text-shadow: 0 0 5px #00ff99;
+}
+
+.profile-block {
+  margin-bottom: 25px;
+}
+
+.profile-block label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #aaa;
+}
+
+.profile-block input[type="text"],
+.profile-block input[type="password"],
+.profile-block input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 6px;
+}
+
+.profile-block input[type="file"] {
+  padding: 6px;
+}
+
+.profile-block button {
+  margin-top: 10px;
+  background-color: #00cc88;
+  color: black;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.profile-block button:hover {
+  background-color: #00ff99;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #00ff99;
+  margin-bottom: 10px;
+}
+
+.danger-zone {
+  border-top: 1px solid #333;
+  padding-top: 20px;
+}
+
+.danger-zone .danger {
+  background-color: transparent;
+  border: 1px solid red;
+  color: red;
+  padding: 10px 16px;
+}
+
+.danger-zone .danger:hover {
+  background-color: red;
+  color: white;
+}
+
+button {
+  font-family: inherit;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

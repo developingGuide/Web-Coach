@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [currentTask, setCurrentTask] = useState(null);
   const [tasksToday, setTasksToday] = useState({})
   const [previewMessages, setPreviewMessages] = useState([]);
+  const [avatar, setAvatar] = useState('')
   const location = useLocation();
   const transition = location.state?.transition;
 
@@ -157,6 +158,22 @@ const Dashboard = () => {
       
       setTasksToday(data.daily_log || {});
   };
+
+  const fetchAvatar = async () => {
+    const { data: userAvatar, error: avatarError } = await supabase
+    .from("user_state")
+    .select("avatar_url")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+    if (avatarError) {
+        console.error(avatarError)
+    }
+
+    setAvatar(userAvatar?.avatar_url || "/noobie.png");
+  }
+
+  fetchAvatar()
     
   const today = new Date().toISOString().split("T")[0];
   const count = tasksToday[today]?.length || 0;
@@ -236,6 +253,9 @@ const Dashboard = () => {
           {/* Center Area */}
           <div className="devdash-center">
             <div className="devdash-level-circle">
+              <div onClick={() => navigate('/profile')} className="home-profile-circle">
+                <img src={avatar} alt="avatar"/>
+              </div>
               <h1>LEVEL {userLvl}</h1>
               <p>Status: <span className="neon-glow">Live</span></p>
               <button className="logoutBtn" onClick={handleLogout}>Log Out</button>

@@ -23,6 +23,7 @@ import GoBack from './pages/GoBack';
 import SuccessPage from './pages/SuccessPage';
 import OnboardingPage from './pages/Onboarding';
 import ChatPage from './pages/ChatPage';
+import ProfileSettings from './pages/ProfileSettings';
 
 function App() {
     const {user} = useContext(AuthContext)
@@ -125,6 +126,10 @@ function App() {
                             <Route
                                 path="/"
                                 element={<Home/>}
+                            />
+                            <Route 
+                                path="/profile"
+                                element={<ProfileSettings/>}
                             />
                             <Route
                                 path="/dashboard"

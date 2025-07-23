@@ -124,7 +124,7 @@ button:active {
 }
 
 .devdash-panel {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 20px;
@@ -148,6 +148,15 @@ button:active {
   font-size: 0.85rem;
   opacity: 0.7;
   margin-top: 10px;
+}
+
+.home-profile-circle:hover{
+  cursor: pointer;
+}
+
+.home-profile-circle img{
+  width: 5rem;
+  border-radius: 50%;
 }
 
 .devdash-value {
