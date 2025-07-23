@@ -19,7 +19,7 @@ const plans = [
     description: "For learners who want to compete.",
     features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards"],
     highlighted: true,
-    priceId: "price_1RaRJgJomOLGn4VAJGjdGU1I"
+    priceId: "price_1RaR6WJomOLGn4VASjYvEprO"
   }
   // ,
   // {
