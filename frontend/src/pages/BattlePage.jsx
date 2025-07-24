@@ -30,7 +30,7 @@ const BattlePage = () => {
   const [opponentHtml, setOpponentHtml] = useState("");
   const [opponentCss, setOpponentCss] = useState("");
   const [opponentJs, setOpponentJs] = useState("");
-  const [timeLeft, setTimeLeft] = useState(10); // 5 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(1800); // 5 minutes in seconds, 300
   const [matchOver, setMatchOver] = useState(false);
   const [opponentRageQuit, setOpponentRageQuit] = useState(false);
   const [battleInfo, setBattleInfo] = useState({ title: "", description: "" });

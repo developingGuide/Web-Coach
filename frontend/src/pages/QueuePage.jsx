@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import supabase from '../../config/supabaseClient';
 import { AuthContext } from '../components/AuthContext';
@@ -7,33 +7,27 @@ import './QueuePage.css';
 export default function QueuePage() {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState('Waiting for opponent...');
-  const [entryId, setEntryId] = useState(null);
-  const [channel, setChannel] = useState(null);
-  const navigate = useNavigate();
   const challengeId = searchParams.get('challenge_id');
-  const {user} = useContext(AuthContext)
-  
-  if (!user) return <div>Loading...</div>;
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const entryIdRef = useRef(null);
+  const channelRef = useRef(null);
+  const joinedRef = useRef(false); // prevent re-running join logic
 
   useEffect(() => {
-    const userId = user.id
-    
-    let active = true;
+    if (!user || !challengeId || joinedRef.current) return;
+    joinedRef.current = true;
+
+    const userId = user.id;
+
     const joinQueue = async () => {
-      const { data: existing } = await supabase
-        .from('queue')
-        .select('id')
-        .eq('user_id', userId)
-        .eq('challenge_id', challengeId)
-        .maybeSingle();
+      // Ensure only one queue entry per user
+      await supabase.from('queue').delete().eq('user_id', userId).eq('challenge_id', challengeId);
 
-      if (existing) {
-        await supabase.from('queue').delete().eq('id', existing.id);
-      }
-
+      // Insert new queue entry
       const { data: entry, error } = await supabase
         .from('queue')
-        // .insert([{ user_id: user.id, challenge_id: challengeId }])
         .insert([{ user_id: userId, challenge_id: challengeId }])
         .select()
         .single();
@@ -43,8 +37,9 @@ export default function QueuePage() {
         return;
       }
 
-      setEntryId(entry.id);
+      entryIdRef.current = entry.id;
 
+      // Check for opponents
       const { data: others } = await supabase
         .from('queue')
         .select('*')
@@ -71,8 +66,7 @@ export default function QueuePage() {
           return;
         }
 
-        await supabase.from('queue').delete().eq('id', entry.id);
-        await supabase.from('queue').delete().eq('id', opponent.id);
+        await supabase.from('queue').delete().in('id', [entry.id, opponent.id]);
         navigate(`/battle/${match.id}`);
       } else {
         const sub = supabase
@@ -86,27 +80,35 @@ export default function QueuePage() {
             navigate(`/battle/${payload.new.id}`);
           })
           .subscribe();
-        setChannel(sub);
+
+        channelRef.current = sub;
       }
     };
 
     joinQueue();
 
     return () => {
-      if (channel) supabase.removeChannel(channel);
-      if (entryId) {
-        supabase.from('queue').delete().eq('id', entryId).then(() => {
-          console.log("Queue entry cleaned up");
-        });
+      // Cleanup on leave/unmount
+      if (entryIdRef.current) {
+        supabase.from('queue').delete().eq('id', entryIdRef.current);
+      }
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
       }
     };
-  }, [challengeId, user, channel, entryId]);
+  }, [user, challengeId]);
 
   const handleCancel = async () => {
-    if (entryId) await supabase.from('queue').delete().eq('id', entryId);
-    if (channel) supabase.removeChannel(channel);
+    if (entryIdRef.current) {
+      await supabase.from('queue').delete().eq('id', entryIdRef.current);
+    }
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+    }
     navigate('/challenges');
   };
+
+  if (!user) return <div>Loading...</div>;
 
   return (
     <div className="queue-page">
