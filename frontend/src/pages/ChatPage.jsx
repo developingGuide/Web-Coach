@@ -3,13 +3,14 @@ import supabase from "../../config/supabaseClient";
 import "./ChatPage.css"
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import Threads from "../components/Threads";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([])
   const [newMsg, setNewMsg] = useState("");
   const bottomRef = useRef();
   const [currentChannel, setCurrentChannel] = useState("general");
-  const channels = ["general", "help", "feedback"];
+  const channels = ["general", "help", "feedback", "threads"];
   const [showIframe, setShowIframe] = useState(false);
 
   const navigate = useNavigate()
@@ -188,71 +189,83 @@ const ChatPage = () => {
 
   return (
     <div className="chat-container">
-      <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
-      <div className="chat-header">🌍 Global Chat</div>
-      <div className="chat-tabs">
-            {channels.map((ch) => (
-            <button
-                key={ch}
-                onClick={() => setCurrentChannel(ch)}
-                className={currentChannel === ch ? "active-tab" : ""}
-            >
-                #{ch}
-            </button>
-            ))}
-      </div>
-      <div className="chat-feed">
-        {messages.map(msg => (
-          <div key={msg.id} className="chat-message">
-            <img src={msg.avatar_url || "/noobie.png"} alt="avatar" className="chat-avatar" />
-            <div>
-                <div>
-                  <span className="chat-username">{msg.display_name}:</span>
-                  <ReactMarkdown
-                    children={msg.message}
-                    components={{
-                      code({ node, inline, className, children, ...props }) {
-                        const language = className?.replace("language-", "") || "js";
-                        const code = String(children).trim();
+      <button className="backBtn" onClick={() => navigate('/dashboard')}>Back</button>
 
-                        if (inline) return <code {...props}>{children}</code>;
-                        return <CodeBlock language={language} value={code} />;
-                      },
-                    }}
-                  />
-                </div>
-                <div className="chat-timestamp">{formatTime(msg.created_at)}</div>
-            </div>
-          </div>
-        ))}
-        <div ref={bottomRef}></div>
+      <div className="chat-header">
+        {currentChannel === "threads" ? "🧵 Threads" : "🌍 Global Chat"}
       </div>
-      <div className="chat-input-row">
-        <textarea
-            value={newMsg}
-            onChange={(e) => setNewMsg(e.target.value)}
-            onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-                }
-            }}
-            placeholder="Type your message..."
-            className="chat-textarea"
-        />
-        <div className="code-helper">
-          <select
-            onChange={(e) => insertCodeBlock(e.target.value)}
-            defaultValue=""
+
+      <div className="chat-tabs">
+        {channels.map((ch) => (
+          <button
+            key={ch}
+            onClick={() => setCurrentChannel(ch)}
+            className={currentChannel === ch ? "active-tab" : ""}
           >
-            <option value="" disabled>Pasting code?</option>
-            <option value="js">JavaScript</option>
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
-          </select>
-        </div>
-        <button onClick={sendMessage}>Send</button>
+            #{ch}
+          </button>
+        ))}
       </div>
+
+      {/* Render threads or chat based on channel */}
+      {currentChannel === "threads" ? (
+        <Threads/>
+      ) : (
+        <>
+          <div className="chat-feed">
+            {messages.map((msg) => (
+              <div key={msg.id} className="chat-message">
+                <img src={msg.avatar_url || "/noobie.png"} alt="avatar" className="chat-avatar" />
+                <div>
+                  <div>
+                    <span className="chat-username">{msg.display_name}:</span>
+                    <ReactMarkdown
+                      children={msg.message}
+                      components={{
+                        code({ node, inline, className, children, ...props }) {
+                          const language = className?.replace("language-", "") || "js";
+                          const code = String(children).trim();
+                          if (inline) return <code {...props}>{children}</code>;
+                          return <CodeBlock language={language} value={code} />;
+                        },
+                      }}
+                    />
+                  </div>
+                  <div className="chat-timestamp">{formatTime(msg.created_at)}</div>
+                </div>
+              </div>
+            ))}
+            <div ref={bottomRef}></div>
+          </div>
+
+          <div className="chat-input-row">
+            <textarea
+              value={newMsg}
+              onChange={(e) => setNewMsg(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+              placeholder="Type your message..."
+              className="chat-textarea"
+            />
+            <div className="code-helper">
+              <select
+                onChange={(e) => insertCodeBlock(e.target.value)}
+                defaultValue=""
+              >
+                <option value="" disabled>Pasting code?</option>
+                <option value="js">JavaScript</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+              </select>
+            </div>
+            <button onClick={sendMessage}>Send</button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

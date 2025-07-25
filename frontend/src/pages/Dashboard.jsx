@@ -205,6 +205,13 @@ const Dashboard = () => {
         <div className="cloud-transition">
           <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`} />
         </div>
+        <div className="devdash-navbar">
+          <div className="nav-buttons">
+            <div className="nav-icon"><i class="fa-solid fa-gear"></i></div>
+            <div className="nav-icon"><i class="fa-solid fa-trophy"></i></div>
+            {/* add more icons here */}
+          </div>
+        </div>
         <div className="devdash-layout">
           {/* Left Side */}
           <div className="devdash-column">
@@ -253,9 +260,6 @@ const Dashboard = () => {
           {/* Center Area */}
           <div className="devdash-center">
             <div className="devdash-level-circle">
-              <div onClick={() => navigate('/profile')} className="home-profile-circle">
-                <img src={avatar} alt="avatar"/>
-              </div>
               <h1>LEVEL {userLvl}</h1>
               <p>Status: <span className="neon-glow">Live</span></p>
               <button className="logoutBtn" onClick={handleLogout}>Log Out</button>

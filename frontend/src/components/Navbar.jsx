@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import "./Navbar.css";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ exp, maxExp, level, avatar }) => {
   const [prevExp, setPrevExp] = useState(exp);
   const [leveledUp, setLeveledUp] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (exp === 0 && prevExp !== 0) {
@@ -19,7 +21,7 @@ const Navbar = ({ exp, maxExp, level, avatar }) => {
   return (
     <div className="navbar">
       <div className="navbar-right">
-        <div className="profile-circle large">
+        <div onClick={() => navigate('/profile')} className="profile-circle large">
           <img src={avatar} alt="avatar"/>
         </div>
 

@@ -1,0 +1,22 @@
+.community-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.left-panel {
+  width: 30%;
+}
+
+.right-panel {
+  width: 70%;
+  border-left: 1px solid #444;
+  padding-left: 1rem;
+}
+
+.thread-item {
+  cursor: pointer;
+  padding: 0.5rem;
+  border: 1px solid #333;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+}

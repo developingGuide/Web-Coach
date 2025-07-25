@@ -44,6 +44,10 @@
   font-weight: bold;
 }
 
+.profile-circle.large:hover{
+  cursor: pointer;
+}
+
 .profile-circle.large img{
   width: 100%;
   height: 100%;
