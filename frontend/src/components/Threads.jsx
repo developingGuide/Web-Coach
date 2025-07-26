@@ -8,18 +8,14 @@ export default function Threads() {
 
   return (
     <div className="community-container">
-      <div className="left-panel">
-        <ThreadCreator onThreadCreated={() => setSelectedThread(null)} />
         <ThreadList onSelectThread={setSelectedThread} />
-      </div>
+        <ThreadCreator onThreadCreated={() => setSelectedThread(null)} />
 
-      <div className="right-panel">
         {selectedThread ? (
           <ThreadMessages thread={selectedThread} onClose={() => setSelectedThread(null)} />
         ) : (
           <p>Select a thread to view messages</p>
         )}
-      </div>
     </div>
   );
 }

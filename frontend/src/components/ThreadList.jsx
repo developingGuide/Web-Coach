@@ -39,19 +39,13 @@ export default function ThreadList({ onSelectThread }) {
             </div>
           </div>
 
-          <h3 className="thread-title">{thread.name}</h3>
+          <h3 className="thread-title">{thread.title}</h3>
           <p className="thread-desc">{thread.description}</p>
 
           <div className="thread-footer">
             <div className="stats">
               <span>💬 12</span>
               <span>❤️ 23</span>
-            </div>
-            <div className="avatars">
-              {/* Replace with real avatars */}
-              <img src="/avatars/dev1.png" alt="dev" />
-              <img src="/avatars/dev2.png" alt="dev" />
-              <img src="/avatars/dev3.png" alt="dev" />
             </div>
             <div className="new-comment">New comment 10m ago</div>
           </div>

@@ -28,7 +28,7 @@ import ProfileSettings from './pages/ProfileSettings';
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/challenges", "/signup", "/login", "/goback", "/success", "/battle/:match_id", "/chat", "/newUser"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle/:match_id", "/chat", "/newUser"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     

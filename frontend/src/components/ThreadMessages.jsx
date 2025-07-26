@@ -1,6 +1,7 @@
 // ThreadMessages.jsx
 import { useEffect, useRef, useState } from "react";
 import supabase from "../../config/supabaseClient";
+import "./ThreadMessages.css"
 
 export default function ThreadMessages({ thread, user, onClose }) {
   const [messages, setMessages] = useState([]);
@@ -51,7 +52,8 @@ export default function ThreadMessages({ thread, user, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
         <button className="close-btn" onClick={onClose}>×</button>
-        <h3>{thread.name}</h3>
+        <h3>{thread.title}</h3>
+        <p>{thread.description}</p>
         <div className="messages">
           {messages.map((msg, i) => (
             <div key={i} className="message">
