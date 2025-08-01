@@ -91,14 +91,14 @@ const ProfileSettings = () => {
 
       <div className="profile-block">
         <label>Display Name</label>
-        <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-        <button onClick={handleNameChange}>Update Name</button>
+        <input type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+        <button className="changeNameBtn" onClick={handleNameChange}>Update Name</button>
       </div>
 
       <div className="profile-block">
         <label>New Password</label>
         <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-        <button onClick={handlePasswordChange}>Change Password</button>
+        <button className="changePwBtn" onClick={handlePasswordChange}>Change Password</button>
       </div>
 
       <div className="profile-block danger-zone">

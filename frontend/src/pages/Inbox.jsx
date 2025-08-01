@@ -5,6 +5,7 @@ import supabase from '../../config/supabaseClient';
 import { AuthContext } from '../components/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fireConfetti } from '../utils/confetti';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const Inbox = () => {
   const {user} = useContext(AuthContext)
@@ -18,6 +19,7 @@ const Inbox = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [showProjectDonePopup, setShowProjectDonePopup] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
 
   const handleBack = () => {
@@ -40,7 +42,12 @@ const Inbox = () => {
 
   const handleStartTask = () => {
     if (selectedTask) {
-      navigate("/playground");
+      setIsLoading(true);
+
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/playground", { state: { transition: "fade-in" } });
+      }, 2000); // ⏳ 2 seconds delay
     }
   };
 
@@ -154,7 +161,7 @@ const Inbox = () => {
         <button className="inboxBackBtn" onClick={handleBack}>Back</button>
         <div className="inbox-main">
           <div className="inbox-sidebar">
-            <h2>The HUD</h2>
+            <h2>Codex</h2>
             {inboxItems.length === 0 ? (
               <p className="inbox-no-selection">No tasks yet. Try selecting a journey!</p>
             ) : (
@@ -198,6 +205,9 @@ const Inbox = () => {
           </div>
         )}
       </div>
+
+      {isLoading && <LoadingOverlay message="Preparing your coding arena..." />}
+
     </div>
   );
 };

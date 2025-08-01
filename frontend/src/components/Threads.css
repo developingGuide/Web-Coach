@@ -54,6 +54,7 @@
   color: #555;
 }
 
+
 .thread-title {
   font-size: 1.2rem;
   font-weight: bold;
@@ -71,6 +72,17 @@
   justify-content: space-between;
   font-size: 0.85rem;
   color: #777;
+}
+
+.new-thread-text{
+  width: 100%;
+  min-height: 50px;
+  max-height: 120px;
+  padding: 8px;
+  resize: vertical; /* user can drag to resize */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
 }
 
 /* New Thread Button */
@@ -106,12 +118,13 @@
 .modal-box {
   background: var(--panel);
   border-radius: 12px;
-  width: 400px;
+  width: 800px;
   max-height: 80vh;
   overflow-y: auto;
   padding: 1rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   position: relative;
+  flex-direction: column;
 }
 
 .close-btn {
@@ -133,6 +146,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .message {
@@ -145,14 +159,29 @@
 .reply-box {
   display: flex;
   gap: 0.5rem;
+  bottom: 0;
+  position: sticky; /* so it always stays at the bottom */
+  bottom: 0;
 }
 
-.reply-box input {
+.reply-box textarea {
   flex: 1;
   padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
+
+.reply-textarea {
+  width: 100%;
+  min-height: 50px;
+  max-height: 120px;
+  padding: 8px;
+  resize: vertical; /* user can drag to resize */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
 
 .reply-box button {
   padding: 0.5rem 0.75rem;
@@ -227,7 +256,7 @@
 }
 
 .message-bubble {
-  background: #f2f2f2;
+  background: #333;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   max-width: 70%;
@@ -237,7 +266,7 @@
   font-weight: bold;
   font-size: 0.8rem;
   margin-bottom: 0.2rem;
-  color: #333;
+  color: #ccc;
 }
 
 .message-text {

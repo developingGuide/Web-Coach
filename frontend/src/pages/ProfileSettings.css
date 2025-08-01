@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
 .profile-settings-page {
   max-width: 600px;
   margin: 60px auto;
@@ -19,6 +24,8 @@
 }
 
 .profile-block {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 25px;
 }
 
@@ -32,7 +39,6 @@
 .profile-block input[type="text"],
 .profile-block input[type="password"],
 .profile-block input[type="file"] {
-  width: 100%;
   padding: 10px;
   background: #222;
   border: 1px solid #444;
@@ -57,6 +63,14 @@
 
 .profile-block button:hover {
   background-color: #00ff99;
+}
+
+.changeNameBtn{
+  width: 9rem;
+}
+
+.changePwBtn{
+  width: 11rem;
 }
 
 .avatar {

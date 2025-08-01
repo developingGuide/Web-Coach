@@ -35,12 +35,17 @@ const BattlePage = () => {
   const [opponentRageQuit, setOpponentRageQuit] = useState(false);
   const [battleInfo, setBattleInfo] = useState({ title: "", description: "" });
   const [battleResult, setBattleResult] = useState(null); // "win", "lose", "tie"
+  const [count, setCount] = useState(10); // starting from 10
 
 
   const [activeTab, setActiveTab] = useState("html");
   const [htmlCode, setHtmlCode] = useState("<h1>Start</h1>");
   const [cssCode, setCssCode] = useState("h1 { color: green; }");
   const [jsCode, setJsCode] = useState("");
+
+  const [showObjective, setShowObjective] = useState(true);
+  const [matchStarted, setMatchStarted] = useState(false);
+  const [showMatchStart, setShowMatchStart] = useState(false);
 
   const {user} = useContext(AuthContext)
   const user_id = user?.id; // safe fallback
@@ -362,8 +367,53 @@ const BattlePage = () => {
   }, [matchOver]);
 
 
+  useEffect(() => {
+    if (count <= 0) {
+      return;
+    }
+
+    const timer = setTimeout(() => setCount(c => c - 1), 1000);
+
+    return () => clearTimeout(timer);
+  }, [count]);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowObjective(false);
+      setShowMatchStart(true);
+
+      setTimeout(() => {
+        setShowMatchStart(false);
+        setMatchStarted(true); // now allow coding & start timer
+      }, 1000);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+
 
   return (
+    <>
+    {showObjective && (
+      <div className="objectiveOverlay">
+        <div className="objectiveCard">
+          <h2>Battle Objective</h2>
+          <h3>{battleInfo.title}</h3>
+          <p>{battleInfo.description}</p>
+          <p className='matchStartText'>Match will start in {count} seconds...</p>
+        </div>
+      </div>
+    )}
+
+    {showMatchStart && (
+      <div className="matchStartPopup">
+        <h1>🔥 Match Start! 🔥</h1>
+      </div>
+    )}
+
+
     <div className="battleContainer">
       <div className="battleHeader">
         <h1>{battleInfo.title}</h1>
@@ -387,16 +437,16 @@ const BattlePage = () => {
       </div>
 
       <div className="editorWrapper">
-        {activeTab === "html" && <HtmlCodeEditor code={htmlCode} setCode={setHtmlCode} matchOver={matchOver} />}
-        {activeTab === "css" && <CssCodeEditor code={cssCode} setCode={setCssCode} matchOver={matchOver} />}
-        {activeTab === "js" && <JsCodeEditor code={jsCode} setCode={setJsCode} matchOver={matchOver} />}
+        {activeTab === "html" && <HtmlCodeEditor code={htmlCode} setCode={setHtmlCode} matchOver={matchOver || !matchStarted} />}
+        {activeTab === "css" && <CssCodeEditor code={cssCode} setCode={setCssCode} matchOver={matchOver || !matchStarted} />}
+        {activeTab === "js" && <JsCodeEditor code={jsCode} setCode={setJsCode} matchOver={matchOver || !matchStarted} />}
       </div>
 
       <div className="matchTimer">
         {matchOver ? "Time's up!" : `Time Left: ${formatTime(timeLeft)}`}
       </div>
 
-      {!matchOver && (
+      {!matchOver && channel && (
         <button className="rageQuitButton" onClick={handleRageQuit}>
           Rage Quit 💥
         </button>
@@ -431,6 +481,7 @@ const BattlePage = () => {
       )}
 
     </div>
+    </>
   );
 }
 

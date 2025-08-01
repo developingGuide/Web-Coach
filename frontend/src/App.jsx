@@ -24,11 +24,12 @@ import SuccessPage from './pages/SuccessPage';
 import OnboardingPage from './pages/Onboarding';
 import ChatPage from './pages/ChatPage';
 import ProfileSettings from './pages/ProfileSettings';
+import Leaderboard from './pages/leaderboard';
 
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle/:match_id", "/chat", "/newUser"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle", "/challenges", "/chat", "/newUser", "/leaderboard"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     
@@ -170,6 +171,10 @@ function App() {
                             <Route
                                 path="/chat"
                                 element={<ChatPage/>}
+                            />
+                            <Route
+                                path='/leaderboard'
+                                element={<Leaderboard/>}
                             />
                         </Routes>
                     </div>

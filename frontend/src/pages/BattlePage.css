@@ -28,6 +28,39 @@
   box-sizing: border-box;
 }
 
+.objectiveOverlay, .matchStartPopup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+}
+
+.objectiveCard {
+  background: #1e1e1e;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 500px;
+}
+
+.objectiveCard h2{
+  color: #3cff99;
+  margin-bottom: 1rem;
+}
+
+.objectiveCard p{
+  margin-top: 0.5rem;
+}
+
+.matchStartText{
+  color: #9b9b9b;
+}
+
 .battleHeader {
   margin-bottom: 20px;
   text-align: center;

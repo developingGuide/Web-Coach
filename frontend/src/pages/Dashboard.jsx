@@ -208,7 +208,7 @@ const Dashboard = () => {
         <div className="devdash-navbar">
           <div className="nav-buttons">
             <div className="nav-icon"><i class="fa-solid fa-gear"></i></div>
-            <div className="nav-icon"><i class="fa-solid fa-trophy"></i></div>
+            <div className="nav-icon" onClick={() => {navigate('/leaderboard')}}><i class="fa-solid fa-trophy"></i></div>
             {/* add more icons here */}
           </div>
         </div>
@@ -295,7 +295,7 @@ const Dashboard = () => {
         </div>
         <div className="arrow-group arrow-right" onClick={() => handleLaunch('/inbox', 'slide')}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-right"></i></div>
-          <div className="arrow-label">HUD</div>
+          <div className="arrow-label">Codex</div>
         </div>
         <div className="arrow-group arrow-bottom" onClick={() => handleLaunch('/journey', 'cloud')}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-down"></i></div>
