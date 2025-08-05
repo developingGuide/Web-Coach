@@ -121,37 +121,6 @@
   text-align: center;
 }
 
-/* Dot nav styles */
-.dot-navigation {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  z-index: 10;
-}
-
-.dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  padding: 0;
-  background-color: gray;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.3s, background-color 0.3s;
-}
-
-.dot:hover {
-  background-color: darkgray;
-}
-
-.dot.active {
-  background-color: limegreen;
-  transform: scale(1.4);
-}
-
 
 /* Cloud overlay */
 .cloud-cover-opening {
@@ -176,4 +145,93 @@
     opacity: 0;
     pointer-events: none;
   }
+}
+
+
+
+
+
+.map-toggle-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(0, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #00ffff;
+  cursor: pointer;
+  z-index: 999;
+  transition: background 0.3s;
+}
+
+.map-toggle-button:hover {
+  background: rgba(0, 255, 255, 0.3);
+}
+
+.map-toggle-button img {
+  width: 32px;
+  height: 32px;
+}
+
+/* Sliding panel */
+.map-list-panel {
+  position: fixed;
+  bottom: 15%;
+  right: -50%;
+  width: 300px;
+  background: #0b1c2caa;
+  color: white;
+  /* padding: 1rem; */
+  transition: right 0.4s ease;
+  z-index: 998;
+  /* border: 2px solid #00ffff; */
+  height: 30rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  font-family: monospace;
+}
+
+.map-list-panel.open {
+  right: 0;
+}
+
+.map-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  /* margin-bottom: 1rem; */
+  background-color: #0b1c2ca7;
+  padding-left: 1rem;
+}
+
+.map-list-header button {
+  background: none;
+  border: none;
+  color: #00ffff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.map-list-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.map-list-panel li {
+  padding: 0.5rem;
+  /* margin-bottom: 0.5rem; */
+  /* background: #132c3a; */
+  border-bottom: 2px solid #00ffff33;
+  /* border-radius: 6px; */
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.map-list-panel li:hover,
+.map-list-panel li.active {
+  background: #00ffff22;
+  /* border-color: #00ffff; */
 }

@@ -259,8 +259,8 @@
 }
 
 .project-popup {
-  color: green;
-  background: var(--accent);
+  color: var(--text);
+  background: var(--panel);
   padding: 2rem 3rem;
   border-radius: 12px;
   text-align: center;

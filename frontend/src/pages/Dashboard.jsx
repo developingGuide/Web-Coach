@@ -192,7 +192,10 @@ const Dashboard = () => {
     await supabase.auth.signOut();
     navigate('/'); // or your homepage
   };
-      
+    
+  function formatMapName(name) {
+    return name.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
     
   return (
     <div className={`page-slide
@@ -269,7 +272,7 @@ const Dashboard = () => {
           {/* Right Side */}
           <div className="devdash-column">
             <div className="devdash-panel">
-              <div className="devdash-title">Current Map: {currentMap}</div>
+              <div className="devdash-title">Current Map: <span>{formatMapName(currentMap)}</span></div>
               <img src={`/${currentMap}.png`} className="devdash-map" />
             </div>
 

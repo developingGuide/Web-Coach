@@ -29,7 +29,7 @@ import Leaderboard from './pages/leaderboard';
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle", "/challenges", "/chat", "/newUser", "/leaderboard"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle", "/chat", "/newUser", "/leaderboard"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     

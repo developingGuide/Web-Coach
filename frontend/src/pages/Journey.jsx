@@ -25,6 +25,8 @@ export default function Journey() {
   const [taskIds, setTaskIds] = useState([])
   const [ inboxHistory, setInboxHistory] = useState([])
   const [selectedProject, setSelectedProject] = useState(null);
+  const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
+
 
   const fetchProjects = async () => {
     const {error, data} = await supabase
@@ -188,17 +190,16 @@ export default function Journey() {
   
   const checkpointLayouts = {
     BeachIsland: [
-      { top: "70%", left: "40%", projectId: 1 },
-      { top: "68%", left: "60%", projectId: 2 },
-      { top: "50%", left: "38%", projectId: 3 },
+      { top: "70%", left: "40%", projectId: 1, scale: 0.8 },
+      { top: "68%", left: "60%", projectId: 2, scale: 1.0 },
+      { top: "50%", left: "38%", projectId: 3, scale: 1.2 },
     ],
     InfernoInterface: [
-      { top: "65%", left: "31%", projectId: 4 },
-      { top: "72%", left: "68%", projectId: 5 },
-      { top: "43%", left: "26%", projectId: 6 },
+      { top: "65%", left: "31%", projectId: 4, scale: 0.8 },
+      { top: "72%", left: "68%", projectId: 5, scale: 1.0 },
+      { top: "43%", left: "26%", projectId: 6, scale: 1.2 },
     ]
   };
-  {/* Add other checkpoints here */}
 
   const mapNames = Object.keys(checkpointLayouts); // ["BeachIsland", "JungleMountain"]
   const checkpoints = checkpointLayouts[currentMap];
@@ -217,6 +218,10 @@ export default function Journey() {
       setIsTransitioning(false);
     }, 2000);
   };
+
+  function formatMapName(name) {
+    return name.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
 
   useEffect(() => {
     fetchTasks();
@@ -298,6 +303,18 @@ export default function Journey() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    const handleKeyCombo = (e) => {
+      if (e.ctrlKey && e.key.toLowerCase() === 'm') {
+        e.preventDefault();
+        setIsMapPanelOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyCombo);
+    return () => window.removeEventListener('keydown', handleKeyCombo);
+  }, []);
+
 
   return (
     <>
@@ -356,27 +373,48 @@ export default function Journey() {
         style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
         >
 
-        <CloudLayer/>
-        {/* <EffectsOverlay currentMap={currentMap} /> */}
+        {/* <CloudLayer/> */}
 
         {/* Put your map image directly here */}
         <img src={`/${currentMap}.png`} alt="Map" className="map-image" />
 
         <div className="journey-main">
-          {checkpointLayouts[currentMap]?.map(({ top, left, projectId }) => (
-            <div
-              key={projectId}
-              className="checkpoint"
-              style={{ top, left }}
-              onClick={() => handleOverlayOpen(projectId)}
-            >
-              <span className="x-on-map"><img src="/red-x.png" alt="redcross" /></span>
-            </div>
-          ))}
+          {checkpointLayouts[currentMap]?.map(({ top, left, projectId, scale = 1 }) => {
+            // Get all tasks belonging to this project
+            const projectTaskIds = tasks
+              .filter((task) => task.project_id === projectId)
+              .map((task) => task.id);
+
+            // Is every task in inboxHistory?
+            const isComplete = projectTaskIds.every((id) => inboxHistory.includes(id));
+
+            return (
+              <div
+                key={projectId}
+                className="checkpoint"
+                style={{ top, left }}
+                onClick={() => handleOverlayOpen(projectId)}
+              >
+                <span
+                  className="x-on-map"
+                  style={{
+                    transform: `scale(${scale})`,
+                    transformOrigin: "center center",
+                    display: "inline-block",
+                  }}
+                >
+                  <img
+                    src={isComplete ? "/green-tick.png" : "/red-x.png"}
+                    alt={isComplete ? "Completed" : "Not completed"}
+                  />
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <div className="dot-navigation">
+      {/* <div className="dot-navigation">
         {mapNames.map((mapName) => (
           <button
             key={mapName}
@@ -385,27 +423,36 @@ export default function Journey() {
             title={mapName}
           />
         ))}
+      </div> */}
+
+
+      {/* 🔘 Map toggle button */}
+      <div className="map-toggle-button" onClick={() => setIsMapPanelOpen(!isMapPanelOpen)}>
+        <i class="fa-regular fa-map"></i>
+      </div>
+
+      {/* 🗺 Map panel that slides in */}
+      <div className={`map-list-panel ${isMapPanelOpen ? 'open' : ''}`}>
+        <div className="map-list-header">
+          <h2>Choose a Map</h2>
+          <button onClick={() => setIsMapPanelOpen(false)}>✕</button>
+        </div>
+        <ul>
+          {mapNames.map((mapName) => (
+            <li
+              key={mapName}
+              className={currentMap === mapName ? 'active' : ''}
+              onClick={() => {
+                handleMapChange(mapName);
+                setIsMapPanelOpen(false);
+              }}
+            >
+              <p>{formatMapName(mapName)}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
-
-    {/* {selectedProject && (
-      <div className="project-overlay" onClick={() => setSelectedProject(null)}>
-        <div className="project-card" onClick={(e) => e.stopPropagation()}>
-          <img src={selectedProject.image_url} alt={selectedProject.name} className="project-image" />
-          <h2>{selectedProject.name}</h2>
-          <p>{selectedProject.description}</p>
-          <button
-            onClick={() => {
-              handleSelect(selectedProject.id);
-              setSelectedProject(null);
-            }}
-            style={{ marginTop: "1rem", padding: "0.5rem 1.5rem", background: "#0ff", color: "#000", borderRadius: "8px" }}
-          >
-            Let's Go
-          </button>
-        </div>
-      </div>
-    )} */}
     </>
   );
 }

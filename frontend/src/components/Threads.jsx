@@ -20,6 +20,10 @@ export default function Threads() {
   const messagesEndRef = useRef(null);
   const textareaRef = useRef();
   const descRef = useRef(null);
+  const [editing, setEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDesc, setEditDesc] = useState("");
+
 
 
   // Fetch threads
@@ -241,6 +245,68 @@ export default function Threads() {
   };
 
 
+  const handleDeleteThread = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this thread?");
+    if (!confirmDelete) return;
+
+    // 1️⃣ Delete messages first
+    const { error: msgError } = await supabase
+      .from("threads_messages")
+      .delete()
+      .eq("thread_id", selectedThread.id);
+
+    if (msgError) {
+      console.error(msgError);
+      return;
+    }
+
+    // 2️⃣ Delete the thread
+    const { error: threadError } = await supabase
+      .from("threads")
+      .delete()
+      .eq("id", selectedThread.id);
+
+    if (!threadError) {
+      setThreads((prev) => prev.filter((t) => t.id !== selectedThread.id));
+      setSelectedThread(null);
+    } else {
+      console.error(threadError);
+    }
+  };
+
+
+
+  const handleUpdateThread = async () => {
+    const { error } = await supabase
+      .from("threads")
+      .update({
+        title: editTitle,
+        description: editDesc,
+      })
+      .eq("id", selectedThread.id);
+
+    if (!error) {
+      setThreads((prev) =>
+        prev.map((t) =>
+          t.id === selectedThread.id
+            ? { ...t, title: editTitle, description: editDesc }
+            : t
+        )
+      );
+      setSelectedThread((prev) => ({
+        ...prev,
+        title: editTitle,
+        description: editDesc,
+      }));
+      setEditing(false);
+    } else {
+      console.error(error);
+    }
+  };
+
+
+
+
   return (
     <div className="community-container">
       {/* Thread List */}
@@ -296,24 +362,54 @@ export default function Threads() {
       {selectedThread && (
         <div className="modal-overlay" onClick={() => setSelectedThread(null)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            <button className="close-btn" onClick={() => setSelectedThread(null)}>×</button>
-            {/* User info header */}
-            <div className="popup-header">
-              <img
-                src={selectedThread.user_state?.avatar_url || "/noobie.png"}
-                alt="avatar"
-                className="popup-avatar"
-              />
-              <div className="popup-meta">
-                <div className="popup-username">{selectedThread.user_state?.display_name || "Anonymous"}</div>
-                <div className="popup-timestamp">
-                  {new Date(selectedThread.created_at).toLocaleString()}
+            <div className="modal-top">
+              <button className="close-btn" onClick={() => setSelectedThread(null)}>×</button>
+              {/* User info header */}
+              <div className="popup-header">
+                <img
+                  src={selectedThread.user_state?.avatar_url || "/noobie.png"}
+                  alt="avatar"
+                  className="popup-avatar"
+                />
+                <div className="popup-meta">
+                  <div className="popup-username">{selectedThread.user_state?.display_name || "Anonymous"}</div>
+                  <div className="popup-timestamp">
+                    {new Date(selectedThread.created_at).toLocaleString()}
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <h3 className="popup-title">{selectedThread.title}</h3>
-            <p className="popup-desc">{selectedThread.description}</p>
+                <div className="thread-actions">
+                {user?.id === selectedThread.created_by && (
+                  <>
+                    <span className="editBtn" onClick={() => setEditing(true)}><i className="fa-solid fa-pen"></i></span>
+                    <span className="deleteBtn" onClick={handleDeleteThread}><i className="fa-solid fa-trash"></i></span>
+                  </>
+                )}
+              </div>
+              </div>
+
+              {/* <h3 className="popup-title">{selectedThread.title}</h3>
+              <p className="popup-desc">{selectedThread.description}</p> */}
+              {editing ? (
+                <>
+                  <input
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                  />
+                  <textarea
+                    value={editDesc}
+                    onChange={(e) => setEditDesc(e.target.value)}
+                  />
+                  <button onClick={handleUpdateThread}>Save</button>
+                  <button onClick={() => setEditing(false)}>Cancel</button>
+                </>
+              ) : (
+                <>
+                  <h3 className="popup-title">{selectedThread.title}</h3>
+                  <p className="popup-desc">{selectedThread.description}</p>
+                </>
+              )}
+            </div>
 
             <div className="messages">
               {messages.map((m, i) => (
