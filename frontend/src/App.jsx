@@ -24,7 +24,7 @@ import SuccessPage from './pages/SuccessPage';
 import OnboardingPage from './pages/Onboarding';
 import ChatPage from './pages/ChatPage';
 import ProfileSettings from './pages/ProfileSettings';
-import Leaderboard from './pages/leaderboard';
+import Leaderboard from './pages/Leaderboard';
 
 function App() {
     const {user} = useContext(AuthContext)

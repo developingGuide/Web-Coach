@@ -19,7 +19,7 @@ const Dashboard = () => {
   
   const navigate = useNavigate()
   const [isLaunching, setIsLaunching] = useState(false);
-  const [currentMap, setCurrentMap] = useState("BeachIsland");
+  const [currentMap, setCurrentMap] = useState("");
   const [userLvl, setUserLvl] = useState(0);
   const [currentTaskId, setCurrentTaskId] = useState(null);
   const [currentTask, setCurrentTask] = useState(null);
@@ -75,6 +75,25 @@ const Dashboard = () => {
       fetchTasksToday();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!user) return; // don't run until user is ready
+
+    const fetchCurrentMap = async () => {
+      const { data, error } = await supabase
+        .from('user_state')
+        .select('current_map')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!error && data) {
+        setCurrentMap(data.current_map);
+      }
+    };
+
+    fetchCurrentMap();
+  }, [user]); // ← add user as a dependency
+
   
   if (!user) {
     return <div>Loading...</div>;
@@ -88,7 +107,7 @@ const Dashboard = () => {
     if (type === "cloud") {
       // Let the cloud appear before routing
       setTimeout(() => {
-        navigate(destination);
+        navigate(destination, { state: { selectedMap: currentMap } } );
       }, 1000);
     } else if (type === "slide-left") {
       setTimeout(() => {
@@ -114,13 +133,7 @@ const Dashboard = () => {
         .select("*")
         .eq("user_id", userId)
         .single();
-  
-      if (stateError || !userState) {
-        console.error("Failed to fetch user state:", stateError);
-        return;
-      }
 
-      setCurrentMap(userState.current_map)
       setUserLvl(userState.level)
       setCurrentTaskId(userState.current_task_id)
   }

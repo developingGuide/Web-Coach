@@ -26,6 +26,7 @@ export default function Journey() {
   const [ inboxHistory, setInboxHistory] = useState([])
   const [selectedProject, setSelectedProject] = useState(null);
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
+  const passedMap = location.state?.selectedMap;
 
 
   const fetchProjects = async () => {
@@ -261,6 +262,13 @@ export default function Journey() {
 
 
   const [isCoverVisible, setIsCoverVisible] = useState(true);
+
+  useEffect(() => {
+    if (passedMap) {
+      setCurrentMap(passedMap); // This is the important part
+    }
+  }, [passedMap]);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
