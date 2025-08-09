@@ -58,7 +58,7 @@ const Home = () => {
             price: "$0",
             description: "Great for curious beginners trying things out.",
             features: [
-            "5 Tasks/day",
+            "UNLIMITED Tasks/day",
             "Daily Tracking",
             ],
             highlighted: false,
@@ -234,7 +234,18 @@ const Home = () => {
                             key={index}
                             className={`pricing-card ${plan.highlighted ? "highlighted" : ""}`}
                         >
-                            <div className="price">{plan.price}</div>
+                            {/* <div className="price">{plan.price}</div> */}
+                            <div className="price">
+                                {plan.name === "Warrior" ? (
+                                    <>
+                                    <span className="old-price">$9/mo</span>
+                                    <span className="new-price">$4.99/mo</span>
+                                    <span className="beta-tag">Beta Discount!</span>
+                                    </>
+                                ) : (
+                                    plan.price
+                                )}
+                            </div>
                             <div className="plan-name">{plan.name}</div>
                             <div className="plan-desc">{plan.description}</div>
 

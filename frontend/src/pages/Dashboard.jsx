@@ -222,10 +222,16 @@ const Dashboard = () => {
           <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`} />
         </div>
         <div className="devdash-navbar">
-          <div className="nav-buttons">
+          {/* <div className="hud-sidebars">
             <div className="nav-icon"><i class="fa-solid fa-gear"></i></div>
             <div className="nav-icon" onClick={() => {navigate('/leaderboard')}}><i class="fa-solid fa-trophy"></i></div>
-            {/* add more icons here */}
+          </div> */}
+          <div className="corner-trigger left">
+            <i className="fa-solid fa-gear"></i>
+          </div>
+
+          <div className="corner-trigger right" onClick={() => navigate('/leaderboard')}>
+            <i className="fa-solid fa-trophy"></i>
           </div>
         </div>
         <div className="devdash-layout">

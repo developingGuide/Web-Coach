@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { AuthContext } from "../components/AuthContext";
+import supabase from '../../config/supabaseClient';
 import './Challenge.css';
 
 const challenges = [
@@ -10,8 +12,10 @@ const challenges = [
 ];
 
 export default function ChallengeMap() {
+  const {user} = useContext(AuthContext)
   const [selected, setSelected] = useState(null);
   const [isExiting, setIsExiting] = useState(false);
+  const [userPlan, setUserPlan] = useState('');
   const navigate = useNavigate();
 
   const handleEnter = () => {
@@ -28,10 +32,41 @@ export default function ChallengeMap() {
   const location = useLocation();
   const transition = location.state?.transition;
 
+  const fetchUserPlan = async () => {
+    const { data, error } = await supabase
+      .from('user_state')
+      .select('plan')
+      .eq('user_id', user.id)
+      .single();
+        
+    if (!error && data) {
+      setUserPlan(data.plan);
+    } else{
+      console.error(error)
+    }
+    
+    
+    return data?.plan || 'starter';
+  };
+
+
+  useEffect(() => {
+    if (user) {
+      fetchUserPlan();
+    }
+  }, [user]);
+
   return (
     <>
-    {/* {isCoverVisible && <div className="cloud-cover-opening"></div>} */}
     <div className={`page-slide ${transition === 'slide-left' ? 'inbox-page-slide-in' : ''} ${isExiting ? 'exit-to-left-active' : ''}`}>
+      {userPlan === 'starter' && (
+        <div className="locked-overlay">
+          <button className="backBtn" onClick={handleBack}>Back</button>
+          <div className="locked-message">
+            🔒 This feature is for Pro users only
+          </div>
+        </div>
+      )}
       <button className="backBtn" onClick={handleBack}>Back</button>
       <div className="challenge-container">
         <div className={`grid ${selected ? 'compressed' : ''}`}>

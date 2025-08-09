@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./Auth.css";
 import supabase from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import './SignupPage.css'
@@ -10,7 +9,7 @@ const plans = [
     name: "Starter",
     price: "$0",
     description: "For curious minds just starting out.",
-    features: ["5 Tasks/day", "Daily Tracking"],
+    features: ["UNLIMITED Tasks/day", "Daily Tracking"],
     highlighted: false,
   },
   {
@@ -19,7 +18,8 @@ const plans = [
     description: "For learners who want to compete.",
     features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards"],
     highlighted: true,
-    priceId: "price_1RaR6WJomOLGn4VASjYvEprO"
+    priceId: "price_1Ru2kvJomOLGn4VAckXBfe5s"
+    // priceId: "price_1RaR6WJomOLGn4VASjYvEprO"
   }
   // ,
   // {
@@ -204,7 +204,18 @@ export default function SignupPage() {
                     plan.highlighted ? "highlighted" : ""
                   }`}
                 >
-                  <div className="price">{plan.price}</div>
+                  {/* <div className="price">{plan.price}</div> */}
+                  <div className="price">
+                    {plan.name === "Warrior" ? (
+                      <>
+                        <span className="old-price">$9/mo</span>
+                        <span className="new-price">$4.99/mo</span>
+                        <span className="beta-tag">Beta Discount!</span>
+                      </>
+                    ) : (
+                      plan.price
+                    )}
+                  </div>
                   <div className="plan-name">{plan.name}</div>
                   <div className="plan-desc">{plan.description}</div>
 

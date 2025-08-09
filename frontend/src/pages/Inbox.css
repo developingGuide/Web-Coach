@@ -56,6 +56,7 @@
   border-right: 1px solid #676767;
   padding: 1rem;
   overflow-y: auto;
+  font-family: "exo 2";
 }
 
 .inbox-sidebar h2 {
@@ -63,6 +64,7 @@
   font-size: 1.25rem;
   color: var(--accent);
   text-align: center;
+  font-family: "Orbitron";
 }
 
 .inbox-email-preview {
@@ -74,6 +76,7 @@
   transition: background 0.2s ease;
   opacity: 0;
   animation: fadeWave 0.4s ease forwards;
+  font-family: "exo 2";
 }
 
 @keyframes fadeWave {
@@ -103,6 +106,7 @@
   resize: none;
   margin-top: 4px;
   pointer-events: none;
+  font-family: "exo 2";
 }
 
 .inbox-task-content{
@@ -126,6 +130,7 @@
   font-size: 0.8rem;
   color: var(--muted);
   margin-top: 0.25rem;
+  font-family: "exo 2";
 }
 
 .inbox-body {
@@ -167,6 +172,7 @@
 .inbox-body h2 {
   margin-top: 0;
   color: var(--text);
+  font-family: "Orbitron";
 }
 
 .inbox-content {
@@ -174,6 +180,7 @@
   font-size: 1rem;
   line-height: 1.5;
   color: var(--text);
+  font-family: "exo 2", Arial, Helvetica, sans-serif;
 }
 
 .inbox-start-task-button {

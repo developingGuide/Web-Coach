@@ -1,17 +1,20 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 import supabase from "../../config/supabaseClient";
 import "./ChatPage.css"
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import Threads from "../components/Threads";
+import { AuthContext } from "../components/AuthContext";
 
 const ChatPage = () => {
+  const {user} = useContext(AuthContext)
   const [messages, setMessages] = useState([])
   const [newMsg, setNewMsg] = useState("");
   const bottomRef = useRef();
   const [currentChannel, setCurrentChannel] = useState("general");
   const channels = ["general", "help", "feedback", "threads"];
   const [showIframe, setShowIframe] = useState(false);
+  const [userPlan, setUserPlan] = useState('');
 
   const navigate = useNavigate()
 
@@ -153,6 +156,30 @@ const ChatPage = () => {
     }, 0);
   };
 
+  const fetchUserPlan = async () => {
+    const { data, error } = await supabase
+      .from('user_state')
+      .select('plan')
+      .eq('user_id', user.id)
+      .single();
+        
+    if (!error && data) {
+      setUserPlan(data.plan);
+    } else{
+      console.error(error)
+    }
+    
+    
+    return data?.plan || 'starter';
+  };
+
+
+  useEffect(() => {
+    if (user) {
+      fetchUserPlan();
+    }
+  }, [user]);
+
     
   useEffect(() => {
       fetchMessages();
@@ -189,6 +216,14 @@ const ChatPage = () => {
 
   return (
     <div className="chat-container">
+      {userPlan === 'starter' && (
+        <div className="locked-overlay">
+          <button className="backBtn" onClick={() => navigate('/dashboard')}>Back</button>
+          <div className="locked-message">
+            🔒 This feature is for Pro users only
+          </div>
+        </div>
+      )}
       <button className="backBtn" onClick={() => navigate('/dashboard')}>Back</button>
 
       <div className="chat-header">
