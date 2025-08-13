@@ -235,3 +235,55 @@
   background: #00ffff22;
   /* border-color: #00ffff; */
 }
+
+.map-item{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.info-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 125%; /* position above icon */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  border: 1px solid #00ffff88;
+  box-shadow: 0 0 10px #00ffff55;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fa-circle-info{
+  color: rgba(255, 255, 255, 0.673);
+  font-size: 0.8rem;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%; /* triangle pointer below tooltip */
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+}
+
+.info-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}

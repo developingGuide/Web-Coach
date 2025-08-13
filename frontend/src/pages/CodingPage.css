@@ -151,6 +151,10 @@
   margin-top: 0;
 }
 
+.resultCard p{
+  margin-top: 8px;
+}
+
 .resultCard h3{
   margin-bottom: 4px;
   margin-top: 8px;

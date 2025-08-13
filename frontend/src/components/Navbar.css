@@ -169,3 +169,47 @@
   color: #ccc;
 }
 
+
+
+.levelup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+.levelup-popup {
+  background: linear-gradient(145deg, #1a1a1a, #222);
+  border: 2px solid #00ff88;
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  text-align: center;
+  animation: popIn 0.4s ease;
+  box-shadow: 0 0 30px #00ff88;
+  color: #fff;
+}
+
+.levelup-popup h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #00ff88;
+}
+
+.levelup-popup p {
+  font-size: 1.3rem;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

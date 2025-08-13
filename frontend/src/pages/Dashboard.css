@@ -111,6 +111,15 @@
   }
 }
 
+.home-profile-circle:hover{
+  cursor: pointer;
+}
+
+.home-profile-circle img{
+  width: 4rem;
+  border-radius: 50%;
+}
+
 .devdash-level-circle h1 {
   margin: 0;
   font-size: 2.5rem;

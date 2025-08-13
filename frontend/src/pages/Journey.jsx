@@ -196,10 +196,17 @@ export default function Journey() {
       { top: "50%", left: "38%", projectId: 3, scale: 1.2 },
     ],
     InfernoInterface: [
-      { top: "65%", left: "31%", projectId: 4, scale: 0.8 },
-      { top: "72%", left: "68%", projectId: 5, scale: 1.0 },
-      { top: "43%", left: "26%", projectId: 6, scale: 1.2 },
+      { top: "64%", left: "50.5%", projectId: 4, scale: 0.8 },
+      { top: "61%", left: "71.5%", projectId: 5, scale: 1.0 },
+      { top: "49%", left: "45%", projectId: 6, scale: 1.2 },
+      { top: "40%", left: "62%", projectId: 7, scale: 1.4 },
     ]
+  };
+
+  const mapInfo = {
+    BeachIsland: "Learn Basic Syntax",
+    InfernoInterface: "Learn How To Use and Manipulate Variables",
+    // Add more maps here...
   };
 
   const mapNames = Object.keys(checkpointLayouts); // ["BeachIsland", "JungleMountain"]
@@ -449,13 +456,18 @@ export default function Journey() {
           {mapNames.map((mapName) => (
             <li
               key={mapName}
-              className={currentMap === mapName ? 'active' : ''}
+              className={`map-item ${currentMap === mapName ? 'active' : ''}`}
               onClick={() => {
                 handleMapChange(mapName);
                 setIsMapPanelOpen(false);
               }}
             >
               <p>{formatMapName(mapName)}</p>
+
+              <div className="info-container">
+                <i class="fa-solid fa-circle-info"></i>
+                <div className="tooltip">{mapInfo[mapName] || "No info available"}</div>
+              </div>
             </li>
           ))}
         </ul>

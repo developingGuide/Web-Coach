@@ -312,8 +312,6 @@ const fetchCurrentTask = async () => {
     tasksToday.push(userState.current_task_id);
     dailyLog[today] = tasksToday;
 
-    console.log("Updated daily log:", dailyLog);
-
     // 3. Update back to Supabase
     await supabase
       .from('task_completion_log')
@@ -483,7 +481,7 @@ const fetchCurrentTask = async () => {
               <pre className="expectedOutput">{resultData.expectedOutput}</pre>
             </>
           )}
-
+          <p>Please wait for the next task!</p>
           <button onClick={shipTask}>
             {resultData.gainedExp >= 0 ? "Continue" : "Continue"}
           </button>

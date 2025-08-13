@@ -5,7 +5,6 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  console.log("🔥 API HIT:", req.method);
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
@@ -23,8 +22,8 @@ export default async function handler(req, res) {
           quantity: 1,
         },
       ],
-      success_url: `https://devsim.app/success?plan=${planName}&email=${email}`,
-      cancel_url: `https://devsim.app/cancel`,
+      success_url: `https://devsim.fun/success?plan=${planName}&email=${email}`,
+      cancel_url: `https://devsim.fun/cancel`,
       metadata: { display_name },
     });
 

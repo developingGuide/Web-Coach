@@ -9,10 +9,6 @@ import LoadingOverlay from '../components/LoadingOverlay';
 
 const Inbox = () => {
   const {user} = useContext(AuthContext)
-  // if (!user) {
-  //   return <div>Loading...</div>;
-  // }
-  // const userId = user.id
   const [inboxItems, setInboxItems] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedProjectId, setSelectedProjectId] = useState(null);

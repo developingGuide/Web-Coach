@@ -1,5 +1,5 @@
 import {Routes, Route, useLocation} from 'react-router-dom';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import Dashboard from './pages/Dashboard'
 import Test from './pages/test';
 import Home from './pages/Home';
@@ -25,6 +25,46 @@ import OnboardingPage from './pages/Onboarding';
 import ChatPage from './pages/ChatPage';
 import ProfileSettings from './pages/ProfileSettings';
 import Leaderboard from './pages/Leaderboard';
+
+function BackgroundMusic() {
+  const location = useLocation();
+  const audioRef = useRef(null);
+
+  // This mapping shows which pages share the same music
+  const pageMusicMap = {
+    "/dashboard": "/dashboard.mp3",
+    "/inbox": "/dashboard.mp3",
+    "/challenges": "/dashboard.mp3",
+    "/playground": "/coding.mp3",
+    "/profile": "/settingsProfile.mp3",
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.volume = 0.2;
+
+    // Pick the track for the current page
+    const newSrc = pageMusicMap[location.pathname] || "/dashboard.mp3";
+
+    // Only update src if it actually changes
+    if (audio.src !== window.location.origin + newSrc) {
+      audio.src = newSrc;
+      audio.play().catch(() => {});
+    }
+
+    const playMusic = () => {
+      audio.play().catch(() => {});
+      document.removeEventListener("click", playMusic);
+    };
+    document.addEventListener("click", playMusic);
+
+  }, [location.pathname]);
+
+  return <audio ref={audioRef} loop />;
+}
+
 
 function App() {
     const {user} = useContext(AuthContext)
@@ -93,6 +133,7 @@ function App() {
 
     return (
         <div className='App'>
+            <BackgroundMusic />
             {!isFullScreen && (
                 <Navbar
                     exp={currentLevelExp}

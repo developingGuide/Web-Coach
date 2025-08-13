@@ -282,6 +282,9 @@ const Dashboard = () => {
           {/* Center Area */}
           <div className="devdash-center">
             <div className="devdash-level-circle">
+              <div onClick={() => navigate('/profile')} className="home-profile-circle">
+                <img src={avatar} alt="avatar"/>
+              </div>
               <h1>LEVEL {userLvl}</h1>
               <p>Status: <span className="neon-glow">Live</span></p>
               <button className="logoutBtn" onClick={handleLogout}>Log Out</button>
