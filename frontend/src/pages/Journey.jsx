@@ -9,6 +9,9 @@ import CloudLayer from "../components/CloudLayer";
 import { AuthContext } from "../components/AuthContext";
 import ScrollOverlay from "../components/ScrollOverlay";
 import EffectsOverlay from "../components/EffectsOverlay";
+import Shepherd from 'shepherd.js';
+import "./Tour2.css";
+// import 'shepherd.js/dist/css/shepherd.css';
 
 export default function Journey() {
   // const userId = "demo_user"
@@ -191,9 +194,9 @@ export default function Journey() {
   
   const checkpointLayouts = {
     BeachIsland: [
-      { top: "70%", left: "40%", projectId: 1, scale: 0.8 },
+      { top: "65%", left: "40%", projectId: 1, scale: 0.8 },
       { top: "68%", left: "60%", projectId: 2, scale: 1.0 },
-      { top: "50%", left: "38%", projectId: 3, scale: 1.2 },
+      { top: "40%", left: "69%", projectId: 3, scale: 1.2 },
     ],
     InfernoInterface: [
       { top: "64%", left: "50.5%", projectId: 4, scale: 0.8 },
@@ -227,9 +230,120 @@ export default function Journey() {
     }, 2000);
   };
 
+
+  const startJourneyTour = () => {
+    const tour = new Shepherd.Tour({
+      useModalOverlay: true,
+      defaultStepOptions: {
+        scrollTo: false,
+        cancelIcon: { enabled: true },
+        classes: 'shepherd-theme-arrows neon-tour', // custom class for theme
+        buttons: [
+          { text: 'Next', action: Shepherd.next }
+        ]
+      }
+    });
+
+    // Step 1 — Intro
+    tour.addStep({
+      id: 'map-intro',
+      text: 'This is a map, where the projects are stored!',
+      attachTo: {
+        element: '.map-container', // adjust to your map wrapper selector
+        on: 'bottom'
+      },
+      buttons: [{ text: 'Next', action: tour.next }]
+    });
+
+    // Step 2 — Highlight X marks
+    tour.addStep({
+      id: 'marks-intro',
+      text: 'The projects are planned by the Idealist... But they did not have the skills to build them...',
+      attachTo: {
+        element: '.x-on-map',
+        on: 'bottom'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    // Step 3 — Legacy story
+    tour.addStep({
+      id: 'legacy',
+      text: 'So they left marks on the map for builders like you to not only build their projects, but to carry on their legacy.',
+      attachTo: {
+        element: '.x-on-map',
+        on: 'top'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    // Step 4 — Difficulty sizes
+    tour.addStep({
+      id: 'difficulty',
+      text: 'Each X is marked with various sizes based on difficulty — smallest is the easiest, biggest is the toughest. They recommend going from smallest to biggest',
+      attachTo: {
+        element: '.x-on-map',
+        on: 'top'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    // Step 5 — Open smallest project
+    tour.addStep({
+      id: 'smallest',
+      text: "Let's open up the smallest one to see what they planned...",
+      attachTo: {
+        element: '.x-on-map.smallest', // add a class to the smallest project mark
+        on: 'top'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Done', action: tour.complete }
+      ]
+    });
+
+    tour.start();
+  };
+
+
   function formatMapName(name) {
     return name.replace(/([a-z])([A-Z])/g, '$1 $2');
   }
+  
+  function useSound(src) {
+    const soundRef = useRef(new Audio(src));
+
+    const play = () => {
+      const sound = soundRef.current;
+      sound.currentTime = 0; // rewind so it can play repeatedly
+      sound.play().catch(() => {});
+    };
+
+
+    return play;
+  }
+    
+  
+  const playClick = useSound("/sfx/backBtn.mp3");
+
+  // useEffect(() => {
+    //   if (user && !localStorage.getItem('seenJourneyTour')) {
+  //     startJourneyTour();
+  //     localStorage.setItem('seenJourneyTour', 'true');
+  //   }
+  // }, [user]);
+
+
+
 
   useEffect(() => {
     fetchTasks();
@@ -359,7 +473,7 @@ export default function Journey() {
     {isCoverVisible && <div className="cloud-cover-opening"></div>}
 
 
-    <button className="backBtn" onClick={() => {navigate('/dashboard')}}>Back</button>
+    <button className="backBtn" onClick={() => {playClick(); navigate('/dashboard')}}>Back</button>
 
     <div
       className="map-container"
@@ -472,6 +586,14 @@ export default function Journey() {
           ))}
         </ul>
       </div>
+      
+      <button 
+        style={{ position: 'absolute', top: 20, right: 20, zIndex: 9999 }}
+        onClick={startJourneyTour}
+      >
+        Restart Tour
+      </button>
+
     </div>
     </>
   );

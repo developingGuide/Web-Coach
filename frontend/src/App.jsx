@@ -32,11 +32,11 @@ function BackgroundMusic() {
 
   // This mapping shows which pages share the same music
   const pageMusicMap = {
-    "/dashboard": "/dashboard.mp3",
-    "/inbox": "/dashboard.mp3",
-    "/challenges": "/dashboard.mp3",
-    "/playground": "/coding.mp3",
-    "/profile": "/settingsProfile.mp3",
+    "/dashboard": "/music/dashboard.mp3",
+    "/inbox": "/music/dashboard.mp3",
+    "/challenges": "/music/dashboard.mp3",
+    "/playground": "/music/coding.mp3",
+    "/profile": "/music/settingsProfile.mp3",
   };
 
   useEffect(() => {

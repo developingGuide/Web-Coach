@@ -1,0 +1,37 @@
+.shepherd-element {
+  background: #0f0f0f; /* dark mode */
+  border: 2px solid #00ff99; /* neon green border */
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 255, 153, 0.5);
+  font-family: "exo 2", 'Orbitron', sans-serif;
+  padding: 1rem;
+}
+
+.shepherd-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #e0ffe0;
+}
+
+.shepherd-button {
+  background: #00ff99;
+  color: #000;
+  border: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shepherd-button:hover {
+  background: #00cc77;
+}
+
+.shepherd-cancel-icon {
+  color: #ff5555;
+}
+
+.shepherd-arrow:before {
+  border-color: #00ff99;
+}

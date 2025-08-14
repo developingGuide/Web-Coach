@@ -1,5 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import "./Dashboard.css";
+import "./Tour.css";
 import {useNavigate, useLocation} from "react-router-dom"
 import supabase from "../../config/supabaseClient";
 import CalendarHeatmap from 'react-calendar-heatmap';
@@ -8,6 +9,8 @@ import moment from "moment";
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { AuthContext } from "../components/AuthContext";
+import Shepherd from 'shepherd.js';
+import 'shepherd.js/dist/css/shepherd.css';
 
 
 const Dashboard = () => {
@@ -28,6 +31,124 @@ const Dashboard = () => {
   const [avatar, setAvatar] = useState('')
   const location = useLocation();
   const transition = location.state?.transition;
+
+
+  // useEffect(() => {
+  //   if (!user) return;
+
+  //   const tour = new Shepherd.Tour({
+  //     useModalOverlay: true,
+  //     defaultStepOptions: {
+  //       scrollTo: true,
+  //       cancelIcon: { enabled: true },
+  //       classes: 'shepherd-theme-arrows',
+  //       buttons: [
+  //         {
+  //           text: 'Next',
+  //           action: Shepherd.next
+  //         }
+  //       ]
+  //     }
+  //   });
+
+  //   tour.addStep({
+  //     id: 'welcome',
+  //     text: 'Welcome to DevSim. This is the main dashboard!',
+  //     buttons: [
+  //       {
+  //         text: 'Next',
+  //         action: tour.next
+  //       }
+  //     ]
+  //   });
+
+  //   tour.addStep({
+  //     id: 'journey',
+  //     text: "Let's start the journey rolling by picking a project at the Journey page.",
+  //     attachTo: {
+  //       element: '.arrow-group.arrow-bottom',
+  //       on: 'top'
+  //     },
+  //     buttons: [
+  //       {
+  //         text: 'Back',
+  //         action: tour.back
+  //       },
+  //       {
+  //         text: 'Done',
+  //         action: tour.complete
+  //       }
+  //     ]
+  //   });
+
+  //   if (!localStorage.getItem('seenDashboardTour')) {
+  //     tour.start();
+  //     localStorage.setItem('seenDashboardTour', 'true');
+  //   }
+
+  // }, [user]);
+
+
+  const startDashboardTour = () => {
+    const tour = new Shepherd.Tour({
+      useModalOverlay: true,
+      defaultStepOptions: {
+        scrollTo: true,
+        cancelIcon: { enabled: true },
+        classes: 'shepherd-theme-arrows',
+        buttons: [
+          {
+            text: 'Next',
+            action: Shepherd.next
+          }
+        ]
+      }
+    });
+
+    tour.addStep({
+      id: 'welcome',
+      text: 'Welcome to DevSim. This is the main dashboard!',
+      // attachTo: {
+      //   element: '.devdash-root',
+      //   on: 'bottom'
+      // },
+      buttons: [
+        {
+          text: 'Next',
+          action: tour.next
+        }
+      ]
+    });
+
+    tour.addStep({
+      id: 'journey',
+      text: "Let's start the journey rolling by picking a project at the Journey page.",
+      attachTo: {
+        element: '.arrow-group.arrow-bottom',
+        on: 'top'
+      },
+      buttons: [
+        {
+          text: 'Back',
+          action: tour.back
+        },
+        {
+          text: 'Done',
+          action: tour.complete
+        }
+      ]
+    });
+
+    tour.start();
+  };
+
+  useEffect(() => {
+    if (user && !localStorage.getItem('seenDashboardTour')) {
+      startDashboardTour();
+      localStorage.setItem('seenDashboardTour', 'true');
+    }
+  }, [user]);
+
 
   useEffect(() => {
     const fetchPreview = async () => {
@@ -94,7 +215,22 @@ const Dashboard = () => {
     fetchCurrentMap();
   }, [user]); // ← add user as a dependency
 
+  function useSound(src) {
+    const soundRef = useRef(new Audio(src));
+
+    const play = () => {
+      const sound = soundRef.current;
+      sound.currentTime = 0; // rewind so it can play repeatedly
+      sound.play().catch(() => {});
+    };
+
+
+    return play;
+  }
   
+
+  const playClick = useSound("/sfx/navigationBtn.mp3");
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -314,19 +450,18 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="arrow-group arrow-left" onClick={() => handleLaunch('/challenges', 'slide-left')}>
+        <div className="arrow-group arrow-left" onClick={() => {playClick(); handleLaunch('/challenges', 'slide-left')}}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-left"></i></div>
           <div className="arrow-label">Challenges</div>
         </div>
-        <div className="arrow-group arrow-right" onClick={() => handleLaunch('/inbox', 'slide')}>
+        <div className="arrow-group arrow-right" onClick={() => {playClick(); handleLaunch('/inbox', 'slide')}}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-right"></i></div>
           <div className="arrow-label">Codex</div>
         </div>
-        <div className="arrow-group arrow-bottom" onClick={() => handleLaunch('/journey', 'cloud')}>
+        <div className="arrow-group arrow-bottom" onClick={() => {playClick(); handleLaunch('/journey', 'cloud')}}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-down"></i></div>
           <div className="arrow-label">View Journey</div>
         </div>
-
       </div>
     </div>
   );

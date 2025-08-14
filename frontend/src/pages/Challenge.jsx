@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from "../components/AuthContext";
 import supabase from '../../config/supabaseClient';
@@ -50,6 +50,23 @@ export default function ChallengeMap() {
   };
 
 
+  function useSound(src) {
+    const soundRef = useRef(new Audio(src));
+
+    const play = () => {
+      const sound = soundRef.current;
+      sound.currentTime = 0; // rewind so it can play repeatedly
+      sound.play().catch(() => {});
+    };
+
+
+    return play;
+  }
+    
+  
+  const playClick = useSound("/sfx/backBtn.mp3");
+
+
   useEffect(() => {
     if (user) {
       fetchUserPlan();
@@ -61,7 +78,7 @@ export default function ChallengeMap() {
     <div className={`page-slide ${transition === 'slide-left' ? 'inbox-page-slide-in' : ''} ${isExiting ? 'exit-to-left-active' : ''}`}>
       {userPlan === 'starter' && (
         <div className="locked-overlay">
-          <button className="backBtn" onClick={handleBack}>Back</button>
+          <button className="backBtn" onClick={() => {playClick(); handleBack()}}>Back</button>
           <div className="locked-message">
             🔒 This feature is for Pro users only
           </div>

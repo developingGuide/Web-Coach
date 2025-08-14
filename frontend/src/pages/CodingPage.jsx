@@ -9,6 +9,9 @@ import { fireConfetti } from '../utils/confetti';
 import HtmlCodeEditor from '../components/HtmlCodeEditor';
 import CssCodeEditor from '../components/CssCodeEditor';
 import JsCodeEditor from '../components/JsCodeEditor';
+import Shepherd from 'shepherd.js';
+import 'shepherd.js/dist/css/shepherd.css';
+import './Tour4.css'
 
 const CodingPage = () => {
   const {user} = useContext(AuthContext)
@@ -85,11 +88,100 @@ const CodingPage = () => {
 </html>
 `;
 
+  useEffect(() => {
+    if (user && !localStorage.getItem('seenCodingPageTour')) {
+      startCodingPageTour();
+      localStorage.setItem('seenCodingPageTour', 'true');
+    }
+  }, [user]);
 
 
-const fetchCurrentTask = async () => {
-  const { data: userState, error: stateError } = await supabase
-  .from("user_state")
+  function startCodingPageTour() {
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        scrollTo: false,
+        cancelIcon: {
+          enabled: true
+        }
+      }
+    });
+
+    tour.addStep({
+      id: 'welcome',
+      text: 'Welcome to the coding page... where you code!',
+      buttons: [
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    tour.addStep({
+      id: 'tabs',
+      text: 'By default, HTML, CSS and JavaScript are already linked together. You just have to play with the tabs.',
+      attachTo: {
+        element: '.tabButtons',
+        on: 'bottom'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    tour.addStep({
+      id: 'tools',
+      text: 'Here are tools to help you create projects. Sometimes, some tools may be missing depending on what concept you’re learning!',
+      attachTo: {
+        element: '.toolsBtn',
+        on: 'bottom'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    tour.addStep({
+      id: 'run',
+      text: 'You can see the result of your code with the Run button.',
+      attachTo: {
+        element: '.runBtn',
+        on: 'bottom'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    tour.addStep({
+      id: 'ship',
+      text: 'When you are done, click Ship! This will check your code and give you EXP based on your answer.',
+      attachTo: {
+        element: '.shipButton',
+        on: 'bottom'
+      },
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    tour.addStep({
+      id: 'end',
+      text: 'Now you’re on your own! Feel free to explore. Some features may still be limited as we’re still building. Goodbye!',
+      buttons: [
+        { text: 'Finish', action: tour.complete }
+      ]
+    });
+
+    tour.start();
+  }
+
+
+
+  const fetchCurrentTask = async () => {
+    const { data: userState, error: stateError } = await supabase
+    .from("user_state")
       .select("selected_project_id, current_task_id")
       .eq("user_id", userId)
       .single();
@@ -427,10 +519,10 @@ const fetchCurrentTask = async () => {
 
         <div className="codingButtons">
 
-          <button onClick={() => setShowTools(!showTools)}>
+          <button className='toolsBtn' onClick={() => setShowTools(!showTools)}>
             {showTools ? 'Hide Tools' : 'Show Tools'}
           </button>
-          <button onClick={handleRun}>Run</button>
+          <button className='runBtn' onClick={handleRun}>Run</button>
           <button className="shipButton" onClick={handleShip}>Ship</button>
         </div>
       </header>

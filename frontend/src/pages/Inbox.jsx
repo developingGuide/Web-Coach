@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import Sidebar from '../components/Sidebar';
 import './Inbox.css';
 import supabase from '../../config/supabaseClient';
@@ -6,6 +6,9 @@ import { AuthContext } from '../components/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fireConfetti } from '../utils/confetti';
 import LoadingOverlay from '../components/LoadingOverlay';
+import Shepherd from 'shepherd.js';
+import 'shepherd.js/dist/css/shepherd.css';
+import './Tour3.css'
 
 const Inbox = () => {
   const {user} = useContext(AuthContext)
@@ -50,6 +53,75 @@ const Inbox = () => {
 
   const location = useLocation();
   const transition = location.state?.transition
+
+  function useSound(src) {
+    const soundRef = useRef(new Audio(src));
+
+    const play = () => {
+      const sound = soundRef.current;
+      sound.currentTime = 0; // rewind so it can play repeatedly
+      sound.play().catch(() => {});
+    };
+
+
+    return play;
+  }
+    
+  
+  const playClick = useSound("/sfx/backBtn.mp3");
+
+
+  function startInboxTour() {
+    const tour = new Shepherd.Tour({
+      defaultStepOptions: {
+        cancelIcon: { enabled: true },
+        classes: 'shepherd-theme-arrows',
+        scrollTo: { behavior: 'smooth', block: 'center' }
+      }
+    });
+
+    // Step 1
+    tour.addStep({
+      id: 'welcome',
+      text: 'Say hello to Codex — she will help you complete the project you scanned on your trip.',
+      buttons: [
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    // Step 2
+    tour.addStep({
+      id: 'explain-tasks',
+      text: 'She will translate what the Idealists have written and produce tasks to finish your project.',
+      buttons: [
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    // Step 3 (Highlight inbox preview)
+    tour.addStep({
+      id: 'open-task',
+      text: 'Let’s open up one task and see what she has to say!',
+      attachTo: {
+        element: '.inbox-email-preview',
+        on: 'bottom'
+      },
+      buttons: [
+        { text: "Let's Go!", action: tour.complete }
+      ]
+    });
+
+    tour.start();
+  }
+
+
+  useEffect(() => {
+    if (user && !localStorage.getItem('seenInboxTour')) {
+      startInboxTour();
+      localStorage.setItem('seenInboxTour', 'true');
+    }
+  }, [user]);
+
 
 
   useEffect(() => {
@@ -154,7 +226,7 @@ const Inbox = () => {
       ${isExiting ? 'exit-to-right-active' : ''}
     `}>
       <div className="inbox-background">
-        <button className="inboxBackBtn" onClick={handleBack}>Back</button>
+        <button className="inboxBackBtn" onClick={() => {playClick(); handleBack()}}>Back</button>
         <div className="inbox-main">
           <div className="inbox-sidebar">
             <h2>Codex</h2>
