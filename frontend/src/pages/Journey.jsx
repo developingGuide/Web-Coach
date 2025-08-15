@@ -356,7 +356,12 @@ export default function Journey() {
   // }, [user]);
 
 
-
+  useEffect(() => {
+    if (user && !localStorage.getItem('seenJourneyTour')) {
+      startJourneyTour();
+      localStorage.setItem('seenJourneyTour', 'true');
+    }
+  }, [user]);
 
   useEffect(() => {
     fetchTasks();
@@ -607,12 +612,12 @@ export default function Journey() {
         </ul>
       </div>
       
-      <button 
+      {/* <button 
         style={{ position: 'absolute', top: 20, right: 20, zIndex: 9999 }}
         onClick={startJourneyTour}
       >
         Restart Tour
-      </button>
+      </button> */}
 
     </div>
     </>
