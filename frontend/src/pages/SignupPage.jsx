@@ -16,9 +16,9 @@ const plans = [
     name: "Warrior",
     price: "$9/mo",
     description: "For learners who want to compete.",
-    features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards"],
+    features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards", "Grandfathered Pricing"],
     highlighted: true,
-    priceId: "price_1Ru2kvJomOLGn4VAckXBfe5s"
+    priceId: "price_1RwNTOJomOLGn4VA5YsAoszl"
   }
   // ,
   // {
@@ -246,7 +246,7 @@ export default function SignupPage() {
                     {plan.name === "Warrior" ? (
                       <>
                         <span className="old-price">$9/mo</span>
-                        <span className="new-price">$4.99/mo</span>
+                        <span className="new-price">$2.99/mo</span>
                         <span className="beta-tag">Beta Discount!</span>
                       </>
                     ) : (
