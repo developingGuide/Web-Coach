@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         },
       ],
       success_url: `https://devsim.fun/success?plan=${planName}&email=${email}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://devsim.fun/cancel`,
+      cancel_url: `https://devsim.fun/signup`,
       metadata: { display_name },
     });
 

@@ -94,31 +94,51 @@ const ProfileSettings = () => {
   // };
 
   async function handleDeleteAccount() {
+    const step1 = window.confirm(
+      "⚠️ Are you VERY VERY sure you want to delete your account FOREVERR??????"
+    );
+    if (!step1) return;
+
+    // Second confirmation with extra detail
+    const step2 = window.prompt(
+      "Type DELETE to confirm you understand this action is irreversible."
+    );
+
+    if (step2 !== "DELETE") {
+      alert("Account deletion cancelled.");
+      return;
+    }
+
     const userId = user.id;
 
-    // Testing
-    // const res = await fetch("http://localhost:4000/delete-account", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ userId }),
-    // });
-
-    const res = await fetch("/api/cancel-subscription", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
-    });
-
-    const result = await res.json();
-    if (result.success) {
-      console.log("Account deleted successfully");
-      await supabase.auth.signOut();
-      window.location.href = "/";
-    } else {
-      console.error("Failed to delete account:", result.error);
+    try{
+      // Testing
+      // const res = await fetch("http://localhost:4000/delete-account", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ userId }),
+      // });
+    
+      const res = await fetch("/api/cancel-subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+    
+      const result = await res.json();
+      if (result.success) {
+        console.log("Account deleted successfully");
+        await supabase.auth.signOut();
+        window.location.href = "/";
+      } else {
+        console.error("Failed to delete account:", result.error);
+      }
+    } catch {
+      console.error("Delete request failed:", err);
+      alert("An error occurred. Please check your internet connection.");
     }
   }
-
+  
 
 
 

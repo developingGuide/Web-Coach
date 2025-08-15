@@ -362,7 +362,7 @@ const Dashboard = () => {
             <div className="nav-icon"><i class="fa-solid fa-gear"></i></div>
             <div className="nav-icon" onClick={() => {navigate('/leaderboard')}}><i class="fa-solid fa-trophy"></i></div>
           </div> */}
-          <div className="corner-trigger left">
+          <div className="corner-trigger left" onClick={() => navigate('/profile')}>
             <i className="fa-solid fa-gear"></i>
           </div>
 

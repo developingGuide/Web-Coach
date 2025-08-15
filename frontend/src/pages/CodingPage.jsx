@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { AuthContext } from '../components/AuthContext';
 import CodeEditor from '../components/CodeEditor';
 import './CodingPage.css';
@@ -484,9 +484,25 @@ const CodingPage = () => {
       expectedOutput: taskData?.expectedOutput || "",
     });
     setShowResultCard(true);
+    congrats();
   };
 
+  function useSound(src) {
+    const soundRef = useRef(new Audio(src));
 
+    const play = () => {
+      const sound = soundRef.current;
+      sound.volume = 0.3
+      sound.currentTime = 0; // rewind so it can play repeatedly
+      sound.play().catch(() => {});
+    };
+
+
+    return play;
+  }
+  
+
+  const congrats = useSound("/sfx/congrats.mp3");
 
 
   const handleBack = () => {

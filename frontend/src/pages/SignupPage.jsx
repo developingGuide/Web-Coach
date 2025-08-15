@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import supabase from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import './SignupPage.css'
@@ -48,17 +48,39 @@ export default function SignupPage() {
   const handleNext = async (e) => {
     e.preventDefault();
 
-    if (!email || !password || !display_name) return;
+    const trimmedName = display_name.trim();
 
-    const taken = await checkUsernameTaken(display_name.trim());
+    if (!email || !password || !trimmedName) return;
+
+    const taken = await checkUsernameTaken(trimmedName);
 
     if (taken) {
-      alert("That username is already taken. Try something else!");
-      return;
+      setUsernameError("That username is already taken. Try something else!");
+      return; // 🚫 Stop here — do not go to step 2
+    } else{
+      // Clear any old error before moving on
+      setUsernameError("");
+      setStep(2);
     }
-
-    setStep(2); // move to pricing step
   };
+
+
+  function useSound(src) {
+    const soundRef = useRef(new Audio(src));
+
+    const play = () => {
+      const sound = soundRef.current;
+      sound.volume = 0.3
+      sound.currentTime = 0; // rewind so it can play repeatedly
+      sound.play().catch(() => {});
+    };
+
+
+    return play;
+  }
+  
+
+  const congrats = useSound("/sfx/congrats.mp3");
 
 
   const handlePlanClick = async (plan) => {
@@ -76,7 +98,9 @@ export default function SignupPage() {
         return;
       } else{
         if (data.session) {
+          await supabase.from("usernames").insert({ display_name });
           fireConfetti()
+          congrats()
           setShowNotification(true);
           setTimeout(() => {
             navigate("/newUser");
@@ -133,17 +157,18 @@ export default function SignupPage() {
 
   const checkUsernameTaken = async (username) => {
     const { data, error } = await supabase
-      .from("user_state")
-      .select("user_id")
+      .from("usernames")
+      .select("display_name")
       .eq("display_name", username)
-      .maybeSingle();
+      .limit(1);
 
     if (error) {
       console.error("Username check error:", error.message);
       return false;
     }
 
-    return !!data; // true if username exists
+    console.log(data)
+    return data.length > 0; // true if username exists
   };
 
 
@@ -155,6 +180,7 @@ export default function SignupPage() {
       </div>
     )}
     <div className="auth-wrapper">
+      <button className="backBtn" onClick={() => {navigate("/")}}>Back</button>
       <div className={`auth-card ${step === 2 ? "wide" : ""}`}>
         {step === 1 && (
           <>

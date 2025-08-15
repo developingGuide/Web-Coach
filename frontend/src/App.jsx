@@ -78,6 +78,8 @@ function App() {
     const [nextLevelExp, setNextLevelExp] = useState(100);
     const [currentLevelExp, setCurrentLevelExp] = useState(0);
     const [avatar, setAvatar] = useState('');
+
+    const clickSound = useRef(new Audio("/sfx/navigationBtn.mp3"));
     
     useEffect(() => {
         if (!user) {
@@ -129,6 +131,25 @@ function App() {
         return () => clearInterval(interval);
     }, [user]);
 
+    useEffect(() => {
+        const handleButtonClick = (e) => {
+        // Only play for <button> or elements with role="button"
+        if (
+            e.target.tagName === "BUTTON" ||
+            e.target.getAttribute("role") === "button"
+        ) {
+            const sound = clickSound.current;
+            sound.currentTime = 0;
+            sound.play().catch(() => {});
+        }
+        };
+
+        document.addEventListener("click", handleButtonClick);
+
+        return () => {
+        document.removeEventListener("click", handleButtonClick);
+        };
+    }, []);
 
 
     return (

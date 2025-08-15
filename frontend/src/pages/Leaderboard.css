@@ -6,6 +6,10 @@
   text-align: center;
 }
 
+.leaderboard h1{
+  margin-bottom: 1rem;
+}
+
 .leaderboard table {
   width: 100%;
   border-collapse: collapse;

@@ -11,7 +11,7 @@
 .homePageImg{
   position: fixed;
   width: 100%;
-  filter: blur(2px);
+  filter: blur(1px);
 }
 
 

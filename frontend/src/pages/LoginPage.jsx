@@ -24,6 +24,7 @@ export default function LoginPage() {
 
   return (
     <div className="auth-wrapper">
+      <button className="backBtn" onClick={() => {navigate("/")}}>Back</button>
       <div className="auth-card">
         <h2>Welcome Back</h2>
         <form onSubmit={handleLogin} className="auth-form">

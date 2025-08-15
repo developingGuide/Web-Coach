@@ -260,7 +260,7 @@ export default function Journey() {
     // Step 1 — Intro
     tour.addStep({
       id: 'map-intro',
-      text: 'This is a map, where the projects are stored!',
+      text: 'This is a map, where the projects are stored! A new map will be launched every month.',
       attachTo: {
         element: '.map-container', // adjust to your map wrapper selector
         on: 'bottom'

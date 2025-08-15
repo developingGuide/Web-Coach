@@ -66,8 +66,23 @@ const Inbox = () => {
 
     return play;
   }
+
+  function useCongratsSound(src) {
+    const soundRef = useRef(new Audio(src));
+
+    const play = () => {
+      const sound = soundRef.current;
+      sound.volume = 0.3
+      sound.currentTime = 0; // rewind so it can play repeatedly
+      sound.play().catch(() => {});
+    };
+
+
+    return play;
+  }
     
   
+  const congrats = useCongratsSound("/sfx/congrats.mp3");
   const playClick = useSound("/sfx/backBtn.mp3");
 
 
@@ -172,6 +187,7 @@ const Inbox = () => {
             .eq("user_id", user.id);
 
           fireConfetti()
+          congrats()
           // 👇 Show popup
           setShowProjectDonePopup(true);
           return;

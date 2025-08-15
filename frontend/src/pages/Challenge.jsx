@@ -6,9 +6,9 @@ import './Challenge.css';
 
 const challenges = [
   { id: 'c1', type: '1v1', title: 'Speed CSS Battle', difficulty: 'Medium', img: "/1v1.png" },
-  { id: 'c2', type: '2v2', title: 'Team Flexbox Showdown', difficulty: 'Hard' },
-  { id: 'c3', type: 'Minigame', title: 'DOM Ninja', difficulty: 'Easy' },
-  { id: 'c4', type: 'Monthly Championship', title: 'June Arena', difficulty: 'Expert' }
+  // { id: 'c2', type: '2v2', title: 'Team Flexbox Showdown', difficulty: 'Hard' },
+  // { id: 'c3', type: 'Minigame', title: 'DOM Ninja', difficulty: 'Easy' },
+  // { id: 'c4', type: 'Monthly Championship', title: 'June Arena', difficulty: 'Expert' }
 ];
 
 export default function ChallengeMap() {
@@ -112,6 +112,12 @@ export default function ChallengeMap() {
           </div>
         </div>
       )}
+      <div className="locked-overlay">
+        <button className="backBtn" onClick={() => {playClick(); handleBack()}}>Back</button>
+        <div className="locked-message">
+          <p>🔒 Sadly, there's not enough people online to battle...</p>
+        </div>
+      </div>
       <button className="backBtn" onClick={handleBack}>Back</button>
       <div className="challenge-container">
         <div className={`grid ${selected ? 'compressed' : ''}`}>
