@@ -18,8 +18,7 @@ const plans = [
     description: "For learners who want to compete.",
     features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards"],
     highlighted: true,
-    priceId: "price_1Ru2kvJomOLGn4VAckXBfe5s"
-    // priceId: "price_1RaR6WJomOLGn4VASjYvEprO"
+    priceId: "price_1RwDwoJomOLGn4VAilGWWRU3"
   }
   // ,
   // {
@@ -89,6 +88,18 @@ export default function SignupPage() {
     } else {
       // Call your Stripe endpoint
       try {
+        // Testing
+        // const res = await fetch("http://localhost:4000/create-checkout-session", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     email,
+        //     display_name,
+        //     priceId: plan.priceId,
+        //     planName: plan.name
+        //    }),
+        // });
+
         const res = await fetch("/api/create-checkout-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

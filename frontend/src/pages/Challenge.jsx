@@ -66,6 +66,32 @@ export default function ChallengeMap() {
   
   const playClick = useSound("/sfx/backBtn.mp3");
 
+  const upgradePlan = async () => {
+    const userId = user.id
+
+    //Testing
+    // const res = await fetch("http://localhost:4000/upgrade-subscription", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     priceId: "price_1RaRJgJomOLGn4VAJGjdGU1I", // paid tier price ID
+    //     userId: user.id
+    //   })
+    // });
+
+
+    const res = await fetch("/api/upgrade-subscription", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        priceId: "price_1RaRJgJomOLGn4VAJGjdGU1I", // paid tier price ID
+        userId: user.id
+      })
+    });
+
+    const data = await res.json();
+    window.location.href = data.url;
+  }
 
   useEffect(() => {
     if (user) {
@@ -80,7 +106,9 @@ export default function ChallengeMap() {
         <div className="locked-overlay">
           <button className="backBtn" onClick={() => {playClick(); handleBack()}}>Back</button>
           <div className="locked-message">
-            🔒 This feature is for Pro users only
+            <p>🔒 This feature is for Pro users only</p>
+            {/* <button onClick={() => upgradePlan()}>Upgrade</button> */}
+
           </div>
         </div>
       )}

@@ -69,14 +69,58 @@ const ProfileSettings = () => {
     if (!error) alert("Password updated!");
   };
 
-  const handleDeleteAccount = async () => {
-    const confirm = window.confirm("This will permanently delete your account. Proceed?");
-    if (!confirm) return;
+  // const handleDeleteAccount = async () => {
+  //   const confirm = window.confirm("This will permanently delete your account. Proceed?");
+  //   if (!confirm) return;
 
-    await supabase.rpc("delete_user", { user_id: user.id });
-    await supabase.auth.signOut();
-    navigate("/");
-  };
+  //   const user = supabase.auth.getUser(); // get current user ID
+  //   const userId = (await user).data.user.id;
+
+  //   const res = await fetch("/api/cancel-subscription", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ userId }),
+  //   });
+
+  //   const result = await res.json();
+  //   if (result.success) {
+  //     console.log("Subscription canceled & account deleted");
+  //     // Maybe log out & redirect to homepage
+  //     await supabase.auth.signOut();
+  //     navigate("/");
+  //   } else {
+  //     console.error(result.error);
+  //   }
+  // };
+
+  async function handleDeleteAccount() {
+    const userId = user.id;
+
+    // Testing
+    // const res = await fetch("http://localhost:4000/delete-account", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ userId }),
+    // });
+
+    const res = await fetch("/api/cancel-subscription", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      console.log("Account deleted successfully");
+      await supabase.auth.signOut();
+      window.location.href = "/";
+    } else {
+      console.error("Failed to delete account:", result.error);
+    }
+  }
+
+
+
 
   if (!user) return <div>Loading...</div>;
 

@@ -30,6 +30,19 @@ export default function Journey() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isMapPanelOpen, setIsMapPanelOpen] = useState(false);
   const passedMap = location.state?.selectedMap;
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  const handleLaunch = (destination, type) => {
+    setIsLaunching(type);
+
+    if (type === "cloud") {
+      setTimeout(() => {
+        navigate(destination, { state: { transition: 'cloud' } });
+      }, 1000);
+    } else {
+      navigate(destination);
+    }
+  };
 
 
   const fetchProjects = async () => {
@@ -451,6 +464,13 @@ export default function Journey() {
       <img src="/cloud-cover.png" className={`cloud-cover ${isTransitioning ? "visible" : ""}`} />
     </div>
 
+    <div className="cloud-transition">
+      <img
+        src="/cloud-cover.png"
+        className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`}
+      />
+    </div>
+
     {selectedProject && !showIpad && (
       <ScrollOverlay
         project={selectedProject}
@@ -473,7 +493,7 @@ export default function Journey() {
     {isCoverVisible && <div className="cloud-cover-opening"></div>}
 
 
-    <button className="backBtn" onClick={() => {playClick(); navigate('/dashboard')}}>Back</button>
+    <button className="backBtn" onClick={() => {playClick(); handleLaunch('/dashboard', 'cloud');}}>Back</button>
 
     <div
       className="map-container"

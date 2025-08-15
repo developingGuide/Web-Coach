@@ -15,6 +15,7 @@ const ChatPage = () => {
   const channels = ["general", "help", "feedback", "threads"];
   const [showIframe, setShowIframe] = useState(false);
   const [userPlan, setUserPlan] = useState('');
+  const [glitch, setGlitch] = useState(true);
 
   const navigate = useNavigate()
 
@@ -173,6 +174,10 @@ const ChatPage = () => {
     return data?.plan || 'starter';
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => setGlitch(false), 600); // Remove after animation
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -215,7 +220,7 @@ const ChatPage = () => {
 
 
   return (
-    <div className="chat-container">
+    <div className={`chat-container ${glitch ? "glitch-in" : ""}`}>
       {userPlan === 'starter' && (
         <div className="locked-overlay">
           <button className="backBtn" onClick={() => navigate('/dashboard')}>Back</button>

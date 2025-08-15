@@ -14,23 +14,45 @@ export default function SuccessPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const plan = params.get("plan");
+    const sessionId = params.get("session_id");
 
     const email = sessionStorage.getItem("email");
     const password = sessionStorage.getItem("password");
     const display_name = sessionStorage.getItem("display_name");
 
     const doSignup = async () => {
-      if (!email || !password || !display_name || !plan) {
+      if (!email || !password || !display_name || !plan || !sessionId) {
         setStatus("Missing signup info.");
         return;
       }
 
+      // For Testing
+      // 1️⃣ Get subscription_id from backend
+      // const subRes = await fetch("http://localhost:4000/get-subscription-id", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ sessionId })
+      // });
+
+
+
+      const subRes = await fetch("/api/get-subscription-id", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId })
+      });
+
+      const { subscriptionId } = await subRes.json();
+      if (!subscriptionId) {
+        setStatus("Could not get subscription info.");
+        return;
+      }
+
+      // 2️⃣ Sign up user in Supabase Auth
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: { display_name, plan },
-        },
+        options: { data: { display_name, plan, subscription_id: subscriptionId } },
       });
 
       if (error) {
@@ -39,21 +61,19 @@ export default function SuccessPage() {
       }
 
       if (data.session) {
-        // User is already signed in
         const user = data.session.user;
 
-        // Insert to user_state (optional, if needed here)
+        // 3️⃣ Insert to user_state with subscription_id
         const { error: insertError } = await supabase.from("user_state").upsert({
           user_id: user.id,
           display_name,
           plan: plan.toLowerCase(),
+          subscription_id: subscriptionId,
         });
 
-        if (insertError) {
-          console.error("Insert error:", insertError.message);
-        }
+        if (insertError) console.error("Insert error:", insertError.message);
 
-        fireConfetti()
+        fireConfetti();
         setStatus("Account created! Redirecting...");
         setTimeout(() => navigate("/newUser"), 1500);
       } else {
@@ -63,6 +83,7 @@ export default function SuccessPage() {
 
     doSignup();
   }, []);
+
 
 
   return (
