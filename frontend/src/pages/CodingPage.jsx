@@ -167,8 +167,17 @@ const CodingPage = () => {
     });
 
     tour.addStep({
+      id: 'freedom',
+      text: 'Now you’re on your own! Feel free to explore. Some features may still be limited as we’re still building.',
+      buttons: [
+        { text: 'Back', action: tour.back },
+        { text: 'Next', action: tour.next }
+      ]
+    });
+
+    tour.addStep({
       id: 'end',
-      text: 'Now you’re on your own! Feel free to explore. Some features may still be limited as we’re still building. Goodbye!',
+      text: 'As this is a beta version, do expect bugs and glitches and weird stuff out of nowhere.. If you face any do email developingguide@gmail.com',
       buttons: [
         { text: 'Finish', action: tour.complete }
       ]

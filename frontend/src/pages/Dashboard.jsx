@@ -33,6 +33,21 @@ const Dashboard = () => {
   const transition = location.state?.transition;
 
 
+
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
+
+  async function sendFeedback(feedbackText) {
+    const { data, error } = await supabase
+      .from("feedback")
+      .insert([{ feedback: feedbackText, user_id: user?.id }]);
+      
+    if (error) console.error(error);
+    else console.log("Feedback sent!");
+  }
+
+  
+
   // useEffect(() => {
   //   if (!user) return;
 
@@ -353,10 +368,71 @@ const Dashboard = () => {
       ${isLaunching === 'slide' ? 'exit-to-left-active' : ''}
       ${isLaunching === 'slide-left' ? 'exit-to-right-active' : ''}
     `}>
+
+      {showFeedback && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
+          <div style={{
+            background: "gray",
+            padding: "20px",
+            borderRadius: "8px",
+            width: "300px"
+          }}>
+            <h3>Send Feedback</h3>
+            <textarea
+              value={feedbackText}
+              onChange={(e) => setFeedbackText(e.target.value)}
+              placeholder="Type your feedback..."
+              style={{ width: "100%", height: "80px", marginBottom: "10px" }}
+            />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button onClick={() => setShowFeedback(false)}>Cancel</button>
+              <button 
+                onClick={async () => {
+                  await sendFeedback(feedbackText);
+                  setFeedbackText("");
+                  setShowFeedback(false);
+                }}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={`devdash-root ${isLaunching === "cloud" ? "launching" : ""}`}>
         <div className="cloud-transition">
           <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`} />
         </div>
+
+        {/* Feedback */}
+        <button 
+          onClick={() => setShowFeedback(true)} 
+          style={{
+            position: "fixed",
+            top: "10px",
+            left: "25px",
+            padding: "8px 12px",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            scale:"0.7"
+          }}
+        >
+          For Feedback (Beta version only)
+        </button>
+
         <div className="devdash-navbar">
           {/* <div className="hud-sidebars">
             <div className="nav-icon"><i class="fa-solid fa-gear"></i></div>
