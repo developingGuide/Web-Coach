@@ -121,13 +121,13 @@ const Home = () => {
         a: "You should know the basics, but you don’t need to be an expert. This app is designed for beginners who want to apply what they’ve learned and escape endless tutorials.",
         },
         {
-        q: "Is this free to use?",
-        a: "There’s a free Starter plan to help you begin. If you want to unlock full journeys, battles, and advanced tracking, you can upgrade anytime.",
+        q: "What kind of projects will I build?",
+        a: "Fun, practical ones—like small games, generators, or mini websites.",
         },
         {
-        q: "Will I get feedback on my code?",
-        a: "Yep. You'll get real-time feedback on some tasks and progress if you're on Warrior tier.",
-        },
+        q: "Do I need to install anything?",
+        a: "Nope. Everything runs in your browser. You can code, test, and learn without setting up a complicated dev environment.",
+        }
     ];
 
     const navigate = useNavigate()
@@ -204,7 +204,7 @@ const Home = () => {
                 </div>
 
 
-                <div className="journey-section">
+                {/* <div className="journey-section">
                     <h2 className="section-title">🌱 Your Journey</h2>
                     <p className="section-subtitle">
                         Level up from HTML noob to frontend hero — one real challenge at a time.
@@ -223,7 +223,7 @@ const Home = () => {
                         ))}
                         </Slider>
                     </div>
-                </div>
+                </div> */}
 
 
                 <div className="pricing-section">
