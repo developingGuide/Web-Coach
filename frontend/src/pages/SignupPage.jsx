@@ -16,7 +16,7 @@ const plans = [
     name: "Warrior",
     price: "$9/mo",
     description: "For learners who want to compete.",
-    features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards", "Grandfathered Pricing"],
+    features: ["UNLIMITED Tasks/day", "Daily Tracking", "Community", "Coding Battles & Leaderboards", "Notion Cheatsheet", "Grandfathered Pricing"],
     highlighted: true,
     priceId: "price_1RwNTOJomOLGn4VA5YsAoszl"
   }

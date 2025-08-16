@@ -13,6 +13,8 @@ export default function ThreadCard({ thread, onClick }) {
   useEffect(() => {
     fetchThreadUserInfo();
     fetchCommentCount();
+    checkIfUserLiked();
+    fetchLikeCount();
   }, []);
 
   const fetchThreadUserInfo = async () => {
@@ -38,19 +40,59 @@ export default function ThreadCard({ thread, onClick }) {
     setCommentCount(count || 0);
   };
 
+  const checkIfUserLiked = async () => {
+    if (!user) return;
+
+    const { data } = await supabase
+      .from("likes")
+      .select("id")
+      .eq("thread_id", thread.id)
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    setLiked(!!data);
+  };
+
 
   const handleLike = async (e) => {
-    e.stopPropagation(); // prevent opening thread
-    const newLiked = !liked;
-    setLiked(newLiked);
-    setLikeCount((prev) => prev + (newLiked ? 1 : -1));
+    e.stopPropagation();
+    if (!user) return; // must be logged in
 
-    const { error } = await supabase
-      .from("threads")
-      .update({ likes: likeCount + (newLiked ? 1 : -1) })
-      .eq("id", thread.id);
+    if (liked) {
+      // Unlike
+      const { error } = await supabase
+        .from("likes")
+        .delete()
+        .eq("thread_id", thread.id)
+        .eq("user_id", user.id);
 
-    if (error) console.error(error);
+      if (!error) {
+        setLiked(false);
+        setLikeCount((prev) => prev - 1);
+      }
+    } else {
+      // Like (with upsert)
+      const {error} = await supabase
+        .from("likes")
+        .insert(
+          { thread_id: thread.id, user_id: user.id },
+          { onConflict: 'thread_id,user_id' } // string, not array
+        );
+
+      if (!error) {
+        setLiked(true);
+        setLikeCount((prev) => prev + 1);
+      }
+    }
+  };
+
+  const fetchLikeCount = async () => {
+    const { count } = await supabase
+      .from("likes")
+      .select("*", { count: "exact", head: true })
+      .eq("thread_id", thread.id);
+
+    setLikeCount(count || 0);
   };
   
   

@@ -421,7 +421,7 @@ const Dashboard = () => {
           style={{
             position: "fixed",
             top: "10px",
-            left: "25px",
+            right: "0",
             padding: "8px 12px",
             color: "#fff",
             border: "none",
@@ -442,9 +442,9 @@ const Dashboard = () => {
             <i className="fa-solid fa-gear"></i>
           </div>
 
-          <div className="corner-trigger right" onClick={() => navigate('/leaderboard')}>
+          {/* <div className="corner-trigger right" onClick={() => navigate('/leaderboard')}>
             <i className="fa-solid fa-trophy"></i>
-          </div>
+          </div> */}
         </div>
         <div className="devdash-layout">
           {/* Left Side */}

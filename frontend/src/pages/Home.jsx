@@ -72,6 +72,8 @@ const Home = () => {
             "Daily Tracking",
             "Community",
             "Coding Battles & Leaderboards",
+            "Notion Cheatsheet",
+            "Grandfathered Pricing"
             ],
             highlighted: true,
         }
@@ -239,7 +241,7 @@ const Home = () => {
                                 {plan.name === "Warrior" ? (
                                     <>
                                     <span className="old-price">$9/mo</span>
-                                    <span className="new-price">$4.99/mo</span>
+                                    <span className="new-price">$2.99/mo</span>
                                     <span className="beta-tag">Beta Discount!</span>
                                     </>
                                 ) : (

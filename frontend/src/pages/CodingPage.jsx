@@ -129,7 +129,7 @@ const CodingPage = () => {
 
     tour.addStep({
       id: 'tools',
-      text: 'Here are tools to help you create projects. Sometimes, some tools may be missing depending on what concept you’re learning!',
+      text: 'Here are tools to help you create projects. Sometimes, some tools may be missing depending on what concept you’re learning! Do not get too overwhelmed the them, you will learn as you go!',
       attachTo: {
         element: '.toolsBtn',
         on: 'bottom'
