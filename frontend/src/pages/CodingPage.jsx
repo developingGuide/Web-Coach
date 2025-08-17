@@ -177,7 +177,7 @@ const CodingPage = () => {
 
     tour.addStep({
       id: 'end',
-      text: 'As this is a beta version, do expect bugs and glitches and weird stuff out of nowhere.. If you face any do email developingguide@gmail.com',
+      text: 'As this is a beta version, do expect bugs and glitches and weird stuff out of nowhere.. If you face any do email fundevsim@gmail.com',
       buttons: [
         { text: 'Finish', action: tour.complete }
       ]
