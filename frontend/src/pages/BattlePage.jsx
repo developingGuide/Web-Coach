@@ -30,7 +30,7 @@ const BattlePage = () => {
   const [opponentHtml, setOpponentHtml] = useState("");
   const [opponentCss, setOpponentCss] = useState("");
   const [opponentJs, setOpponentJs] = useState("");
-  const [timeLeft, setTimeLeft] = useState(1800); // 5 minutes in seconds, 300
+  const [timeLeft, setTimeLeft] = useState(35); // 5 minutes in seconds, 300
   const [matchOver, setMatchOver] = useState(false);
   const [opponentRageQuit, setOpponentRageQuit] = useState(false);
   const [battleInfo, setBattleInfo] = useState({ title: "", description: "" });
@@ -71,14 +71,35 @@ const BattlePage = () => {
   }
 
   function cssMatches(userCss, expectedCss) {
-    return userCss.replace(/\s+/g, '').toLowerCase()
-      .includes(expectedCss.replace(/\s+/g, '').toLowerCase());
+    const selectorRegex = /([^{]+)\s*\{/g;
+    const selectors = [];
+    let match;
+    while ((match = selectorRegex.exec(expectedCss)) !== null) {
+      selectors.push(match[1].trim());
+    }
+
+    return selectors.every(sel => {
+      const regex = new RegExp(sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      return regex.test(userCss);
+    });
+  }
+
+  function jsMatches(userJs, expectedJs) {
+    const requiredSnippets = expectedJs
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('//'));
+
+    return requiredSnippets.every(snippet => {
+      const regex = new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+      return regex.test(userJs);
+    });
   }
 
 
 
   const gradeAndCompare = (subs, challengeData) => {
-    const { html_check, css_check, js_check, expected_output } = challengeData;
+    const { html_check, css_check, js_check } = challengeData;
 
     const grade = (submission) => {
       let score = 0;
@@ -98,7 +119,7 @@ const BattlePage = () => {
         }
 
         if (js_check) {
-          const jsPass = submission.js.includes(js_check);
+          const jsPass = jsMatches(submission.js, js_check);
           console.log("JS Check:", jsPass);
           if (jsPass) score++;
         }
@@ -110,6 +131,10 @@ const BattlePage = () => {
         console.log("🧪 Comparing CSS:");
         console.log("Submission:", submission.css);
         console.log("Expected:", css_check);
+
+        console.log("🧪 Comparing JS:");
+        console.log("Submission:", submission.js);
+        console.log("Expected:", js_check);
 
       } catch (e) {
         console.error("❌ Error grading submission:", e);
@@ -158,7 +183,7 @@ const BattlePage = () => {
       // Get match to find challenge_id
       const { data: matchData, error: matchErr } = await supabase
         .from('matches')
-        .select('challenge_id')
+        .select('battle_id')
         .eq('id', match_id)
         .single();
 
@@ -170,8 +195,8 @@ const BattlePage = () => {
       // Use challenge_id to get title & description
       const { data: battleData, error: battleErr } = await supabase
         .from('battles')
-        .select('title, description')
-        .eq('challenge_id', matchData.challenge_id)
+        .select('title, description, starting_html, starting_css, starting_js')
+        .eq('id', matchData.battle_id)
         .single();
 
       if (battleErr || !battleData) {
@@ -183,6 +208,11 @@ const BattlePage = () => {
         title: battleData.title || "Untitled Battle",
         description: battleData.description || "",
       });
+
+      // Set starting code (only if you haven't started coding yet)
+      setHtmlCode(battleData.starting_html || "<!-- Start coding here -->");
+      setCssCode(battleData.starting_css || "/* Start coding here */");
+      setJsCode(battleData.starting_js || "// Start coding here");
     };
 
     fetchBattleInfo();
@@ -308,7 +338,7 @@ const BattlePage = () => {
       // 1. Get match details (to find challenge_id)
       const { data: matchData, error: matchErr } = await supabase
         .from('matches') // or your match table
-        .select('challenge_id')
+        .select('battle_id')
         .eq('id', match_id)
         .single();
 
@@ -317,13 +347,11 @@ const BattlePage = () => {
         return;
       }
 
-      const challengeId = matchData.challenge_id;
-
       // 2. Get challenge test/check info
       const { data: challengeData, error: challengeErr } = await supabase
         .from('battles')
         .select('html_check, css_check, js_check, expected_output, title, description')
-        .eq('challenge_id', challengeId)
+        .eq('id', matchData.battle_id)
         .single();
 
       if (challengeErr || !challengeData) {

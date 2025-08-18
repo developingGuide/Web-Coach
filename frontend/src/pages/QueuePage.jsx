@@ -50,18 +50,34 @@ export default function QueuePage() {
       if (others.length > 0) {
         const opponent = others[0];
 
+        const { data: battles, error } = await supabase
+          .from('battles')
+          .select('id')
+          .eq('challenge_id', challengeId)
+
+        if (error || !battles?.length) {
+          console.error("Fetch battles error:", error?.message);
+          return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * battles.length);
+        const randomBattle = battles[randomIndex];
+
+        console.log("🎲 Random battle:", randomBattle.id);
+
         const { data: match, error: matchError } = await supabase
           .from('matches')
           .insert([{
             challenge_id: challengeId,
+            battle_id: randomBattle.id,
             user_1_id: userId,
             user_2_id: opponent.user_id,
             created_at: new Date().toISOString()
           }])
           .select()
           .single();
-
-        if (matchError || !match) {
+        
+        if (matchError) {
           console.error('Failed to create match:', matchError);
           return;
         }
