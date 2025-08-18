@@ -59,106 +59,82 @@ const BattlePage = () => {
     return `${m}:${s}`;
   }
 
-  function htmlStructuresMatch(userHtml, expectedHtml) {
+  function htmlScore(userHtml, expectedHtml) {
     const parser = new DOMParser();
-
     const userDoc = parser.parseFromString(userHtml, 'text/html');
     const expectedDoc = parser.parseFromString(expectedHtml, 'text/html');
 
-    const clean = (html) => html.replace(/[\s\n]+/g, '').toLowerCase();
+    const userTags = Array.from(userDoc.body.querySelectorAll('*')).map(t => t.tagName.toLowerCase());
+    const expectedTags = Array.from(expectedDoc.body.querySelectorAll('*')).map(t => t.tagName.toLowerCase());
 
-    return clean(userDoc.body.innerHTML).includes(clean(expectedDoc.body.innerHTML));
+    const total = expectedTags.length;
+    const matched = expectedTags.filter(tag => userTags.includes(tag)).length;
+
+    return total ? matched / total : 1; // fraction between 0 and 1
   }
 
-  function cssMatches(userCss, expectedCss) {
+  function cssScore(userCss, expectedCss) {
     const selectorRegex = /([^{]+)\s*\{/g;
-    const selectors = [];
+    const requiredSelectors = [];
     let match;
     while ((match = selectorRegex.exec(expectedCss)) !== null) {
-      selectors.push(match[1].trim());
+      requiredSelectors.push(match[1].trim());
     }
 
-    return selectors.every(sel => {
+    const matched = requiredSelectors.filter(sel => {
       const regex = new RegExp(sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
       return regex.test(userCss);
     });
+
+    return requiredSelectors.length ? matched.length / requiredSelectors.length : 1;
   }
 
-  function jsMatches(userJs, expectedJs) {
+  function jsScore(userJs, expectedJs) {
     const requiredSnippets = expectedJs
       .split('\n')
       .map(line => line.trim())
       .filter(line => line && !line.startsWith('//'));
 
-    return requiredSnippets.every(snippet => {
+    const matched = requiredSnippets.filter(snippet => {
       const regex = new RegExp(snippet.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
       return regex.test(userJs);
     });
+
+    return requiredSnippets.length ? matched.length / requiredSnippets.length : 1;
   }
 
 
 
-  const gradeAndCompare = (subs, challengeData) => {
+  function gradeSubmission(submission, challengeData) {
     const { html_check, css_check, js_check } = challengeData;
 
-    const grade = (submission) => {
-      let score = 0;
-      console.log("▶️ Grading submission for:", submission.user_id);
+    let score = 0;
+    let totalSections = 0;
 
-      try {
-        if (html_check) {
-          const htmlPass = htmlStructuresMatch(submission.html, html_check);
-          console.log("HTML Check:", htmlPass);
-          if (htmlPass) score++;
-        }
-
-        if (css_check) {
-          const cssPass = cssMatches(submission.css, css_check);
-          console.log("CSS Check:", cssPass);
-          if (cssPass) score++;
-        }
-
-        if (js_check) {
-          const jsPass = jsMatches(submission.js, js_check);
-          console.log("JS Check:", jsPass);
-          if (jsPass) score++;
-        }
-
-        console.log("🧪 Comparing HTML:");
-        console.log("Submission:", submission.html);
-        console.log("Expected:", html_check);
-
-        console.log("🧪 Comparing CSS:");
-        console.log("Submission:", submission.css);
-        console.log("Expected:", css_check);
-
-        console.log("🧪 Comparing JS:");
-        console.log("Submission:", submission.js);
-        console.log("Expected:", js_check);
-
-      } catch (e) {
-        console.error("❌ Error grading submission:", e);
-      }
-
-      console.log("✅ Final score:", score);
-      return score;
-    };
-
-
-    const results = subs.map(sub => ({
-      user_id: sub.user_id,
-      score: grade(sub)
-    }));
-
-    // pick winner
-    const [userA, userB] = results;
-    if (userA.score > userB.score) {
-      setBattleResult(userA.user_id === user_id ? "win" : "lose");
-    } else if (userB.score > userA.score) {
-      setBattleResult(userB.user_id === user_id ? "win" : "lose");
-    } else {
-      setBattleResult("tie");
+    if (html_check) {
+      score += htmlScore(submission.html, html_check);
+      totalSections++;
     }
+
+    if (css_check) {
+      score += cssScore(submission.css, css_check);
+      totalSections++;
+    }
+
+    if (js_check) {
+      score += jsScore(submission.js, js_check);
+      totalSections++;
+    }
+
+    return totalSections ? score / totalSections : 0; // normalized 0-1
+  }
+
+  // Grade all submissions
+  const gradeAndCompare = (subs, challengeData) => {
+    return subs.map(sub => ({
+      user_id: sub.user_id,
+      score: gradeSubmission(sub, challengeData)
+    }));
   };
 
 
@@ -386,7 +362,14 @@ const BattlePage = () => {
       }
 
       // now you can compare both
-      gradeAndCompare(subs, challengeData);
+      const scores = gradeAndCompare(subs, challengeData);
+
+      const meScore = scores.find(s => s.user_id === user_id)?.score || 0;
+      const opponentScore = scores.find(s => s.user_id !== user_id)?.score || 0;
+
+      if (meScore > opponentScore) setBattleResult("win");
+      else if (meScore < opponentScore) setBattleResult("lose");
+      else setBattleResult("tie");
     };
 
     if (matchOver) {
