@@ -147,6 +147,11 @@
   border: 2px solid #e23d3d;
 }
 
+.resultImprovements{
+  max-height: 5rem;
+  overflow-y: auto;
+}
+
 .resultCard h2 {
   margin-top: 0;
 }

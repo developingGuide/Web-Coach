@@ -15,10 +15,6 @@ import './Tour4.css'
 
 const CodingPage = () => {
   const {user} = useContext(AuthContext)
-  // if (!user) {
-  //   return <div>Loading...</div>;
-  // }
-  // const userId = user.id
   const [showTools, setShowTools] = useState(false);
   const [currentTask, setCurrentTask] = useState({});
   const [code, setCode] = useState("");
@@ -435,7 +431,7 @@ const CodingPage = () => {
     const { correct, tips } = checkUserCode();
     const { data, error } = await supabase
       .from("user_state")
-      .select("exp")
+      .select("exp, completed_tasks")
       .eq("user_id", userId)
       .single();
 
@@ -444,13 +440,13 @@ const CodingPage = () => {
       return;
     }
 
+    // 🔑 Count how many times this task was done before
+    const completionCount = data.completed_tasks.filter(t => t === currentTask.id).length;
 
-    // let tips = [];
-    // const lowerCode = htmlCode.toLowerCase();
-    // if (!lowerCode.includes('<nav')) tips.push("Try adding a <nav> tag.");
-    // if (!lowerCode.includes('<ul')) tips.push("Did you use an unordered list (<ul>)?");
-    // if (!lowerCode.includes('>home<')) tips.push("Missing a link to 'Home'.");
-    // if (!lowerCode.includes('>about<')) tips.push("Missing a link to 'About'.");
+    // EXP multiplier logic
+    let multiplier = 1;
+    if (completionCount === 1) multiplier = 0.5;   // 50% EXP if done once before
+    if (completionCount >= 2) multiplier = 0.1;   // 10% EXP if done 2+ times
 
     let gainedExp = 0;
     if (!correct) {
@@ -459,7 +455,8 @@ const CodingPage = () => {
       const min = 20;
       const max = 50;
       gainedExp = Math.floor(Math.random() * (max - min + 1)) + min;
-      fireConfetti()
+      gainedExp = Math.floor(gainedExp * multiplier); // 👈 apply multiplier
+      if (gainedExp > 0) fireConfetti();
     }
 
     const newExp = data.exp + gainedExp;
@@ -586,7 +583,7 @@ const CodingPage = () => {
           {resultData.tips.length > 0 && (
             <>
               <h3>Improvements</h3>
-              <ul>
+              <ul className='resultImprovements'>
                 {resultData.tips.map((tip, i) => <li key={i}>{tip}</li>)}
               </ul>
             </>

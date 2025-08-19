@@ -612,12 +612,12 @@ export default function Journey() {
         </ul>
       </div>
       
-      {/* <button 
-        style={{ position: 'absolute', top: 20, right: 20, zIndex: 9999 }}
+      <button 
+        style={{ position: 'absolute', bottom: 20, left: 20, zIndex: 9999, borderRadius: '50%', backgroundColor: "#ffffff30" }}
         onClick={startJourneyTour}
       >
-        Restart Tour
-      </button> */}
+        <i class="fa-solid fa-question"></i>
+      </button>
 
     </div>
     </>

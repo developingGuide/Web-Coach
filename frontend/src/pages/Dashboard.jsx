@@ -14,12 +14,8 @@ import 'shepherd.js/dist/css/shepherd.css';
 
 
 const Dashboard = () => {
-  // const userId = "demo_user"
+  const PATCH_VERSION = "v0.1";
   const {user} = useContext(AuthContext)
-  // if (!user) {
-  //   return <div>Loading...</div>; // or show a spinner, or redirect to login
-  // }
-  
   const navigate = useNavigate()
   const [isLaunching, setIsLaunching] = useState(false);
   const [currentMap, setCurrentMap] = useState("");
@@ -29,9 +25,9 @@ const Dashboard = () => {
   const [tasksToday, setTasksToday] = useState({})
   const [previewMessages, setPreviewMessages] = useState([]);
   const [avatar, setAvatar] = useState('')
+  const [showUpdateNotice, setShowUpdateNotice] = useState(false)
   const location = useLocation();
   const transition = location.state?.transition;
-
 
 
   const [showFeedback, setShowFeedback] = useState(false);
@@ -47,61 +43,6 @@ const Dashboard = () => {
   }
 
   
-
-  // useEffect(() => {
-  //   if (!user) return;
-
-  //   const tour = new Shepherd.Tour({
-  //     useModalOverlay: true,
-  //     defaultStepOptions: {
-  //       scrollTo: true,
-  //       cancelIcon: { enabled: true },
-  //       classes: 'shepherd-theme-arrows',
-  //       buttons: [
-  //         {
-  //           text: 'Next',
-  //           action: Shepherd.next
-  //         }
-  //       ]
-  //     }
-  //   });
-
-  //   tour.addStep({
-  //     id: 'welcome',
-  //     text: 'Welcome to DevSim. This is the main dashboard!',
-  //     buttons: [
-  //       {
-  //         text: 'Next',
-  //         action: tour.next
-  //       }
-  //     ]
-  //   });
-
-  //   tour.addStep({
-  //     id: 'journey',
-  //     text: "Let's start the journey rolling by picking a project at the Journey page.",
-  //     attachTo: {
-  //       element: '.arrow-group.arrow-bottom',
-  //       on: 'top'
-  //     },
-  //     buttons: [
-  //       {
-  //         text: 'Back',
-  //         action: tour.back
-  //       },
-  //       {
-  //         text: 'Done',
-  //         action: tour.complete
-  //       }
-  //     ]
-  //   });
-
-  //   if (!localStorage.getItem('seenDashboardTour')) {
-  //     tour.start();
-  //     localStorage.setItem('seenDashboardTour', 'true');
-  //   }
-
-  // }, [user]);
 
 
   const startDashboardTour = () => {
@@ -229,6 +170,34 @@ const Dashboard = () => {
 
     fetchCurrentMap();
   }, [user]); // ← add user as a dependency
+
+  useEffect(() => {
+    const checkUpdateNotice = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("user_state")
+        .select("last_seen_update")
+        .eq("user_id", user.id)
+        .single();
+
+      if (!error && data) {
+        if (data.last_seen_update !== PATCH_VERSION) {
+          setShowUpdateNotice(true);
+        }
+      }
+    };
+
+    checkUpdateNotice();
+  }, [user]);
+
+  const acknowledgeUpdate = async () => {
+    setShowUpdateNotice(false);
+    await supabase
+      .from("user_state")
+      .update({ last_seen_update: PATCH_VERSION })
+      .eq("user_id", user.id);
+  };
 
   function useSound(src) {
     const soundRef = useRef(new Audio(src));
@@ -410,6 +379,28 @@ const Dashboard = () => {
         </div>
       )}
 
+      {showUpdateNotice && (
+        <div style={{
+          position: "fixed",
+          top: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background: "#222",
+          color: "white",
+          padding: "15px 25px",
+          borderRadius: "8px",
+          zIndex: 1000
+        }}>
+          <p>🚀 New Patch v0.1: Reduced height of "Improvement" section when code is wrong, removed comments for checks (your code don't need comments), and reduced points given if tasks are retried, added a button to restart tour. </p>
+          <button 
+            style={{ marginTop: "10px", padding: "6px 12px", cursor: "pointer" }}
+            onClick={() => acknowledgeUpdate()}
+          >
+            Got it!
+          </button>
+        </div>
+      )}
+
       <div className={`devdash-root ${isLaunching === "cloud" ? "launching" : ""}`}>
         <div className="cloud-transition">
           <img src="/cloud-cover.png" className={`cloud-cover ${isLaunching === "cloud" ? "visible" : ""}`} />
@@ -434,10 +425,6 @@ const Dashboard = () => {
         </button>
 
         <div className="devdash-navbar">
-          {/* <div className="hud-sidebars">
-            <div className="nav-icon"><i class="fa-solid fa-gear"></i></div>
-            <div className="nav-icon" onClick={() => {navigate('/leaderboard')}}><i class="fa-solid fa-trophy"></i></div>
-          </div> */}
           <div className="corner-trigger left" onClick={() => navigate('/profile')}>
             <i className="fa-solid fa-gear"></i>
           </div>
@@ -453,7 +440,7 @@ const Dashboard = () => {
               <div className="devdash-title">Current Task</div>
               <div className="devdash-label">Title</div>
               <div className="devdash-value">
-                {currentTask ? currentTask.title : "No Task Started Yet!"}
+                {currentTask ? currentTask.subject : "No Task Started Yet!"}
               </div>
               <div className="devdash-label">Status</div>
               <div className="devdash-value">

@@ -290,6 +290,13 @@ const Inbox = () => {
         )}
       </div>
 
+      <button 
+        style={{ position: 'absolute', bottom: 20, left: 20, zIndex: 9999, borderRadius: '50%', backgroundColor: "#ffffff30" }}
+        onClick={startInboxTour}
+      >
+        <i class="fa-solid fa-question"></i>
+      </button>
+
       {isLoading && <LoadingOverlay message="Preparing your coding arena..." />}
 
     </div>

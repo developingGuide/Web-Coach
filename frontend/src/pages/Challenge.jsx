@@ -112,12 +112,12 @@ export default function ChallengeMap() {
           </div>
         </div>
       )}
-      {/* <div className="locked-overlay">
+      <div className="locked-overlay">
         <button className="backBtn" onClick={() => {playClick(); handleBack()}}>Back</button>
         <div className="locked-message">
           <p>🔒 Sadly, there's not enough people online to battle...</p>
         </div>
-      </div> */}
+      </div>
       <button className="backBtn" onClick={handleBack}>Back</button>
       <div className="challenge-container">
         <div className={`grid ${selected ? 'compressed' : ''}`}>
