@@ -14,7 +14,7 @@ import 'shepherd.js/dist/css/shepherd.css';
 
 
 const Dashboard = () => {
-  const PATCH_VERSION = "v0.1";
+  const PATCH_VERSION = "v0.11";
   const {user} = useContext(AuthContext)
   const navigate = useNavigate()
   const [isLaunching, setIsLaunching] = useState(false);
@@ -391,7 +391,7 @@ const Dashboard = () => {
           borderRadius: "8px",
           zIndex: 1000
         }}>
-          <p>🚀 New Patch v0.1: Reduced height of "Improvement" section when code is wrong, removed comments for checks (your code don't need comments), and reduced points given if tasks are retried, added a button to restart tour. </p>
+          <p>🚀 New Patch v0.11: Redesigned toolbox! </p>
           <button 
             style={{ marginTop: "10px", padding: "6px 12px", cursor: "pointer" }}
             onClick={() => acknowledgeUpdate()}

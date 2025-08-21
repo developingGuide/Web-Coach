@@ -41,6 +41,33 @@ const CodingPage = () => {
     { name: "bg.jpg", url: "/assets/bg.jpg" },
   ]);
 
+  const [toolsWidth, setToolsWidth] = useState(350); // default width
+  const isResizing = useRef(false);
+
+
+  const startResizing = (e) => {
+    isResizing.current = true;
+
+    const startX = e.clientX;
+    const startWidth = toolsWidth;
+
+    const onMouseMove = (e) => {
+      if (!isResizing.current) return;
+      const newWidth = startWidth - (e.clientX - startX);
+      if (newWidth > 200 && newWidth < 600) {
+        setToolsWidth(newWidth);
+      }
+    };
+
+    const onMouseUp = () => {
+      isResizing.current = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -562,11 +589,30 @@ const CodingPage = () => {
         </div>
 
         {showTools && (
-          <div className="toolsPane">
-            <h3>Tools for this Project:</h3>
-            <pre>
-              {taskTools}
-            </pre>
+          <div className="resizableTools">
+            <div className="resizer" onMouseDown={startResizing}></div>
+            <div className="toolsPane" style={{ width: toolsWidth }}>
+              <h3>Tools for this Project:</h3>
+
+              {currentTask.html_tools && (
+                <div className="toolSection" id='htmlTools'>
+                  <h4>HTML</h4>
+                  <pre>{currentTask.html_tools}</pre>
+                </div>
+              )}
+              {currentTask.css_tools && (
+                <div className="toolSection" id='cssTools'>
+                  <h4>CSS</h4>
+                  <pre>{currentTask.css_tools}</pre>
+                </div>
+              )}
+              {currentTask.js_tools && (
+                <div className="toolSection" id='jsTools'>
+                  <h4>JavaScript</h4>
+                  <pre>{currentTask.js_tools}</pre>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
