@@ -25,6 +25,7 @@ import OnboardingPage from './pages/Onboarding';
 import ChatPage from './pages/ChatPage';
 import ProfileSettings from './pages/ProfileSettings';
 import Leaderboard from './pages/Leaderboard';
+import DailyChallengePage from './pages/dailyChallenge';
 
 function BackgroundMusic() {
   const location = useLocation();
@@ -69,7 +70,7 @@ function BackgroundMusic() {
 function App() {
     const {user} = useContext(AuthContext)
     const location = useLocation();
-    const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle", "/chat", "/newUser", "/leaderboard", "/dashboard"];
+    const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle", "/chat", "/newUser", "/leaderboard", "/dashboard", "/dailychallenge"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
     
     
@@ -238,6 +239,11 @@ function App() {
                                 path='/leaderboard'
                                 element={<Leaderboard/>}
                             />
+                            <Route
+                                path='/dailychallenge'
+                                element={<DailyChallengePage/>}
+                            />
+
                         </Routes>
                     </div>
                 </div>

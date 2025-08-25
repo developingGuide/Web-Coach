@@ -25,7 +25,9 @@ const Dashboard = () => {
   const [tasksToday, setTasksToday] = useState({})
   const [previewMessages, setPreviewMessages] = useState([]);
   const [avatar, setAvatar] = useState('')
-  const [showUpdateNotice, setShowUpdateNotice] = useState(false)
+  const [showUpdateNotice, setShowUpdateNotice] = useState(false);
+  const [todayChallenge, setTodayChallenge] = useState(null)
+  const [dailyCompleted, setDailyCompleted] = useState(false)
   const location = useLocation();
   const transition = location.state?.transition;
 
@@ -150,6 +152,8 @@ const Dashboard = () => {
     if (user?.id) {
       fetchUserState();
       fetchTasksToday();
+      fetchDailyChallenge();
+      fetchUserDailyCompleted()
     }
   }, [user]);
 
@@ -274,6 +278,40 @@ const Dashboard = () => {
     setCurrentTask(task);
   };
 
+  const fetchDailyChallenge = async () => {
+    const today = new Date().toISOString().split("T")[0];
+
+    const { data, error } = await supabase
+        .from("daily_challenges")
+        .select("*")
+        .eq("date", today)
+        .single();
+
+    if (error) {
+        console.error("No challenge found for today:", error);
+        return;
+    }
+
+    setTodayChallenge(data);
+  };
+
+  const fetchUserDailyCompleted = async () => {
+    const today = new Date().toISOString().split("T")[0]; // "2025-08-25"
+
+    const { data, error } = await supabase
+        .from("daily_challenge_log")
+        .select("completed")
+        .eq("date", today)
+        .eq("user_id", userId)
+        .single();
+
+    if (error) {
+        console.error("No daily challenge Log", error);
+        return;
+    }
+
+    setDailyCompleted(data);
+  };
   
   // Today's Commit
   
@@ -437,16 +475,16 @@ const Dashboard = () => {
           {/* Left Side */}
           <div className="devdash-column">
             <div className="devdash-panel">
-              <div className="devdash-title">Current Task</div>
+              <div className="devdash-title">Daily Challenge</div>
               <div className="devdash-label">Title</div>
               <div className="devdash-value">
-                {currentTask ? currentTask.subject : "No Task Started Yet!"}
+                {todayChallenge ? todayChallenge.title : "No Daily Challenge Today"}
               </div>
               <div className="devdash-label">Status</div>
               <div className="devdash-value">
-                {currentTask ? "In Progress" : "Not Started!"}
+                {dailyCompleted ? "Completed!" : "Not Started!"}
               </div>
-              <button onClick={() => {navigate('/playground')}}>Go straight to it!</button>
+              <button onClick={() => {navigate('/dailychallenge')}}>Start!</button>
             </div>
 
             <div className="devdash-panel devdash-compact">

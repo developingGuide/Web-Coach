@@ -1,0 +1,336 @@
+.codingPage {
+  background-color: transparent;
+  color: #e0e0e0;
+  overflow-y: hidden;
+  /* padding: 1rem 2rem; */
+}
+
+.codingHeader {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.codingHeaderTop {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.backButton {
+  background: none;
+  color: #91f42f;
+  border: 1px solid #91f42f;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.taskText{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.taskDescription {
+  color: #999;
+}
+
+.codingButtons button {
+  margin-right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #91f42f;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.shipButton {
+  background-color: #fff;
+  color: #000;
+}
+
+.codingBody {
+  display: flex;
+  gap: 1rem;
+  height: calc(100vh - 125px); /* adjust based on header height */
+  position: relative;
+  z-index: 1;
+}
+
+.editorWrapper {
+  flex: 1;
+  min-width: 0; /* important for editors in flex layout */
+  z-index: 2;
+}
+
+.resizableTools {
+  display: flex;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.resizer {
+  width: 5px;
+  cursor: ew-resize;
+  background: #333;
+  transition: background 0.2s;
+}
+
+.resizer:hover {
+  background: #666;
+}
+
+.hintReminder{
+    position: absolute;
+    top: 4rem;
+    right: 1rem;
+    z-index: 10;
+    background-color: #121212;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.hintReminder p{
+    margin-bottom: 4px;
+}
+
+#yesBtn{
+    color: rgb(255, 101, 101);
+}
+
+#maybeNotBtn{
+    color: #28d07a;
+    margin-left: 4px;
+}
+
+.toolsPane {
+  background: #1e1e1e;
+  padding: 1rem;
+  border-left: 1px solid #333;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.toolsPane h3{
+  margin-bottom: 4px;
+  color: #91f42f;
+}
+
+.toolSection {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: #121212;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.toolSection h4 {
+  margin-bottom: 0.5rem;
+}
+
+.toolSection pre {
+  white-space: pre-wrap;
+  color: #ccc;
+  font-family: monospace, 'Fira Code', 'Segoe UI', sans-serif;
+  background-color: #000;
+  padding: 0.5rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+#htmlTools{
+  background-color: #f06529;
+}
+
+#cssTools{
+  background-color: #2965F1;
+}
+
+#jsTools{
+  background-color: #f0db4f;
+}
+
+#jsTools h4{
+  color: #000;
+}
+
+.tabButtons {
+  display: flex;
+  border-bottom: 1px solid #444;
+  margin-bottom: 12px;
+}
+
+.tabButtons button {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  color: #bbb;
+  font-size: 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tabButtons button:hover {
+  color: white;
+}
+
+.tabButtons button.active {
+  color: #3cff99;
+  border-bottom: 2px solid #3cff99;
+  font-weight: bold;
+}
+
+
+.resultCard {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background: #222;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  width: 400px;
+  max-width: 90%;
+  z-index: 9999;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.resultCard.positive {
+  border: 2px solid #28d07a;
+  background: radial-gradient(circle, #28d07a33, #1e1e1e);
+  box-shadow: 0 0 20px 5px #28d07a55;
+  animation: bounceInCentered 0.4s ease-out;
+}
+
+.resultCard.negative {
+  border: 2px solid #e23d3d;
+}
+
+.resultImprovements{
+  max-height: 5rem;
+  overflow-y: auto;
+}
+
+.resultCard h2 {
+  margin-top: 0;
+}
+
+.resultCard p{
+  margin-top: 8px;
+}
+
+.resultCard h3{
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
+
+.resultCard button{
+  margin-top: 8px;
+}
+
+.expectedOutput {
+  background: #111;
+  padding: 0.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  max-height: 200px;
+}
+
+
+@keyframes fadeInUp {
+  from {
+    transform: translate(-50%, 20%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0%);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceInCentered {
+  0% {
+    transform: translate(-50%, 0) scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, 0) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 0) scale(1.05);
+  }
+}
+
+
+
+.taskTitleWithHelp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.helpIcon {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  background-color: #444;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+.helpIcon:hover {
+  background-color: #666;
+}
+
+.taskBodyOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.taskBodyContent {
+  background: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 0 20px #000;
+}
+
+.taskBodyContent h3 {
+  margin-top: 0;
+}
+
+.taskBodyText pre {
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+.danger{
+    margin-top: 1rem;
+    font-size: 12px;
+    color: rgb(255, 94, 94);
+}
