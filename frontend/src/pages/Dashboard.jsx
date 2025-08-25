@@ -14,7 +14,7 @@ import 'shepherd.js/dist/css/shepherd.css';
 
 
 const Dashboard = () => {
-  const PATCH_VERSION = "v0.11";
+  const PATCH_VERSION = "v0.12";
   const {user} = useContext(AuthContext)
   const navigate = useNavigate()
   const [isLaunching, setIsLaunching] = useState(false);
@@ -429,7 +429,7 @@ const Dashboard = () => {
           borderRadius: "8px",
           zIndex: 1000
         }}>
-          <p>🚀 New Patch v0.11: Redesigned toolbox! </p>
+          <p>🚀 New Patch v0.12: Launched Daily challenge that you can do to train yourself! </p>
           <button 
             style={{ marginTop: "10px", padding: "6px 12px", cursor: "pointer" }}
             onClick={() => acknowledgeUpdate()}
