@@ -25,7 +25,7 @@ import OnboardingPage from './pages/Onboarding';
 import ChatPage from './pages/ChatPage';
 import ProfileSettings from './pages/ProfileSettings';
 import Leaderboard from './pages/Leaderboard';
-import DailyChallengePage from './pages/dailyChallenge';
+import DailyChallengePage from './pages/DailyChallenge';
 
 function BackgroundMusic() {
   const location = useLocation();
