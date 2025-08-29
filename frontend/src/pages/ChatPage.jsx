@@ -19,9 +19,13 @@ const ChatPage = () => {
 
   const navigate = useNavigate()
 
-  function formatTime(isoString) {
+  function formatDateTime(isoString) {
     const date = new Date(isoString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleDateString([], {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    }) + " • " + date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   }
 
 
@@ -271,7 +275,7 @@ const ChatPage = () => {
                       }}
                     />
                   </div>
-                  <div className="chat-timestamp">{formatTime(msg.created_at)}</div>
+                  <div className="chat-timestamp">{formatDateTime(msg.created_at)}</div>
                 </div>
               </div>
             ))}

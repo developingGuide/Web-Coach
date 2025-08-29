@@ -125,6 +125,12 @@
   color: #64f4ac;
 }
 
+.chat-timestamp{
+  font-size: 13px;
+  color: rgb(112, 112, 112);
+  margin-top: 4px;
+}
+
 .chat-input-row {
   display: flex;
   gap: 0.5rem;

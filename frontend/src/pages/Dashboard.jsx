@@ -14,7 +14,7 @@ import 'shepherd.js/dist/css/shepherd.css';
 
 
 const Dashboard = () => {
-  const PATCH_VERSION = "v0.12";
+  const PATCH_VERSION = "v0.13";
   const {user} = useContext(AuthContext)
   const navigate = useNavigate()
   const [isLaunching, setIsLaunching] = useState(false);
@@ -306,8 +306,8 @@ const Dashboard = () => {
         .single();
 
     if (error) {
-        console.error("No daily challenge Log", error);
-        return;
+      console.error("No daily challenge Log", error);
+      return;
     }
 
     setDailyCompleted(data);
@@ -429,7 +429,7 @@ const Dashboard = () => {
           borderRadius: "8px",
           zIndex: 1000
         }}>
-          <p>🚀 New Patch v0.12: Launched Daily challenge that you can do to train yourself! </p>
+          <p>🚀 New Patch v0.13: Added volume settings (top left); Added date and time to chat; Shortcut to run code: ctrl + s! </p>
           <button 
             style={{ marginTop: "10px", padding: "6px 12px", cursor: "pointer" }}
             onClick={() => acknowledgeUpdate()}
@@ -463,7 +463,7 @@ const Dashboard = () => {
         </button>
 
         <div className="devdash-navbar">
-          <div className="corner-trigger left" onClick={() => navigate('/profile')}>
+          <div className="corner-trigger left" onClick={() => navigate('/settings')}>
             <i className="fa-solid fa-gear"></i>
           </div>
 

@@ -1,0 +1,71 @@
+/* src/pages/SettingsPage.css */
+
+.settings-container {
+  max-width: 500px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #1e1e2f; /* dark background */
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  color: #f0f0f0;
+  font-family: sans-serif;
+}
+
+.settings-title {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #4ade80; /* green accent */
+}
+
+.settings-section {
+  margin-bottom: 1.5rem;
+}
+
+.settings-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.settings-slider {
+  margin-top: 0.5rem;
+  width: 100%;
+  appearance: none;
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #4ade80, #22c55e);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.settings-slider:hover {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+/* Make the slider handle look nice */
+.settings-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #4ade80;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.settings-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.settings-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #4ade80;
+  cursor: pointer;
+}

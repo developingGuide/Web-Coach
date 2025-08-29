@@ -26,16 +26,20 @@ import ChatPage from './pages/ChatPage';
 import ProfileSettings from './pages/ProfileSettings';
 import Leaderboard from './pages/Leaderboard';
 import DailyChallengePage from './pages/DailyChallenge';
+import { useAudio } from './components/AudioContext';
+import SettingsPage from './pages/SettingsPage';
 
 function BackgroundMusic() {
   const location = useLocation();
   const audioRef = useRef(null);
+  const { musicVolume, registerMusic } = useAudio();
 
   // This mapping shows which pages share the same music
   const pageMusicMap = {
     "/dashboard": "/music/dashboard.mp3",
     "/inbox": "/music/dashboard.mp3",
     "/challenges": "/music/dashboard.mp3",
+    "/settings": "/music/dashboard.mp3",
     "/playground": "/music/coding.mp3",
     "/profile": "/music/settingsProfile.mp3",
   };
@@ -44,7 +48,7 @@ function BackgroundMusic() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.volume = 0.2;
+    registerMusic(audio); // let context control it
 
     // Pick the track for the current page
     const newSrc = pageMusicMap[location.pathname] || "/dashboard.mp3";
@@ -72,7 +76,7 @@ function App() {
     const location = useLocation();
     const fullScreenRoutes = ["/playground", "/", "/journey", "/signup", "/login", "/goback", "/success", "/battle", "/chat", "/newUser", "/leaderboard", "/dashboard", "/dailychallenge"];
     const isFullScreen = fullScreenRoutes.includes(location.pathname);
-    
+    const { playSfx } = useAudio();
     
     const [userExp, setUserExp] = useState(0);
     const [userLevel, setUserLevel] = useState(0);
@@ -139,9 +143,7 @@ function App() {
             e.target.tagName === "BUTTON" ||
             e.target.getAttribute("role") === "button"
         ) {
-            const sound = clickSound.current;
-            sound.currentTime = 0;
-            sound.play().catch(() => {});
+            playSfx("/sfx/navigationBtn.mp3");
         }
         };
 
@@ -150,7 +152,7 @@ function App() {
         return () => {
         document.removeEventListener("click", handleButtonClick);
         };
-    }, []);
+    }, [playSfx]);
 
 
     return (
@@ -194,6 +196,10 @@ function App() {
                             <Route 
                                 path="/profile"
                                 element={<ProfileSettings/>}
+                            />
+                            <Route 
+                                path="/settings"
+                                element={<SettingsPage/>}
                             />
                             <Route
                                 path="/dashboard"

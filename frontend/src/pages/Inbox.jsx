@@ -269,7 +269,8 @@ const Inbox = () => {
               <div className='inbox-task-content'>
                 <h2>{selectedTask.subject}</h2>
                 <p className="inbox-sender"><strong>From:</strong> {selectedTask.sender}</p>
-                <div style={{ whiteSpace: 'pre-line' }} className="inbox-content">{selectedTask.body}</div>
+                {/* <div style={{ whiteSpace: 'pre-line' }} className="inbox-content">{selectedTask.body}</div> */}
+                <pre className="inbox-content">{selectedTask.body}</pre>
                 <button className="inbox-start-task-button" onClick={handleStartTask}>
                   Start Task
                 </button>
