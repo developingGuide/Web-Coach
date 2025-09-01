@@ -429,7 +429,7 @@ const Dashboard = () => {
           borderRadius: "8px",
           zIndex: 1000
         }}>
-          <p>🚀 New Patch v0.13: Added volume settings (top left); Added date and time to chat; Shortcut to run code: ctrl + s! </p>
+          <p>🚀 New Patch v0.13: New Map! Added volume settings (top left); Added date and time to chat; Shortcut to run code: ctrl + s! </p>
           <button 
             style={{ marginTop: "10px", padding: "6px 12px", cursor: "pointer" }}
             onClick={() => acknowledgeUpdate()}
@@ -475,14 +475,14 @@ const Dashboard = () => {
           {/* Left Side */}
           <div className="devdash-column">
             <div className="devdash-panel">
-              <div className="devdash-title">Daily Challenge</div>
+              <div className="devdash-title">Current Task</div>
               <div className="devdash-label">Title</div>
               <div className="devdash-value">
-                {todayChallenge ? todayChallenge.title : "No Daily Challenge Today"}
+                {currentTask ? currentTask.title : "No Task Started"}
               </div>
               <div className="devdash-label">Status</div>
               <div className="devdash-value">
-                {dailyCompleted ? "Completed!" : "Not Started!"}
+                {currentTask ? "In Progress" : "Not Started!"}
               </div>
               <button onClick={() => {navigate('/dailychallenge')}}>Start!</button>
             </div>
@@ -551,9 +551,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="arrow-group arrow-left" onClick={() => {playClick(); handleLaunch('/challenges', 'slide-left')}}>
+        <div className="arrow-group arrow-left" onClick={() => {playClick(); handleLaunch('/chat', 'slide-left')}}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-left"></i></div>
-          <div className="arrow-label">Challenges</div>
+          <div className="arrow-label">Chat</div>
         </div>
         <div className="arrow-group arrow-right" onClick={() => {playClick(); handleLaunch('/inbox', 'slide')}}>
           <div className="arrow-circle"><i className="fa-solid fa-angles-right"></i></div>

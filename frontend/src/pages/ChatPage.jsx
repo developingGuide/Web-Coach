@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useContext } from "react";
 import supabase from "../../config/supabaseClient";
 import "./ChatPage.css"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import Threads from "../components/Threads";
 import { AuthContext } from "../components/AuthContext";
@@ -14,10 +14,20 @@ const ChatPage = () => {
   const [currentChannel, setCurrentChannel] = useState("general");
   const channels = ["general", "help", "feedback", "threads"];
   const [showIframe, setShowIframe] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const [userPlan, setUserPlan] = useState('');
   const [glitch, setGlitch] = useState(true);
 
   const navigate = useNavigate()
+  const location = useLocation()
+  const transition = location.state?.transition;
+
+  const handleBack = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      navigate('/dashboard', { state: { transition: 'slide' } });
+    }, 800);
+  };
 
   function formatDateTime(isoString) {
     const date = new Date(isoString);
@@ -224,10 +234,10 @@ const ChatPage = () => {
 
 
   return (
-    <div className={`chat-container ${glitch ? "glitch-in" : ""}`}>
+    <div className={`chat-container ${glitch ? "glitch-in" : ""} page-slide  ${isExiting ? 'exit-to-left-active' : ''}`}>
       {userPlan === 'starter' && (
         <div className="locked-overlay">
-          <button className="backBtn" onClick={() => navigate('/dashboard')}>Back</button>
+          <button className="backBtn" onClick={() => {playClick(); handleBack()}}>Back</button>
           <div className="locked-message">
             🔒 This feature is for Pro users only
           </div>

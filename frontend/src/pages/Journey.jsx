@@ -216,13 +216,19 @@ export default function Journey() {
       { top: "61%", left: "71.5%", projectId: 5, scale: 1.0 },
       { top: "49%", left: "45%", projectId: 6, scale: 1.2 },
       { top: "40%", left: "62%", projectId: 7, scale: 1.4 },
-    ]
+    ],
+    ThemePark: [
+      { top: "82%", left: "29%", projectId: 8, scale: 0.8 },
+      { top: "80%", left: "82%", projectId: 9, scale: 1.0 },
+      { top: "68%", left: "52%", projectId: 10, scale: 1.2 },
+      { top: "32%", left: "25%", projectId: 11, scale: 1.4 },
+    ],
   };
 
   const mapInfo = {
     BeachIsland: "Learn Basic Syntax",
     InfernoInterface: "Learn How To Use and Manipulate Variables",
-    // Add more maps here...
+    ThemePark: "Learn the most common CSS"
   };
 
   const mapNames = Object.keys(checkpointLayouts); // ["BeachIsland", "JungleMountain"]
